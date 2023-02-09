@@ -4,14 +4,35 @@
 package Windowing;
 
 import Windowing.datastructure.PrioritySearchTree;
+import Windowing.front.navigation.Flow;
+import Windowing.front.scenes.SceneLoader;
+import Windowing.front.scenes.Scenes;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TestMe {
+public class TestMe extends Application {
+    private static Stage stage;
+
     public static void main(String[] args) {
-        ArrayList<Double> data = new ArrayList<>(Arrays.asList(1D, 5D, 9D, 7D));
-        PrioritySearchTree tree = PrioritySearchTree.createPrioritySearchTree(data);
-        System.out.println("");
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage_) {
+        // ArrayList<Double> data = new ArrayList<>(Arrays.asList(1D, 5D, 9D, 7D));
+        // PrioritySearchTree tree = PrioritySearchTree.createPrioritySearchTree(data);
+        // System.out.println("");
+        stage = stage_;
+
+        Scenes.MainScene = SceneLoader.load("MainScene");
+
+        Flow.add(Scenes.MainScene);
+
+        stage.setTitle("Linuxing app");
+        stage.setScene(Scenes.MainScene);
+        stage.show();
     }
 }
