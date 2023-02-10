@@ -1,5 +1,7 @@
 package Windowing.back.segmentfile;
 
+import javafx.scene.shape.Line;
+
 /**
  * Represents a segment as a pair of coordinates in two dimensions : (x0, y0), (x1, y1), where (x0, y0) is the
  * starting point of the segment and (x1, y1) is the ending point of the segment.
@@ -7,11 +9,15 @@ package Windowing.back.segmentfile;
 public class Segment {
     private int x0, x1, y0, y1;
 
-    public Segment(int x0, int x1, int y0, int y1) {
+    public Segment(int x0, int y0, int x1, int y1) {
         this.x0 = x0;
-        this.x1 = x1;
         this.y0 = y0;
+        this.x1 = x1;
         this.y1 = y1;
+    }
+
+    public Line toLine() {
+        return new Line(x0, y0, x1, y1);
     }
 
     public int getX0() {

@@ -64,7 +64,7 @@ public class SegmentFileReader {
 
     /**
      * Creates a segment using an array of four numbers.
-     * @param numbers x0 x1 y0 y1
+     * @param numbers x0 y0 x1 y1
      * @return A segment corresponding to the given coordinates
      */
     private static Segment extractSegment(int[] numbers) {
