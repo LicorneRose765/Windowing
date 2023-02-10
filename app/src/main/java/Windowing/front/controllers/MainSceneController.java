@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 public class MainSceneController extends Controller {
     @FXML
@@ -34,21 +35,30 @@ public class MainSceneController extends Controller {
     public static int chosenFileInt;
 
     @FXML
-    void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) {
+    void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) throws IOException, URISyntaxException, FormatException {
         SegmentFileData fileData = null;
         openFileLoaderPopup();
-        try {
-            fileData = SegmentFileReader.readLines("segments1");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
-            // TODO : show feedback to the user
-            e.printStackTrace();
-            System.out.println("File is not properly formatted.");
-        } catch (URISyntaxException e) {
-            // TODO : show feedback to the user ?
-            e.printStackTrace();
-            System.out.println("File path is not properly formatted and cannot be converted from URL to URI.");
+
+        switch (chosenFileInt) {
+            // throws exception in cases 1 2 and 3 because we know that the example are properly formatted
+            case 0:
+                try {
+                    fileData = SegmentFileReader.readLines(chosenFile.toURI());
+                } catch (FormatException e) {
+                    // TODO : show feedback to the user
+                    e.printStackTrace();
+                    System.out.println("File is not properly formatted.");
+                }
+                break;
+            case 1:
+                fileData = SegmentFileReader.readLines("segments1");
+                break;
+            case 2:
+                fileData = SegmentFileReader.readLines("segments2");
+                break;
+            case 3:
+                fileData = SegmentFileReader.readLines("segments3");
+                break;
         }
         assert fileData != null;
         segmentsPane.getChildren().clear();

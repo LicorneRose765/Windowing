@@ -4,6 +4,7 @@ import Windowing.TestMe;
 import javafx.geometry.Point2D;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -14,18 +15,36 @@ import java.util.stream.Stream;
 
 public class SegmentFileReader {
     /**
-     Reads the content of a file line by line and returns a SegmentFileData object representing the read data.
-     Does not catch any exception because we wouldn't add any value to the error if we did so.
-     This method serves as a wrapper to Files.readAllLines to adapt its behavior to our case.
-     @param filename The name of the file to read
-     @return A SegmentFileData object representing the read data
+     * Wrapper for the {@link #readSegmentFileLines} method that takes a filename as a parameter.
+     * Looks for the given filename in the resources.
+     * @param filename The name of the file located in the resources
      */
     public static SegmentFileData readLines(String filename) throws IOException, FormatException, URISyntaxException {
         URL url = TestMe.class.getResource("/segments/" + filename);
         assert url != null;
-        List<String> lines = Files.readAllLines(Paths.get(url.toURI())); // TODO : use resources bc this path won't work
+        return readSegmentFileLines(url.toURI());
+    }
 
-        Point2D[] dimensions = new Point2D[2];
+    /**
+     * Wrapper for the {@link #readSegmentFileLines} method that takes a URI as a parameter.
+     * @param uri The URI of the file to read
+     */
+    public static SegmentFileData readLines(URI uri) throws IOException, FormatException {
+        return readSegmentFileLines(uri);
+    }
+
+    /**
+     * Reads the content of a file line by line and returns a SegmentFileData object representing the read data.
+     * Does not catch any exception because we wouldn't add any value to the error if we did so.
+     * This method serves as a wrapper to Files.readAllLines to adapt its behavior to our case.
+     * @param uri The URI of the file to read
+     * @return A SegmentFileData object representing the read data
+     * @throws FormatException See {@link #parseLine}
+     * @throws IOException See {@link java.nio.file.Files#readAllLines}
+     */
+    private static SegmentFileData readSegmentFileLines(URI uri) throws FormatException, IOException {
+        List<String> lines = Files.readAllLines(Paths.get(uri)); // TODO : use resources bc this path won't work
+        Point2D[] dimensions = new Point2D[2];                   //  why did I write this to.do ?
         ArrayList<Segment> segments = new ArrayList<>();
 
         for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
@@ -55,7 +74,7 @@ public class SegmentFileReader {
         if (!line.matches("[0-9]+\\s[0-9]+\\s([+-]?(?=\\.\\d|\\d)(?:\\d+)?(?:\\.?\\d*))(?:[Ee]([+-]?\\d+))?\\s[0-9]+")) {
             throw new FormatException("Line is not properly formatted.\n" +
                     "Expected format : x0 y0 x1 y1.\n" +
-                    "Line number : " + (lineIndex + 1) +
+                    "Line number : " + (lineIndex + 1) + "\n" +
                     "Line content : " + line);
         }
 
