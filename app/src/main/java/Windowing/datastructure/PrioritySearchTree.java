@@ -1,7 +1,6 @@
 package Windowing.datastructure;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Implementation of a priority search tree.
@@ -53,7 +52,7 @@ public class PrioritySearchTree {
         AbstractList<Double> firstHalf = (AbstractList<Double>) sortedData.subList(0, sortedData.size() / 2),
                 secondHalf = (AbstractList<Double>) sortedData.subList(sortedData.size() / 2, sortedData.size());
 
-        System.out.println("");
+        System.out.println();
         return new PrioritySearchTree(minimum, ymid,
                 PrioritySearchTree.createPrioritySearchTree(secondHalf),
                 PrioritySearchTree.createPrioritySearchTree(firstHalf));
