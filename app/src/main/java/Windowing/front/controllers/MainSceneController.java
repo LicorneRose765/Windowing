@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -23,6 +24,14 @@ public class MainSceneController extends Controller {
     Button readSegmentFileButton;
 
     public static Stage popup; // TODO : this code sucks
+    public static File chosenFile;
+    /**
+     * 0 : the chosen file is the chosenFile object of type File
+     * 1 : the chosen file is example 1
+     * 2 : the chosen file is example 2
+     * 3 : the chosen file is example 3
+     */
+    public static int chosenFileInt;
 
     @FXML
     void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) {

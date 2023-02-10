@@ -33,6 +33,9 @@ public class FileLoaderPopupController extends Controller {
 
         fileChosenLabel.setVisible(false);
         filenameLabel.setVisible(false);
+
+        if (!example1RadioButton.isSelected() && !example2RadioButton.isSelected() && !example3RadioButton.isSelected())
+            confirmButton.setDisable(true);
     }
 
     @FXML
@@ -47,6 +50,8 @@ public class FileLoaderPopupController extends Controller {
 
         fileChosenLabel.setVisible(true);
         filenameLabel.setVisible(true);
+
+        confirmButton.setDisable(chosenFile == null);
     }
 
     @FXML
@@ -60,12 +65,35 @@ public class FileLoaderPopupController extends Controller {
             return;
         }
         filenameLabel.setText(chosenFile.getName());
+        confirmButton.setDisable(false);
     }
 
     @FXML
     void handleOnConfirmButtonMouseClicked(MouseEvent mouseEvent) {
+        if (examplesRadioButton.isSelected()) {
+            if (example1RadioButton.isSelected()) MainSceneController.chosenFileInt = 1;
+            if (example2RadioButton.isSelected()) MainSceneController.chosenFileInt = 2;
+            if (example3RadioButton.isSelected()) MainSceneController.chosenFileInt = 3;
+        } else {
+            // The filesystem radio button MUST be selected then
+            MainSceneController.chosenFileInt = 0;
+            MainSceneController.chosenFile = chosenFile;
+        }
         MainSceneController.popup.close();
-        // TODO : set the file in a static var or something
-        //  also we can prevent closing via "confirm" if no file is selected (only allow closing via closing button)
+    }
+
+    @FXML
+    void handleOnExample1ButtonMouseClicked(MouseEvent mouseEvent) {
+        confirmButton.setDisable(false);
+    }
+
+    @FXML
+    void handleOnExample2ButtonMouseClicked(MouseEvent mouseEvent) {
+        confirmButton.setDisable(false);
+    }
+
+    @FXML
+    void handleOnExample3ButtonMouseClicked(MouseEvent mouseEvent) {
+        confirmButton.setDisable(false);
     }
 }

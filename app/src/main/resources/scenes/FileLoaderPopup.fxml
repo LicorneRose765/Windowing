@@ -12,16 +12,16 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="fileSystemRadioButton" layoutX="347.0" layoutY="106.0" mnemonicParsing="false" onMouseClicked="#handleFileSystemOnMouseClicked" text="From file system" toggleGroup="$loadGroup" />
-        <RadioButton fx:id="example1RadioButton" disable="true" layoutX="132.0" layoutY="183.0" mnemonicParsing="false" text="example 1">
+        <RadioButton fx:id="example1RadioButton" disable="true" layoutX="132.0" layoutY="183.0" mnemonicParsing="false" onMouseClicked="#handleOnExample1ButtonMouseClicked" text="example 1">
             <toggleGroup>
                 <ToggleGroup fx:id="examplesGroup" />
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="example2RadioButton" disable="true" layoutX="132.0" layoutY="221.0" mnemonicParsing="false" text="example 2" toggleGroup="$examplesGroup" />
-        <RadioButton fx:id="example3RadioButton" disable="true" layoutX="132.0" layoutY="260.0" mnemonicParsing="false" text="example 3" toggleGroup="$examplesGroup" />
+        <RadioButton fx:id="example2RadioButton" disable="true" layoutX="132.0" layoutY="221.0" mnemonicParsing="false" onMouseClicked="#handleOnExample2ButtonMouseClicked" text="example 2" toggleGroup="$examplesGroup" />
+        <RadioButton fx:id="example3RadioButton" disable="true" layoutX="132.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#handleOnExample3ButtonMouseClicked" text="example 3" toggleGroup="$examplesGroup" />
         <Button fx:id="fileChooserButton" disable="true" layoutX="348.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#handleOnOpenFileChooserButtonMouseClicked" text="open file chooser" />
         <Label fx:id="fileChosenLabel" layoutX="372.0" layoutY="230.0" text="File chosen :" visible="false" />
         <Label fx:id="filenameLabel" alignment="TOP_CENTER" layoutX="337.0" layoutY="260.0" prefHeight="71.0" prefWidth="158.0" textAlignment="CENTER" visible="false" wrapText="true" />
-      <Button fx:id="confirmButton" layoutX="270.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#handleOnConfirmButtonMouseClicked" text="confirm" />
+      <Button fx:id="confirmButton" disable="true" layoutX="270.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#handleOnConfirmButtonMouseClicked" text="confirm" />
     </children>
 </AnchorPane>
