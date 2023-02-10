@@ -79,7 +79,7 @@ public class MainSceneController extends Controller {
     //  2 radio buttons :
     //     * From resources
     //     * From file system
-    //  If from resources is selected, activate three radio buttons : example1, example2, example3 to load either
+    //  If from resources is selected, activate three radio buttons : example1, segments2, example3 to load either
     //  example file located in the resources
     //  If from file system is selected, activate a button that opens a file chooser
 }
