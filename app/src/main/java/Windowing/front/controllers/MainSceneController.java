@@ -51,13 +51,13 @@ public class MainSceneController extends Controller {
                 }
                 break;
             case 1:
-                fileData = SegmentFileReader.readLines("segments1");
+                fileData = SegmentFileReader.readLines("segments1.seg");
                 break;
             case 2:
-                fileData = SegmentFileReader.readLines("segments2");
+                fileData = SegmentFileReader.readLines("segments2.seg");
                 break;
             case 3:
-                fileData = SegmentFileReader.readLines("segments3");
+                fileData = SegmentFileReader.readLines("segments3.seg");
                 break;
         }
         assert fileData != null;
@@ -79,7 +79,7 @@ public class MainSceneController extends Controller {
     //  2 radio buttons :
     //     * From resources
     //     * From file system
-    //  If from resources is selected, activate three radio buttons : example1, segments2, example3 to load either
+    //  If from resources is selected, activate three radio buttons : example1, segments2.seg, example3 to load either
     //  example file located in the resources
     //  If from file system is selected, activate a button that opens a file chooser
 }

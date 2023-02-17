@@ -20,6 +20,7 @@ public class SegmentFileReader {
      * @param filename The name of the file located in the resources
      */
     public static SegmentFileData readLines(String filename) throws IOException, FormatException, URISyntaxException {
+        if (!filename.endsWith(".seg")) filename += ".seg";
         URL url = TestMe.class.getResource("/segments/" + filename);
         assert url != null;
         return readSegmentFileLines(url.toURI());

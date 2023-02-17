@@ -6,12 +6,8 @@ import javafx.scene.input.MouseEvent;
 
 /**
  * This mother Controller class gives access to a few useful methods to all children classes.
- * Having access to these methods provide shortcuts. For example :
- * The method formatCurrentTime() uses a <code>Calendar</code> object to return the current time in a defined format.
- * This allows every controller to have access to a method to format time, rather than defining it in all FXML controllers.
- * It also makes the code more readable.
  */
-public class Controller {
+public abstract class Controller {
     /**
      * Returns a new style line with the darker background color to use when the mouse enters a button.
      *
