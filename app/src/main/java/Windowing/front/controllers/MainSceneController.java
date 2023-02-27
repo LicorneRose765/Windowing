@@ -1,22 +1,17 @@
 package Windowing.front.controllers;
 
-import Windowing.back.segmentfile.FormatException;
-import Windowing.back.segmentfile.Segment;
-import Windowing.back.segmentfile.SegmentFileData;
-import Windowing.back.segmentfile.SegmentFileReader;
+import Windowing.back.segmentfile.*;
 import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 
 public class MainSceneController extends Controller {
     @FXML
@@ -62,9 +57,9 @@ public class MainSceneController extends Controller {
         }
         assert fileData != null;
         segmentsPane.getChildren().clear();
-        for (Segment segment : fileData.getSegments()) {
-            System.out.println(segment);
-            segmentsPane.getChildren().add(segment.toLine());
+        for (Point point : fileData.getPST().query()) {
+            System.out.println(point);
+            segmentsPane.getChildren().add(point.toLine());
         }
     }
 

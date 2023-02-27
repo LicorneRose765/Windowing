@@ -1,6 +1,6 @@
 package Windowing.back.segmentfile;
 
-import javafx.geometry.Dimension2D;
+import Windowing.datastructure.PrioritySearchTree;
 import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
@@ -12,19 +12,21 @@ import java.util.ArrayList;
  */
 public class SegmentFileData {
     private Point2D[] windowDimension;
-    private ArrayList<Segment> segments;
+    private ArrayList<Point> points;
+    private PrioritySearchTree PST;
 
-    public SegmentFileData(Point2D[] windowDimension, ArrayList<Segment> segments) {
+    public SegmentFileData(Point2D[] windowDimension, ArrayList<Point> points) {
         this.windowDimension = windowDimension;
-        this.segments = segments;
+        this.points = points;
+        this.PST = PrioritySearchTree.build(points);
     }
 
     public Point2D[] getWindowDimension() {
         return windowDimension;
     }
 
-    public ArrayList<Segment> getSegments() {
-        return segments;
+    public ArrayList<Point> getPoints() {
+        return points;
     }
 
     @Override
@@ -35,11 +37,15 @@ public class SegmentFileData {
                      .append(" x ")
                      .append(Math.abs(windowDimension[0].getY() - windowDimension[1].getY()))
                      .append("\n");
-        for (int segmentIndex = 0; segmentIndex < segments.size(); segmentIndex++) {
+        for (int segmentIndex = 0; segmentIndex < points.size(); segmentIndex++) {
             bobTheBuilder.append("Segment ").append(segmentIndex).append(" : ")
-                         .append(segments.get(segmentIndex).toString())
+                         .append(points.get(segmentIndex).toString())
                          .append("\n");
         }
         return bobTheBuilder.toString();
+    }
+
+    public PrioritySearchTree getPST() {
+        return PST;
     }
 }

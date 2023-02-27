@@ -1,5 +1,7 @@
 package Windowing.back.segmentfile;
 
+import javafx.scene.shape.Line;
+
 public class Point {
     private double x;
     private double y;
@@ -73,4 +75,7 @@ public class Point {
         }
     }
 
+    public Line toLine() {
+        return new Line(x, y, x1, y1);
+    }
 }
