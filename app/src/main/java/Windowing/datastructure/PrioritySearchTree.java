@@ -36,7 +36,7 @@ public class PrioritySearchTree {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Point[] query(){
+    public Point[] query(Window window){
         return null;
     }
 }

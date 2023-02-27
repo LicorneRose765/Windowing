@@ -1,6 +1,7 @@
 package Windowing.back.segmentfile;
 
 import Windowing.TestMe;
+import Windowing.datastructure.Window;
 import javafx.geometry.Point2D;
 
 import java.io.IOException;
@@ -44,21 +45,23 @@ public class SegmentFileReader {
      * @throws IOException See {@link java.nio.file.Files#readAllLines}
      */
     private static SegmentFileData readSegmentFileLines(URI uri) throws FormatException, IOException {
-        List<String> lines = Files.readAllLines(Paths.get(uri)); // TODO : use resources bc this path won't work
-        Point2D[] dimensions = new Point2D[2];                   //  why did I write this to.do ?
+        List<String> lines = Files.readAllLines(Paths.get(uri)); // TODO : use resources bc this path won't work         //  why did I write this to.do ?
+        Window window = null;
         ArrayList<Point> points = new ArrayList<>();
 
         for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
             double[] lineNumbers = parseLine(lines.get(lineIndex), lineIndex);
 
             if (lineIndex == 0) {
-                dimensions = extractDimensions(lineNumbers);
+                window = extractWindow(lineNumbers);
             } else {
                 points.add(extractPoint(lineNumbers));
             }
         }
 
-        return new SegmentFileData(dimensions, points);
+        assert window != null;
+
+        return new SegmentFileData(window, points);
     }
 
     /**
@@ -95,11 +98,7 @@ public class SegmentFileReader {
      * @param numbers x0 x1 y0 y1
      * @return An array of Point2D representing the dimensions of the window
      */
-    private static Point2D[] extractDimensions(double[] numbers) {
-        Point2D[] dimensions = new Point2D[2];
-        dimensions[0] = new Point2D(numbers[0], numbers[2]);
-        dimensions[1] = new Point2D(numbers[1], numbers[3]);
-
-        return dimensions;
+    private static Window extractWindow(double[] numbers) {
+        return new Window(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 }

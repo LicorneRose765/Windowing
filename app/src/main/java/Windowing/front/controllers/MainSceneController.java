@@ -1,6 +1,7 @@
 package Windowing.front.controllers;
 
 import Windowing.back.segmentfile.*;
+import Windowing.datastructure.Window;
 import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
 import javafx.fxml.FXML;
@@ -56,8 +57,13 @@ public class MainSceneController extends Controller {
                 break;
         }
         assert fileData != null;
+
+        drawSegments(fileData, fileData.getWindow());
+    }
+
+    private void drawSegments(SegmentFileData fileData, Window window) {
         segmentsPane.getChildren().clear();
-        for (Point point : fileData.getPST().query()) {
+        for (Point point : fileData.getPST().query(window)) {
             System.out.println(point);
             segmentsPane.getChildren().add(point.toLine());
         }
