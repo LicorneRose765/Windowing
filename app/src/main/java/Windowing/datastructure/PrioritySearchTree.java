@@ -1,5 +1,6 @@
 package Windowing.datastructure;
 
+import Windowing.back.segmentfile.Point;
 import Windowing.back.segmentfile.Segment;
 import javafx.geometry.Point2D;
 
@@ -33,5 +34,9 @@ public class PrioritySearchTree {
     private static ArrayList<Point2D> getPointsAbove(ArrayList<Point2D> points, int y) {
         return points.stream().filter(point -> point.getY() > y)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Point[] query(){
+        return null;
     }
 }

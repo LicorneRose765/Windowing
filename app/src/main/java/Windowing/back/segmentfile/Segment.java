@@ -16,10 +16,6 @@ public class Segment {
         this.y1 = y1;
     }
 
-    public Point[] query(){
-        return null;
-    }
-
     public Line toLine() {
         return new Line(x0, y0, x1, y1);
     }

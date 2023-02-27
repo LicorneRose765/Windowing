@@ -3,9 +3,7 @@ package Windowing.back.segmentfile;
 public class Point {
     private double x;
     private double y;
-
     private double x1;
-
     private double y1;
 
     /**
@@ -21,7 +19,6 @@ public class Point {
         this.x1 = x1;
         this.y1 = y1;
     }
-
 
     public double getX() {
         return x;
