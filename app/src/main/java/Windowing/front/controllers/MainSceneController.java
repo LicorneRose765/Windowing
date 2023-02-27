@@ -74,12 +74,4 @@ public class MainSceneController extends Controller {
         popup.setScene(Scenes.FileLoaderPopup);
         popup.showAndWait();
     }
-
-    // TODO : to choose a file to load :
-    //  2 radio buttons :
-    //     * From resources
-    //     * From file system
-    //  If from resources is selected, activate three radio buttons : example1, segments2.seg, example3 to load either
-    //  example file located in the resources
-    //  If from file system is selected, activate a button that opens a file chooser
 }

@@ -4,13 +4,13 @@ import Windowing.back.segmentfile.Point;
 
 import java.util.Random;
 
-public class heapSort {
+public class HeapSort {
 
 
-    public static void heapSort(Point[] A, int N) {
+    public static void HeapSort(Point[] A, int N) {
         buildHeap(A, N);
         int n = N;
-        while(n >= 2) {
+        while (n >= 2) {
             swap(A, 1, n);
             n--;
             heapify(A, n, 1);
@@ -30,13 +30,12 @@ public class heapSort {
     }
 
     public static void buildHeap(Point[] A, int N) {
-        for(int i=father(N); i>1; i--) {
+        for (int i = father(N); i > 1; i--) {
             heapify(A, i, N);
         }
     }
 
-    public static void heapify(Point[] A, int n, int i)
-    {
+    public static void heapify(Point[] A, int n, int i) {
         int largest = i;
         int l = left(i);
         int r = right(i);
@@ -46,7 +45,7 @@ public class heapSort {
         } else if (r <= n && A[r].compareYTo(A[largest]) == 1) { // A[r] > A[largest]
             largest = r;
         }
-        if (i!=largest) {
+        if (i != largest) {
             swap(A, i, largest);
             heapify(A, n, largest);
         }
@@ -62,11 +61,11 @@ public class heapSort {
     public static void main(String[] args) {
         Point[] A = new Point[20];
         Random rand = new Random();
-        for (int i=0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
             A[i] = new Point(rand.nextInt(100), rand.nextInt(100), rand.nextInt(100), rand.nextInt(100));
         }
-        heapSort(A, A.length-1);
-        for (int j=0; j<20; j++) {
+        HeapSort(A, A.length - 1);
+        for (int j = 0; j < 20; j++) {
             System.out.println(A[j]);
         }
         System.out.println();
