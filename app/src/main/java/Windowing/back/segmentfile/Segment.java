@@ -7,9 +7,9 @@ import javafx.scene.shape.Line;
  * starting point of the segment and (x1, y1) is the ending point of the segment.
  */
 public class Segment {
-    private int x0, x1, y0, y1;
+    private double x0, x1, y0, y1;
 
-    public Segment(int x0, int y0, int x1, int y1) {
+    public Segment(double x0, double y0, double x1, double y1) {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
@@ -25,7 +25,7 @@ public class Segment {
      * @param x The value of x representing the vertical axis (line of equation x = [given_x])
      * @return True if the segment is entirely left of the given x coordinate, else otherwise
      */
-    public boolean isLeftOf(int x) {
+    public boolean isLeftOf(double x) {
         return Math.max(x0, x1) < x;
     }
 
@@ -34,7 +34,7 @@ public class Segment {
      * @param x The value of x representing the vertical axis (line of equation x = [given_x])
      * @return True if the segment intersect the given x coordinate, else otherwise
      */
-    public boolean horizontalIntersects(int x) {
+    public boolean horizontalIntersects(double x) {
         return Math.min(x0, x1) <= x && x <= Math.max(x0, x1);
     }
 
@@ -43,7 +43,7 @@ public class Segment {
      * @param x The value of x representing the vertical axis (line of equation x = [given_x])
      * @return True if the segment is entirely right of the given x coordinate, else otherwise
      */
-    public boolean isRightOf(int x) {
+    public boolean isRightOf(double x) {
         return x < Math.min(x0, x1);
     }
 
@@ -52,7 +52,7 @@ public class Segment {
      * @param y The value of y representing the vertical axis (line of equation y = [given_y])
      * @return True if the segment is entirely above the given y coordinate, else otherwise
      */
-    public boolean isAbove(int y) {
+    public boolean isAbove(double y) {
         // TODO : le repère est-il le repère habituel ou bien celui de l'affichage (y croissant vers le bas) ?
         //  ici je suppose que c'est le repère de l'affichage (y croissant vers le bas) (idem pour below)
         return Math.max(y0, y1) < y;
@@ -63,7 +63,7 @@ public class Segment {
      * @param y The value of y representing the horizontal axis (line of equation y = [given_y])
      * @return True if the segment intersect the given y coordinate, else otherwise
      */
-    public boolean verticalIntersects(int y) {
+    public boolean verticalIntersects(double y) {
         return Math.min(y0, y1) <= y && y <= Math.max(y0, y1);
     }
 
@@ -72,7 +72,7 @@ public class Segment {
      * @param y The value of y representing the vertical axis (line of equation y = [given_y])
      * @return True if the segment is entirely below the given y coordinate, else otherwise
      */
-    public boolean isBelow(int y) {
+    public boolean isBelow(double y) {
         return y < Math.min(y0, y1);
     }
 
