@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 public class PrioritySearchTree {
     private PrioritySearchTree left = null, right = null;
-    private Point2D value = null;
+    private Point value = null;
 
     /**
      * Builds a priority search tree from a sorted list of segments.
      * @param data The list of segments
      * @return A priority search tree
      */
-    public static PrioritySearchTree build(ArrayList<Point2D> data) {
+    public static PrioritySearchTree build(ArrayList<Point> data) {
         PrioritySearchTree tree = new PrioritySearchTree();
         // tree.left = build();
         // tree.right = build();
