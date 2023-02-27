@@ -22,6 +22,11 @@ public class Point {
         this.y1 = y1;
     }
 
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public double getX() {
         return x;
     }
@@ -43,12 +48,20 @@ public class Point {
         return "(" + x + ", " + y + ").(" + x1 + ", " + y1 + ")";
     }
 
+    public int compareTo(Point p2, CompareVariable var) {
+        if (var == CompareVariable.X) {
+            return compareXTo(p2);
+        } else {
+            return compareYTo(p2);
+        }
+    }
+
     /**
      * Compare two points by their y coordinate, if they are equal, compare by their x coordinate.(Composite number space)
      * @param p2 The point to compare to
      * @return 1 if this point is greater than p2, -1 if this point is lesser than p2, 0 if they are equal.
      */
-    public int compareYTo(Point p2) {
+    private int compareYTo(Point p2) {
         if (this.y < p2.y) {
             return -1;
         } else if (this.y > p2.y) {
@@ -64,7 +77,7 @@ public class Point {
      * @param p2 The point to compare to
      * @return 1 if this point is greater than p2, -1 if this point is lesser than p2, 0 if they are equal.
      */
-    public int compareXto(Point p2) {
+    private int compareXTo(Point p2) {
         if (this.x < p2.x) {
             return -1;
         } else if (this.x > p2.x) {
@@ -73,6 +86,15 @@ public class Point {
             // this.x == p2.x, we're using the y coordinate to break the tie (Composite number space)
             return Double.compare(this.y, p2.y);
         }
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Point p2))
+            return false;
+        return this.x == p2.x && this.y == p2.y && this.x1 == p2.x1 && this.y1 == p2.y1;
     }
 
     public Line toLine() {
