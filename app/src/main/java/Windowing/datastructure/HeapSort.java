@@ -5,8 +5,6 @@ import Windowing.back.segmentfile.Point;
 import java.util.Random;
 
 public class HeapSort {
-
-
     public static void HeapSort(Point[] A, int N) {
         buildHeap(A, N);
         int n = N;
