@@ -4,6 +4,7 @@ import Windowing.back.segmentfile.CompareVariable;
 import Windowing.back.segmentfile.Point;
 import javafx.geometry.Point2D;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -29,15 +30,24 @@ public class PrioritySearchTree {
         }
         Point minX = data.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
         data.remove(minX); // Remove the minimum X of the list
-
         HeapSort.sort(data, CompareVariable.Y);
-        int medianIndex = data.size() / 2;
+        int medianIndex = (data.size() / 2)-1;
+        if (medianIndex < 0){
+            medianIndex = 0; // TODO : clear this up (it's ugly af)
+        }
         Point median = data.get(medianIndex);
 
-        ArrayList<Point> leftData = new ArrayList<>(data.subList(0, medianIndex));
-        ArrayList<Point> rightData = new ArrayList<>(data.subList(medianIndex + 1, data.size()));
+        ArrayList<Point> leftData = new ArrayList<>();
+        ArrayList<Point> rightData = new ArrayList<>();
+        for (Point p : data) {
+            if (p.compareTo(median, CompareVariable.Y) == 1) {
+                rightData.add(p);
+            } else {
+                leftData.add(p);
+            }
+        }
 
-        return new PrioritySearchTree(build(leftData), build(rightData), median, median.getY());
+        return new PrioritySearchTree(build(leftData), build(rightData), minX, median.getY());
     }
 
     public PrioritySearchTree(Point value) {
@@ -63,5 +73,18 @@ public class PrioritySearchTree {
 
     public Point[] query(Window window){
         return null;
+    }
+
+
+    public PrioritySearchTree getLeft() {
+        return left;
+    }
+
+    public PrioritySearchTree getRight() {
+        return right;
+    }
+
+    public Point getValue() {
+        return value;
     }
 }
