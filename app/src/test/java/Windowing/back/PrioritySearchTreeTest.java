@@ -16,14 +16,11 @@ public class PrioritySearchTreeTest {
     @Test
     void canCreatePST(){
         // The expected result is in the question file in the misc folder. (Question 1)
-        ArrayList<Point> dataSet = new ArrayList<Point>(Arrays.asList(new Point(1,5),
+        ArrayList<Point> dataSet = new ArrayList<>(Arrays.asList(new Point(1,5),
                 new Point(2,3),
                 new Point(3, 7),
                 new Point(4, 2),
                 new Point(5,8)));
-
-        Point minX = dataSet.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
-        System.out.println(minX);
 
         PrioritySearchTree pst = PrioritySearchTree.build(dataSet);
 
@@ -40,9 +37,39 @@ public class PrioritySearchTreeTest {
         assertEquals(new Point(3,7), right.getValue());
         assertNull(right.getRight());
         //assertEquals(new Point(5,8), right.getLeft().getValue());
+    }
 
+    @Test
+    void canCreatePSTWithPointWithTheSameYCoordinate(){
+        // TODO : implement this test
+        ArrayList<Point> dataSet = new ArrayList<>(Arrays.asList(
+                new Point(-2,10),
+                new Point(0,10),
+                new Point(2,10),
+                new Point(6,10),
+                new Point(8,10)));
 
+        // The points to distribute between p_below and p_above are (0,10), (2,10), (6,10), (8,10).
+        // The median cannot be simply 10, y_mid will be the midpoint which will be in this case (2,10)
+
+        PrioritySearchTree pst = PrioritySearchTree.build(dataSet);
+
+        // Testing if the PST has the correct shape
+        assertEquals(new Point(-2,10), pst.getValue());
+        // Left part
+        PrioritySearchTree left = pst.getLeft();
+        assertEquals(new Point(0,10), left.getValue());
+        assertNull(left.getRight());
+        assertEquals(new Point(2,10), left.getLeft().getValue());
+
+        // Right part
+        PrioritySearchTree right = pst.getRight();
+        assertEquals(new Point(6,10), right.getValue());
+        assertNull(right.getRight());
+        assertEquals(new Point(8,10), right.getLeft().getValue());
 
 
     }
+
+
 }

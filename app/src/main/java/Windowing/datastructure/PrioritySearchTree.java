@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class PrioritySearchTree {
 
     private PrioritySearchTree left, right;
-    private Point value = null;
-    private double median = 0;
+    private Point value;
+    private Point median;
 
     /**
      * Builds a priority search tree from a sorted list of segments.
@@ -28,18 +28,25 @@ public class PrioritySearchTree {
         if (data.size() == 1) {
             return new PrioritySearchTree(data.get(0));
         }
-        Point minX = data.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
-        data.remove(minX); // Remove the minimum X of the list
         HeapSort.sort(data, CompareVariable.Y);
-        int medianIndex = (data.size() / 2)-1;
+
+        return buildHelper(data);
+    }
+
+
+    private static PrioritySearchTree buildHelper(ArrayList<Point> sortedData) {
+        Point minX = sortedData.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
+        sortedData.remove(minX); // Remove the minimum X of the list
+
+        int medianIndex = (sortedData.size() / 2)-1;
         if (medianIndex < 0){
             medianIndex = 0; // TODO : clear this up (it's ugly af)
         }
-        Point median = data.get(medianIndex);
+        Point median = sortedData.get(medianIndex);
 
         ArrayList<Point> leftData = new ArrayList<>();
         ArrayList<Point> rightData = new ArrayList<>();
-        for (Point p : data) {
+        for (Point p : sortedData) {
             if (p.compareTo(median, CompareVariable.Y) == 1) {
                 rightData.add(p);
             } else {
@@ -47,14 +54,14 @@ public class PrioritySearchTree {
             }
         }
 
-        return new PrioritySearchTree(build(leftData), build(rightData), minX, median.getY());
+        return new PrioritySearchTree(build(leftData), build(rightData), minX, median);
     }
 
     public PrioritySearchTree(Point value) {
         this.value = value;
     }
 
-    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Point value, double median) {
+    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Point value, Point median) {
         this.left = left;
         this.right = right;
         this.value = value;
