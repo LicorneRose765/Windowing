@@ -75,7 +75,7 @@ public class SegmentFileReader {
      * @throws FormatException If the line is not properly formatted, i.e. not in this format : x0 x1 y0 y1
      */
     private static double[] parseLine(String line, int lineIndex) throws FormatException {
-        if (!line.matches("(?:-)?[0-9]*\\.[0-9]+\\s(?:-)?[0-9]*\\.[0-9]+\\s(?:-)?[0-9]*\\.[0-9]+\\s(?:-)?[0-9]*\\.[0-9]+")) {
+        if (!line.matches("-?[0-9]+\\.?[0-9]*\\s-?[0-9]+\\.?[0-9]*\\s-?[0-9]+\\.?[0-9]*\\s-?[0-9]+\\.?[0-9]*")) { // should be working
             throw new FormatException("Line is not properly formatted.\n" +
                     "Expected format : x0 y0 x1 y1.\n" +
                     "Line number : " + (lineIndex + 1) + "\n" +

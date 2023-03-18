@@ -92,9 +92,9 @@ public class Point {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Point p2))
+        if (!(obj instanceof Point))
             return false;
-        return this.x == p2.x && this.y == p2.y && this.x1 == p2.x1 && this.y1 == p2.y1;
+        return this.x == ((Point) obj).x && this.y == ((Point) obj).y && this.x1 == ((Point) obj).x1 && this.y1 == ((Point) obj).y1;
     }
 
     public Line toLine() {

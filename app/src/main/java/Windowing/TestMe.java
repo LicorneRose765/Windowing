@@ -29,7 +29,7 @@ public class TestMe extends Application {
         Flow.add(Scenes.MainScene);
 
         stage.setTitle("Linuxing app");
-        stage.setResizable(false);
+        // stage.setResizable(false);
         stage.setWidth(1280);
         stage.setHeight(720);
         stage.setScene(Scenes.MainScene);

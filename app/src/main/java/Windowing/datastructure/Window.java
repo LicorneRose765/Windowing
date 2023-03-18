@@ -95,4 +95,12 @@ public class Window {
         System.out.println(point + " - " + xMin + " " + xMax + " " + yMin + " " + yMax + " Result: " + (point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax));
         return point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax;
     }
+
+    public double getWidth() {
+        return xMax - xMin;
+    }
+
+    public double getHeight() {
+        return yMax - yMin;
+    }
 }
