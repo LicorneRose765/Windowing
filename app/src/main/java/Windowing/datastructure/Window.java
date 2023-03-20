@@ -1,6 +1,5 @@
 package Windowing.datastructure;
 
-import Windowing.back.segmentfile.CompareVariable;
 import Windowing.back.segmentfile.Point;
 
 /**
@@ -11,7 +10,7 @@ import Windowing.back.segmentfile.Point;
  * [xMin, xMax] x [yMin, yMax]
  */
 public class Window {
-    private double xMin, xMax, yMin, yMax;
+    private final double xMin, xMax, yMin, yMax;
 
     /**
      * Creates a window object.
@@ -24,10 +23,12 @@ public class Window {
      * @param yMax The maximum y coordinate of the window
      */
     public Window(double xMin, double xMax, double yMin, double yMax) {
+        if (xMin > xMax || yMin > yMax) throw new IllegalArgumentException("Invalid window bounds");
         this.xMin = xMin;
         this.xMax = xMax;
         this.yMin = yMin;
         this.yMax = yMax;
+        System.out.println("Window created : [" + xMin + ", "+ xMax + "] x [" + yMin + ", " + yMax + "]");
     }
 
     public double getXMin() {
@@ -100,7 +101,7 @@ public class Window {
 
 
     public boolean contains(Point point) {
-        System.out.println(point + " - " + xMin + " " + xMax + " " + yMin + " " + yMax + " Result: " + (point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax));
+        System.out.println(point + " Result : " + (point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax));
         return point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax;
     }
 

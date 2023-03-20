@@ -3,15 +3,13 @@ package Windowing.back.segmentfile;
 import javafx.scene.shape.Line;
 
 public class Point {
-    private double x;
-    private double y;
-    private double x1;
-    private double y1;
+    private final double x, y, x1, y1;
 
     /**
      * Creates a point from two coordinates and store the coordinates of the other point of the segment.
-     * @param x The x coordinate of the point
-     * @param y The y coordinate of the point
+     *
+     * @param x  The x coordinate of the point
+     * @param y  The y coordinate of the point
      * @param x1 The x coordinate of the other point of the segment
      * @param y1 The y coordinate of the other point of the segment
      */
@@ -22,9 +20,16 @@ public class Point {
         this.y1 = y1;
     }
 
+    /**
+     * Used for the tests.
+     * @param x The x coordinate of the point
+     * @param y The y coordinate of the point
+     */
     public Point(double x, double y) {
         this.x = x;
         this.y = y;
+        this.x1 = 0;
+        this.y1 = 0;
     }
 
     public double getX() {
@@ -58,6 +63,7 @@ public class Point {
 
     /**
      * Compare two points by their y coordinate, if they are equal, compare by their x coordinate.(Composite number space)
+     *
      * @param p2 The point to compare to
      * @return 1 if this point is greater than p2, -1 if this point is lesser than p2, 0 if they are equal.
      */
@@ -74,6 +80,7 @@ public class Point {
 
     /**
      * Compare two points by their x coordinate, if they are equal, compare by their y coordinate.(Composite number space)
+     *
      * @param p2 The point to compare to
      * @return 1 if this point is greater than p2, -1 if this point is lesser than p2, 0 if they are equal.
      */
@@ -91,6 +98,7 @@ public class Point {
 
     /**
      * Used for testing purposes.
+     *
      * @param obj The object to compare to
      * @return True if the two objects are equal, false otherwise.
      */

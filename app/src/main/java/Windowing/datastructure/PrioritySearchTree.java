@@ -2,16 +2,13 @@ package Windowing.datastructure;
 
 import Windowing.back.segmentfile.CompareVariable;
 import Windowing.back.segmentfile.Point;
-import javafx.geometry.Point2D;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class PrioritySearchTree {
 
     private PrioritySearchTree left, right;
-    private Point value;
+    private final Point value;
     private Point median;
 
     /**
@@ -47,7 +44,7 @@ public class PrioritySearchTree {
 
         int medianIndex = (sortedData.size() / 2) - 1;
         if (medianIndex < 0) {
-            medianIndex = 0; // TODO : clear this up (it's ugly af)
+            medianIndex = 0;
         }
         Point median = sortedData.get(medianIndex);
 
@@ -75,15 +72,15 @@ public class PrioritySearchTree {
         this.median = median;
     }
 
-    public boolean isLeaf(){
+    public boolean isLeaf() {
         return median == null;
     }
 
-    public boolean hasLeft(){
+    public boolean hasLeft() {
         return left != null;
     }
 
-    public boolean hasRight(){
+    public boolean hasRight() {
         return right != null;
     }
 
@@ -92,8 +89,8 @@ public class PrioritySearchTree {
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
-        while (vSplit == null && !current.isLeaf()){
-            if (window.contains(current.value)){
+        while (vSplit == null && !current.isLeaf()) {
+            if (window.contains(current.value)) {
                 // If the node is in the window.
                 res.add(current.value);
             }
@@ -108,7 +105,6 @@ public class PrioritySearchTree {
                 if (window.yMaxCompareTo(current.median) == 1) {
                     // yMax >= y_mid : found vSplit
                     vSplit = current;
-                    System.out.println("vSplit found : " + vSplit.value);
                 } else {
                     // yMax < y_mid : searching in left part
                     current = current.getLeft();
@@ -116,9 +112,9 @@ public class PrioritySearchTree {
             }
         }
 
-        if (vSplit == null){
+        if (vSplit == null) {
             // We are in a leaf, and we didn't find vSplit.
-            if (window.contains(current.value)){
+            if (window.contains(current.value)) {
                 res.add(current.value);
             }
             return res;
@@ -126,18 +122,18 @@ public class PrioritySearchTree {
 
         // Searching for yMin
         PrioritySearchTree leftSubtree = vSplit.getLeft();
-        while (leftSubtree != null){
-            if (window.contains(leftSubtree.value)){
+        while (leftSubtree != null) {
+            if (window.contains(leftSubtree.value)) {
                 res.add(leftSubtree.value);
             }
-            if(leftSubtree.isLeaf()){
+            if (leftSubtree.isLeaf()) {
                 break;
             }
 
             if (window.yMinCompareTo(leftSubtree.median) == -1) {
                 // yMin <= y_min, searching yMin in the left subtree.
                 // All the points in the right subtree have their y coordinates in the window.
-                if (leftSubtree.hasRight()){
+                if (leftSubtree.hasRight()) {
                     res.addAll(leftSubtree.getRight().reportInSubtree(window));
                 }
                 leftSubtree = leftSubtree.getLeft();
@@ -148,18 +144,18 @@ public class PrioritySearchTree {
 
         // Searching for yMax
         PrioritySearchTree rightSubtree = vSplit.getRight();
-        while (rightSubtree != null && !rightSubtree.isLeaf()){
-            if (window.contains(rightSubtree.value)){
+        while (rightSubtree != null && !rightSubtree.isLeaf()) {
+            if (window.contains(rightSubtree.value)) {
                 res.add(rightSubtree.value);
             }
-            if(rightSubtree.isLeaf()){
+            if (rightSubtree.isLeaf()) {
                 break;
             }
 
             if (window.yMaxCompareTo(rightSubtree.median) == 1) {
                 // yMax >= y_mid, searching yMax in the right subtree.
                 // All the points in the left subtree have their y coordinates in the window.
-                if (rightSubtree.hasLeft()){
+                if (rightSubtree.hasLeft()) {
                     res.addAll(rightSubtree.getLeft().reportInSubtree(window));
                 }
                 rightSubtree = rightSubtree.getRight();
@@ -175,21 +171,19 @@ public class PrioritySearchTree {
     /**
      * Reports all the points in the subtree that are in the x-range of the window. <br>
      * We don't have to check on their y-coordinates because we have already done in the function query.
+     *
      * @param window The window to check
      * @return A list of points in the subtree that are in the x-range of the window.
      */
     public ArrayList<Point> reportInSubtree(Window window) {
-        // TODO ; adapt this to the new window types
-
-        // TODO : take advantage of the fact that the x coordinates are stored in a min-heap.
         ArrayList<Point> res = new ArrayList<>();
-        if (window.xMaxCompareTo(this.value) == 1){
+        if (window.xMaxCompareTo(this.value) == 1) {
             // xMax >= x
-            if (window.xMinCompareTo(this.value) == -1){
+            if (window.xMinCompareTo(this.value) == -1) {
                 // xMin <= x
                 res.add(this.value);
             }
-            if (this.hasLeft()){
+            if (this.hasLeft()) {
                 res.addAll(this.getLeft().reportInSubtree(window));
             }
             if (this.hasRight()) {
