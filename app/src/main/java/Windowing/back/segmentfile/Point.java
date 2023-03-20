@@ -89,7 +89,11 @@ public class Point {
     }
 
 
-
+    /**
+     * Used for testing purposes.
+     * @param obj The object to compare to
+     * @return True if the two objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Point))

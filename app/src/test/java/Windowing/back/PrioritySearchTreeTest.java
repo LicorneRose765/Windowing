@@ -85,15 +85,14 @@ public class PrioritySearchTreeTest {
 
         PrioritySearchTree pst = PrioritySearchTree.build(dataSet);
 
-        Window window = new Window(0, 8, 0, 8);
+        Window window = new Window(Double.NEGATIVE_INFINITY, 8, 0, 8);
 
         ArrayList<Point> expected = new ArrayList<>(Arrays.asList(
-                new Point(1, 5),
-                new Point(2, 5),
-                new Point(2,2),
-                new Point(0,2)));
+                new Point(0, 2),
+                new Point(2, 2),
+                new Point(1,5),
+                new Point(2,5)));
 
-        assert pst != null;
         ArrayList<Point> result = pst.query(window);
 
         assertEquals(expected, result);

@@ -76,7 +76,7 @@ public class PrioritySearchTree {
     }
 
     public boolean isLeaf(){
-        return left == null && right == null;
+        return median == null;
     }
 
     public boolean hasLeft(){
@@ -88,50 +88,57 @@ public class PrioritySearchTree {
     }
 
     public ArrayList<Point> query(Window window) {
-        // TODO : implement this but with all window types
         ArrayList<Point> res = new ArrayList<>();
-        // Search yMin and yMax in the tree
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
-        while (vSplit == null && !current.isLeaf()) {
-            if (window.contains(current.value)) {
+        while (vSplit == null && !current.isLeaf()){
+            if (window.contains(current.value)){
+                // If the node is in the window.
                 res.add(current.value);
             }
-            // Searching vSplit
+
+            // Searching for vSplit
             if (window.yMinCompareTo(current.median) == 1) {
-                // yMin > y_mid, search right part
-                if (window.yMaxCompareTo(current.median) == 1) {
-                    // yMax >= y_mid, search right part
-                    current = current.getLeft();
-                } else {
-                    // yMin > y_mid && yMax < y_mid = found vSplit
-                    // TODO : check out to deal with this case because it's theoretically impossible.
-                    System.out.println("ERROR : IMPOSSIBLE CASE");
-                    vSplit = current;
-                }
+                // yMin > y_mid. All the points at left aren't in the window, searching in right part.
+                current = current.getRight();
             } else {
-                // yMin <= y_mid, search left part
+                // yMin <= y_mid.
+                // We have to check were is yMax here.
                 if (window.yMaxCompareTo(current.median) == 1) {
-                    // yMin <= y_mid && yMax >= y_mid = found vSplit
+                    // yMax >= y_mid : found vSplit
                     vSplit = current;
+                    System.out.println("vSplit found : " + vSplit.value);
                 } else {
-                    // yMax < y_mid = search left part
+                    // yMax < y_mid : searching in left part
                     current = current.getLeft();
                 }
             }
         }
-        if (vSplit.isLeaf()) {
+
+        if (vSplit == null){
+            // We are in a leaf, and we didn't find vSplit.
+            if (window.contains(current.value)){
+                res.add(current.value);
+            }
             return res;
         }
+
+        // Searching for yMin
         PrioritySearchTree leftSubtree = vSplit.getLeft();
-        while (leftSubtree.hasLeft() && leftSubtree.hasRight()) {
-            // Searching for yMin
+        while (leftSubtree != null){
+            if (window.contains(leftSubtree.value)){
+                res.add(leftSubtree.value);
+            }
+            if(leftSubtree.isLeaf()){
+                break;
+            }
+
             if (window.yMinCompareTo(leftSubtree.median) == -1) {
-                // yMin <= y_mid, search left part and report all the points in the right part
-                ArrayList<Point> tmp = leftSubtree.getRight().reportInSubtree(window);
-                if (tmp != null) {
-                    res.addAll(tmp);
+                // yMin <= y_min, searching yMin in the left subtree.
+                // All the points in the right subtree have their y coordinates in the window.
+                if (leftSubtree.hasRight()){
+                    res.addAll(leftSubtree.getRight().reportInSubtree(window));
                 }
                 leftSubtree = leftSubtree.getLeft();
             } else {
@@ -139,24 +146,30 @@ public class PrioritySearchTree {
             }
         }
 
-
-        PrioritySearchTree rightSubTree = vSplit.getRight();
         // Searching for yMax
-        while (rightSubTree.hasRight() && rightSubTree.hasLeft()) {
-            if (window.yMaxCompareTo(rightSubTree.median) == 1) {
-                // yMax >= y_mid, search right part and report all the points in the left part
-                ArrayList<Point> tmp = rightSubTree.getLeft().reportInSubtree(window);
-                if (tmp != null) {
-                    res.addAll(tmp);
+        PrioritySearchTree rightSubtree = vSplit.getRight();
+        while (rightSubtree != null && !rightSubtree.isLeaf()){
+            if (window.contains(rightSubtree.value)){
+                res.add(rightSubtree.value);
+            }
+            if(rightSubtree.isLeaf()){
+                break;
+            }
+
+            if (window.yMaxCompareTo(rightSubtree.median) == 1) {
+                // yMax >= y_mid, searching yMax in the right subtree.
+                // All the points in the left subtree have their y coordinates in the window.
+                if (rightSubtree.hasLeft()){
+                    res.addAll(rightSubtree.getLeft().reportInSubtree(window));
                 }
-                rightSubTree = rightSubTree.getRight();
+                rightSubtree = rightSubtree.getRight();
             } else {
-                rightSubTree = rightSubTree.getLeft();
+                rightSubtree = rightSubtree.getLeft();
             }
         }
 
 
-        return null;
+        return res;
     }
 
     /**
@@ -168,18 +181,22 @@ public class PrioritySearchTree {
     public ArrayList<Point> reportInSubtree(Window window) {
         // TODO ; adapt this to the new window types
 
+        // TODO : take advantage of the fact that the x coordinates are stored in a min-heap.
         ArrayList<Point> res = new ArrayList<>();
-        if (this.isLeaf() && window.contains(this.value)) {
-            res.add(this.value);
+        if (window.xMaxCompareTo(this.value) == 1){
+            // xMax >= x
+            if (window.xMinCompareTo(this.value) == -1){
+                // xMin <= x
+                res.add(this.value);
+            }
+            if (this.hasLeft()){
+                res.addAll(this.getLeft().reportInSubtree(window));
+            }
+            if (this.hasRight()) {
+                res.addAll(this.getRight().reportInSubtree(window));
+            }
         }
-        if (this.hasLeft()){
-            res.addAll(this.getLeft().reportInSubtree(window));
-        }
-        if (this.hasRight()) {
-            res.addAll(this.getRight().reportInSubtree(window));
-        }
-
-        return null;
+        return res;
     }
 
 

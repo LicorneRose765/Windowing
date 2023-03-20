@@ -46,26 +46,34 @@ public class Window {
         return yMax;
     }
 
-    public int xMincompareTo(Point p) {
-        if (p.getX() < xMin) {
-            return -1;
-        } else {
-            // p.getX() >= xMin
-            return 1;
-        }
-    }
-
-    public int xMaxCompareTo(Point p) {
-        if (p.getX() > xMax) {
+    /**
+     * Compare The xMin bound of the window with the point. (xMin | - infty)
+     * @param p the point to compare with
+     * @return -1 if xMin <= pX, 1 otherwise.
+     */
+    public int xMinCompareTo(Point p) {
+        if (xMin > p.getX()) {
             return 1;
         } else {
-            // p.getX() <= xMax
             return -1;
         }
     }
 
     /**
-     * Compare the point with the yMin bound of the window. (yMin | - infty)
+     * Compare The xMax bound of the window with the point. (xMax | + infty)
+     * @param p the point to compare with
+     * @return -1 if xMax < pX, 1 otherwise.
+     */
+    public int xMaxCompareTo(Point p) {
+        if (xMax < p.getX()) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * Compare The yMin bound of the window with the point. (yMin | - infty)
      * @param p the point to compare with
      * @return -1 if yMin <= pY, 1 otherwise.
      */
@@ -78,7 +86,7 @@ public class Window {
     }
 
     /**
-     * Compare the point with the yMax bound of the window. (yMax | + infty)
+     * Compare The yMax bound of the window with the point. (yMax | + infty)
      * @param p the point to compare with
      * @return -1 if yMax < pY, 1 otherwise.
      */
