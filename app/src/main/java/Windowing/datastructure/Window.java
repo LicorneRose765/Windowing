@@ -1,6 +1,6 @@
 package Windowing.datastructure;
 
-import Windowing.back.segmentfile.Point;
+import Windowing.back.segment.Point;
 
 /**
  * Represents a window in the plane.

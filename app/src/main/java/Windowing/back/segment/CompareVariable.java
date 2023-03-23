@@ -1,4 +1,4 @@
-package Windowing.back.segmentfile;
+package Windowing.back.segment;
 
 public enum CompareVariable {
     X,Y

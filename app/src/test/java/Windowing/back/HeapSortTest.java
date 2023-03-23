@@ -1,7 +1,7 @@
 package Windowing.back;
 
-import Windowing.back.segmentfile.CompareVariable;
-import Windowing.back.segmentfile.Point;
+import Windowing.back.segment.CompareVariable;
+import Windowing.back.segment.Point;
 import Windowing.datastructure.HeapSort;
 import org.junit.jupiter.api.Test;
 

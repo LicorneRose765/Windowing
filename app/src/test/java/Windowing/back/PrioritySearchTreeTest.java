@@ -1,6 +1,6 @@
 package Windowing.back;
 
-import Windowing.back.segmentfile.Point;
+import Windowing.back.segment.Point;
 import Windowing.datastructure.PrioritySearchTree;
 import Windowing.datastructure.Window;
 import org.junit.jupiter.api.Test;

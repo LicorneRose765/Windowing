@@ -1,8 +1,7 @@
-package Windowing.back.segmentfile;
+package Windowing.back.segment;
 
 import Windowing.TestMe;
 import Windowing.datastructure.Window;
-import javafx.geometry.Point2D;
 
 import java.io.IOException;
 import java.net.URI;
