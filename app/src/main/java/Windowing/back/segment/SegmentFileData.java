@@ -13,22 +13,22 @@ import java.util.ArrayList;
  */
 public class SegmentFileData {
     private Window window;
-    private ArrayList<Point> points;
+    private ArrayList<Segment> segments;
     private PrioritySearchTree PST;
 
-    public SegmentFileData(Window window, ArrayList<Point> points) {
+    public SegmentFileData(Window window, ArrayList<Segment> segments) {
         this.window = window;
-        this.points = points;
-        this.PST = PrioritySearchTree.build(points, Direction.HORIZONTAL);
-        // TODO : separate here horizontal and vertical segments
+        this.segments = segments;
+        this.PST = PrioritySearchTree.build(segments, Direction.HORIZONTAL);
+        // TODO : separate here horizontal and vertical segments ?
     }
 
     public Window getWindow() {
         return window;
     }
 
-    public ArrayList<Point> getPoints() {
-        return points;
+    public ArrayList<Segment> getPoints() {
+        return segments;
     }
 
     @Override
@@ -39,9 +39,9 @@ public class SegmentFileData {
                      .append(" x ")
                      .append(window.getYMax() - window.getYMin())
                      .append("\n");
-        for (int segmentIndex = 0; segmentIndex < points.size(); segmentIndex++) {
+        for (int segmentIndex = 0; segmentIndex < segments.size(); segmentIndex++) {
             bobTheBuilder.append("Segment ").append(segmentIndex).append(" : ")
-                         .append(points.get(segmentIndex).toString())
+                         .append(segments.get(segmentIndex).toString())
                          .append("\n");
         }
         return bobTheBuilder.toString();

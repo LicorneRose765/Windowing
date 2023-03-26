@@ -1,6 +1,6 @@
 package Windowing.datastructure;
 
-import Windowing.back.segment.Point;
+import Windowing.back.segment.Segment;
 
 /**
  * Represents a window in the plane.
@@ -52,7 +52,7 @@ public class Window {
      * @param p the point to compare with
      * @return -1 if xMin <= pX, 1 otherwise.
      */
-    public int xMinCompareTo(Point p) {
+    public int xMinCompareTo(Segment p) {
         if (xMin > p.getX()) {
             return 1;
         } else {
@@ -65,7 +65,7 @@ public class Window {
      * @param p the point to compare with
      * @return -1 if xMax < pX, 1 otherwise.
      */
-    public int xMaxCompareTo(Point p) {
+    public int xMaxCompareTo(Segment p) {
         if (xMax < p.getX()) {
             return -1;
         } else {
@@ -78,7 +78,7 @@ public class Window {
      * @param p the point to compare with
      * @return -1 if yMin <= pY, 1 otherwise.
      */
-    public int yMinCompareTo(Point p) {
+    public int yMinCompareTo(Segment p) {
         if (yMin > p.getY()) {
             return 1;
         } else {
@@ -91,7 +91,7 @@ public class Window {
      * @param p the point to compare with
      * @return -1 if yMax < pY, 1 otherwise.
      */
-    public int yMaxCompareTo(Point p) {
+    public int yMaxCompareTo(Segment p) {
         if (yMax < p.getY()) {
             return -1;
         } else {
@@ -100,9 +100,15 @@ public class Window {
     }
 
 
-    public boolean contains(Point point) {
-        System.out.println(point + " Result : " + (point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax));
-        return point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax;
+    public boolean contains(Segment segment) {
+        // TODO : clean this up
+        System.out.println(segment + " Result : " + (segment.getX() >= xMin &&
+                segment.getX() <= xMax && segment.getY() >= yMin && segment.getY() <= yMax));
+
+        return  segment.getX() >= xMin &&
+                segment.getX() <= xMax &&
+                segment.getY() >= yMin &&
+                segment.getY() <= yMax;
     }
 
     public double getWidth() {

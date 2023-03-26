@@ -46,7 +46,7 @@ public class SegmentFileReader {
     private static SegmentFileData readSegmentFileLines(URI uri) throws FormatException, IOException {
         List<String> lines = Files.readAllLines(Paths.get(uri)); // TODO : use resources bc this path won't work         //  why did I write this to.do ?
         Window window = null;
-        ArrayList<Point> points = new ArrayList<>();
+        ArrayList<Segment> segments = new ArrayList<>();
 
         for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
             double[] lineNumbers = parseLine(lines.get(lineIndex), lineIndex);
@@ -54,13 +54,13 @@ public class SegmentFileReader {
             if (lineIndex == 0) {
                 window = extractWindow(lineNumbers);
             } else {
-                points.add(extractPoint(lineNumbers));
+                segments.add(extractPoint(lineNumbers));
             }
         }
 
         assert window != null;
 
-        return new SegmentFileData(window, points);
+        return new SegmentFileData(window, segments);
     }
 
     /**
@@ -89,8 +89,8 @@ public class SegmentFileReader {
      * @param numbers x0 y0 x1 y1
      * @return A segment corresponding to the given coordinates
      */
-    private static Point extractPoint(double[] numbers) {
-        return new Point(numbers[0], numbers[1], numbers[2], numbers[3]);
+    private static Segment extractPoint(double[] numbers) {
+        return new Segment(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 
     /**

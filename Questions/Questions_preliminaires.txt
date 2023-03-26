@@ -9,7 +9,7 @@ Si on ne considère que la coordonnée y, on fait apparaître un ABR. La défini
 Un arbre binaire de recherche (ABR) est un arbre binaire tel que pour tout noeud x, la donnée qui s'y trouve est
   > aux données du sous-arbre gauche de x
   < aux données du sous-arbre droit de x
-Or, dans la définition de la structure de donnée employée, il est dit que l'on note ymid la médiane des coordonnées de tous les points sauf la racine. Aussi, on note Pbelow l'ensemble des points p appartenant à l'ensemble P (duquel on exclut la racine) qui ont une coordonnée y < ymid. Similairement, on note Pabove l'ensemble des points p appartenant à l'ensemble P (duquel on exclut de nouveau la racin) qui ont une coordonnée y > ymid. La structure de donnée est construire telle que la racine possède deux sous-arbres : Pbelow comme sous-arbre gauche et Pabove comme sous-arbre droit. Il est donc clair que nous avons affaire à un ABR, puisque pour toutes donnée d'un noeud x, cette donnée est > aux données contenues dans son sous-arbre gauche et < aux données contenues dans son sous-arbre droit.
+Or, dans la définition de la structure de donnée employée, il est dit que l'on note ymid la médiane des coordonnées de tous les segments sauf la racine. Aussi, on note Pbelow l'ensemble des segments p appartenant à l'ensemble P (duquel on exclut la racine) qui ont une coordonnée y < ymid. Similairement, on note Pabove l'ensemble des segments p appartenant à l'ensemble P (duquel on exclut de nouveau la racin) qui ont une coordonnée y > ymid. La structure de donnée est construire telle que la racine possède deux sous-arbres : Pbelow comme sous-arbre gauche et Pabove comme sous-arbre droit. Il est donc clair que nous avons affaire à un ABR, puisque pour toutes donnée d'un noeud x, cette donnée est > aux données contenues dans son sous-arbre gauche et < aux données contenues dans son sous-arbre droit.
 
 
 3. De quelle façon est équilibré un arbre de recherche à priorité ?
@@ -18,12 +18,12 @@ Lorsqu'on insère une nouvelle donnée, il faut la placer correctement selon sa 
 Équilibré = équilibre entre les sous-arbres ? Parce que si oui alors mon raisonnement sert à rien lol
 
 
-4. La construction d’un arbre de recherche à priorité peut se faire en O(n log2 n) si n est le nombre de points de R^2 contenus dans l’arbre. Expliquez comment on peut y parvenir et comment le prouver. Il faut sans doute utiliser une autre structure de données qui permet de calculer efficacement la médiane.
+4. La construction d’un arbre de recherche à priorité peut se faire en O(n log2 n) si n est le nombre de segments de R^2 contenus dans l’arbre. Expliquez comment on peut y parvenir et comment le prouver. Il faut sans doute utiliser une autre structure de données qui permet de calculer efficacement la médiane.
 
 
 
 
-5. La structure d’arbre de recherche à priorité permet d’obtenir efficacement l’ensemble des points de T qui sont contenus dans une fenêtre donnée de la forme (−∞ : x'] × [y : y']. Expliquez comment adapter l’algorithme proposé pour traiter une fenêtre de la forme [x : +∞) × [y : y'], [x : x'] × (−∞ : y'] ou [x : x'] × [y : y'].
+5. La structure d’arbre de recherche à priorité permet d’obtenir efficacement l’ensemble des segments de T qui sont contenus dans une fenêtre donnée de la forme (−∞ : x'] × [y : y']. Expliquez comment adapter l’algorithme proposé pour traiter une fenêtre de la forme [x : +∞) × [y : y'], [x : x'] × (−∞ : y'] ou [x : x'] × [y : y'].
 
 Pour une fenêtre de la forme (−∞ : x'] × [y : y'], on a
   - un minimum à la racine selon la coordonnée x
@@ -34,17 +34,17 @@ Pour une fenêtre de la forme [x : x'] × (−∞ : y'], il faut inverser le rô
 Pour une fenêtre de la forme [x : x'] × [y : y'], on peut choisir sur quelle composante jouera le parcours "vers le bas" (x ou y). La racine aura comme valeur de la composante (x ou y) choisie un minimum ou un maximum, pour lequel on imposera une borne (x si on y met le minimum en x, x' si on y met le maximum en x, y si on y met le minimum en y et y' si on y met le maximum en y'). On imposera que tout noeud (racine comprise) doit se trouver dans l'intervale désormais bornée à gauche et à droite, alors qu'avant, on pouvait avoir une absence de borne et donc pas de minimum/maximum à respecter dans certains cas. On imposera aussi que les fils gauches/droits seront ordonnés selon la composante qui n'a pas été choisie, et que celle-ci doit se trouver dans l'intervalle bornée à gauche et à droite.
 
 
-6. Les auteurs du Chapitre 10 font l’hypothèse que tous les points ont des coordonnées bien distinctes en x et en y. Expliquez pourquoi.
+6. Les auteurs du Chapitre 10 font l’hypothèse que tous les segments ont des coordonnées bien distinctes en x et en y. Expliquez pourquoi.
 
-On accepte les points ayant une composante identique en x ou en y (ou exclusif) puisqu'on peut les représenter différemment comme suit : (x, y) devient ((x|y), (y|x)). Il est trivial de voir que si deux points ont une composante identique, alors, sous cette nouvelle forme, ils ont deux composantes distinctes. On empêche cependant d'avoir des points avec deux composantes identiques (par exemple (2, 3) et (2, 3)) car alors, sous leur nouvelle forme, ils conserveraient leur identicité ((2, 3) devient ((2|3), (3|2)), et on ne peut plus différencier plusieurs instances de (2, 3), là où c'était le cas lorsqu'une composante variait)).
+On accepte les segments ayant une composante identique en x ou en y (ou exclusif) puisqu'on peut les représenter différemment comme suit : (x, y) devient ((x|y), (y|x)). Il est trivial de voir que si deux segments ont une composante identique, alors, sous cette nouvelle forme, ils ont deux composantes distinctes. On empêche cependant d'avoir des segments avec deux composantes identiques (par exemple (2, 3) et (2, 3)) car alors, sous leur nouvelle forme, ils conserveraient leur identicité ((2, 3) devient ((2|3), (3|2)), et on ne peut plus différencier plusieurs instances de (2, 3), là où c'était le cas lorsqu'une composante variait)).
 
 
-7. Une technique est présentée à la page 111. Celle-ci permet de simuler des coordonnées distinctes pour un ensemble de points quelconques et une requête. Expliquez comment.
+7. Une technique est présentée à la page 111. Celle-ci permet de simuler des coordonnées distinctes pour un ensemble de segments quelconques et une requête. Expliquez comment.
 
-La coordonnée simulée pour un point (px, py) est ((px|py), (py|px)). Cela permet de différencier des points ayant une composante identique grâce à leur nouvelle composantes, appelées nombres composites. La nouvelle range (R') définie est [(x|−∞) : (x'|+∞)] × [(y| −∞) : (y'|+∞)]. Chaque point original appartient à la range originale (R) si x <= px <= x' et y <= py <= y'. Pour R', la condition devient (x|−∞) <= (a|b) <= (x'|+∞) et (y|-∞) <= (py|px) <= (y'|+∞). Pour vérifier chacune des conditions, on doit vérifier l'ordre définit sur les nombres composites définit comme (a|b) < (a'|b') ⇔ a < a' or (a = a' and b < b'). Donc, pour la première condition, on a (x|-∞) <= (px|py) <= (x'|+∞) qui devient x <= px or (x = px and y <= py) and px <= x' or (px = x' and py <= y'), c'est-à-dire x <= px or (x = px and py >= -∞) and px <= x' or (px = x' and py <= +∞). On doit donc vérifier que (x <= px ou x = px) et (px <= x' ou px = x') car les conditions -∞ <= py et py <= +∞ seront toujours vraies par hypothèse.
+La coordonnée simulée pour un segment (px, py) est ((px|py), (py|px)). Cela permet de différencier des segments ayant une composante identique grâce à leur nouvelle composantes, appelées nombres composites. La nouvelle range (R') définie est [(x|−∞) : (x'|+∞)] × [(y| −∞) : (y'|+∞)]. Chaque segment original appartient à la range originale (R) si x <= px <= x' et y <= py <= y'. Pour R', la condition devient (x|−∞) <= (a|b) <= (x'|+∞) et (y|-∞) <= (py|px) <= (y'|+∞). Pour vérifier chacune des conditions, on doit vérifier l'ordre définit sur les nombres composites définit comme (a|b) < (a'|b') ⇔ a < a' or (a = a' and b < b'). Donc, pour la première condition, on a (x|-∞) <= (px|py) <= (x'|+∞) qui devient x <= px or (x = px and y <= py) and px <= x' or (px = x' and py <= y'), c'est-à-dire x <= px or (x = px and py >= -∞) and px <= x' or (px = x' and py <= +∞). On doit donc vérifier que (x <= px ou x = px) et (px <= x' ou px = x') car les conditions -∞ <= py et py <= +∞ seront toujours vraies par hypothèse.
 On peut donc dire que si (px, py) appartient à R, alors x <= px <= x' et y <= py <= y'. Or, ((px|py), (py|px)) appartient à R' si (x <= px ou x = px) et (px <= x' ou px = x'), c'est-à-dire x <= px <= x'. Cela nous permet de conclure que si (px, py) appartient à R, alors ((px|py), (py|px)) appartient à la nouvelle range.
 
 
-8. Dans le chapitre, la technique présentée est adaptée à des points. Quelles différences importantes aurait-on avec des segments de droite ? Comment peut-on adapter la technique ?
+8. Dans le chapitre, la technique présentée est adaptée à des segments. Quelles différences importantes aurait-on avec des segments de droite ? Comment peut-on adapter la technique ?
 
 
