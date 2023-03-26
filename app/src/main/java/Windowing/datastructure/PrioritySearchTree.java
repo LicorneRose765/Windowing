@@ -10,37 +10,50 @@ public class PrioritySearchTree {
     private PrioritySearchTree left, right;
     private final Point value;
     private Point median;
+    private final Direction direction;
 
     /**
-     * Builds a priority search tree from a sorted list of segments.
+     * Builds a priority search tree from a list of points. <br>
+     * We store the points from the vertical and horizontal segments in different PSTs.<br>
+     * For the vertical segments,we only need to store the bottom points. <br>
+     * For the horizontal segments, we only need to store the left points.
      *
-     * @param data The list of Points.
+     * @param data      The list of Points.
+     * @param direction True if the PST stores point from a vertical segment, false otherwise.
      * @return A priority search tree
      */
-    public static PrioritySearchTree build(ArrayList<Point> data) {
+    public static PrioritySearchTree build(ArrayList<Point> data, Direction direction) {
         // TODO : implement a way to change the roles of X and Y with only a parameter
-        // Idk if it works but it should :wink:
         if (data.size() == 0) {
             return null;
         }
         if (data.size() == 1) {
-            return new PrioritySearchTree(data.get(0));
+            return new PrioritySearchTree(data.get(0), direction);
         }
-        HeapSort.sort(data, CompareVariable.Y);
+        if (direction == Direction.VERTICAL) {
+            HeapSort.sort(data, CompareVariable.X);
+        } else {
+            HeapSort.sort(data, CompareVariable.Y);
+        }
 
-        return buildHelper(data);
+        return buildHelper(data, direction);
     }
 
 
-    private static PrioritySearchTree buildHelper(ArrayList<Point> sortedData) {
+    private static PrioritySearchTree buildHelper(ArrayList<Point> sortedData, Direction direction) {
         if (sortedData.size() == 0) {
             return null;
         }
         if (sortedData.size() == 1) {
-            return new PrioritySearchTree(sortedData.get(0));
+            return new PrioritySearchTree(sortedData.get(0), direction);
         }
-        Point minX = sortedData.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
-        sortedData.remove(minX); // Remove the minimum X of the list
+        Point min;
+        if (direction == Direction.VERTICAL) {
+            min = sortedData.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.Y)).get();
+        } else {
+            min = sortedData.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
+        }
+        sortedData.remove(min); // Remove the minimum (y if vertical, x otherwise) of the list
 
         int medianIndex = (sortedData.size() / 2) - 1;
         if (medianIndex < 0) {
@@ -51,25 +64,38 @@ public class PrioritySearchTree {
         ArrayList<Point> leftData = new ArrayList<>();
         ArrayList<Point> rightData = new ArrayList<>();
         for (Point p : sortedData) {
-            if (p.compareTo(median, CompareVariable.Y) == 1) {
-                rightData.add(p);
+            if (direction == Direction.VERTICAL) {
+                if (p.compareTo(median, CompareVariable.X) == 1) {
+                    rightData.add(p);
+                } else {
+                    leftData.add(p);
+                }
             } else {
-                leftData.add(p);
+                if (p.compareTo(median, CompareVariable.Y) == 1) {
+                    rightData.add(p);
+                } else {
+                    leftData.add(p);
+                }
             }
         }
 
-        return new PrioritySearchTree(buildHelper(leftData), buildHelper(rightData), minX, median);
+        return new PrioritySearchTree(buildHelper(leftData, direction),
+                buildHelper(rightData, direction),
+                min, median, direction);
     }
 
-    public PrioritySearchTree(Point value) {
+    public PrioritySearchTree(Point value, Direction direction) {
         this.value = value;
+        this.direction = direction;
     }
 
-    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Point value, Point median) {
+    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Point value,
+                              Point median, Direction direction) {
         this.left = left;
         this.right = right;
         this.value = value;
         this.median = median;
+        this.direction = direction;
     }
 
     public boolean isLeaf() {
@@ -166,6 +192,16 @@ public class PrioritySearchTree {
 
 
         return res;
+    }
+
+    private ArrayList<Point> queryHorizontal(Window window) {
+        // TODO : Implement this function
+        return null;
+    }
+
+    private ArrayList<Point> queryVertical(Window window) {
+        // TODO : Implement this function
+        return null;
     }
 
     /**

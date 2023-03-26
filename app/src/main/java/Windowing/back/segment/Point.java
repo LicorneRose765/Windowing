@@ -1,9 +1,11 @@
 package Windowing.back.segment;
 
+import Windowing.datastructure.Direction;
 import javafx.scene.shape.Line;
 
 public class Point {
     private final double x, y, x1, y1;
+    private final Direction direction;
 
     /**
      * Creates a point from two coordinates and store the coordinates of the other point of the segment.
@@ -18,18 +20,11 @@ public class Point {
         this.y = y;
         this.x1 = x1;
         this.y1 = y1;
-    }
-
-    /**
-     * Used for the tests.
-     * @param x The x coordinate of the point
-     * @param y The y coordinate of the point
-     */
-    public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
-        this.x1 = 0;
-        this.y1 = 0;
+        if (x == x1) {
+            direction = Direction.VERTICAL;
+        } else {
+            direction = Direction.HORIZONTAL;
+        }
     }
 
     public double getX() {
@@ -48,6 +43,10 @@ public class Point {
         return y1;
     }
 
+    public boolean isHorizontal() {
+        return direction == Direction.HORIZONTAL;
+    }
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ").(" + x1 + ", " + y1 + ")";
@@ -62,7 +61,7 @@ public class Point {
     }
 
     /**
-     * Compare two points by their y coordinate, if they are equal, compare by their x coordinate.(Composite number space)
+     * Compares two points by their y coordinate, if they are equal, compare by their x coordinate.(Composite number space)
      *
      * @param p2 The point to compare to
      * @return 1 if this point is greater than p2, -1 if this point is lesser than p2, 0 if they are equal.

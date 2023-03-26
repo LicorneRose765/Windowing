@@ -1,5 +1,6 @@
 package Windowing.back.segment;
 
+import Windowing.datastructure.Direction;
 import Windowing.datastructure.PrioritySearchTree;
 import Windowing.datastructure.Window;
 
@@ -18,7 +19,8 @@ public class SegmentFileData {
     public SegmentFileData(Window window, ArrayList<Point> points) {
         this.window = window;
         this.points = points;
-        this.PST = PrioritySearchTree.build(points);
+        this.PST = PrioritySearchTree.build(points, Direction.HORIZONTAL);
+        // TODO : separate here horizontal and vertical segments
     }
 
     public Window getWindow() {

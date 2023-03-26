@@ -57,8 +57,8 @@ public class HeapSort {
 
 
     public static void main(String[] args) {
-        Point A = new Point(1, 4);
-        Point B = new Point(18, -5);
+        Point A = new Point(1, 4, 0, 0);
+        Point B = new Point(18, -5, 0, 0);
         System.out.println(A.compareTo(B, CompareVariable.Y));
     }
 
