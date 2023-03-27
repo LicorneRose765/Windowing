@@ -14,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WindowingTest {
 
+    /**
+     * Test in a general set, more precise test below.<br>
+     * See test1.png in misc folder
+     */
     @Test
     public void canQuerySegmentsWithBoundedWindow() {
-        // Test in a general set, more precise test below.
-        // See test1.png in misc folder
 
         // [-2,12]X[0,7]
         // Given
@@ -81,10 +83,12 @@ public class WindowingTest {
         // TODO : create this test
     }
 
+    /**
+     * Error encountered during testing, the segment in the node were not returned <br>
+     * See test6.png in misc folder
+     */
     @Test
     public void canQuerySegmentCrossingWindowWithSmallDataSet() {
-        // error encountered during testing
-        // TODO : create png file for this test
         // Given
         Window w = new Window(0, 5, 0, 5);
 
@@ -108,6 +112,9 @@ public class WindowingTest {
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 
+    /**
+     * See test7.png in misc folder
+     */
     @Test
     public void canQuerySegmentsWithBothPointsInWindow() {
         // TODO : create png file for this test
@@ -118,7 +125,7 @@ public class WindowingTest {
                 new Segment(2, 2, 3, 2),
                 new Segment(-10, -5, -5, -5),
                 new Segment(2, 4, 2, 5),
-                new Segment(-4, -20, -4, -10)
+                new Segment(-4, -3, -4, -1)
         ));
 
         // When
@@ -134,9 +141,11 @@ public class WindowingTest {
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 
+    /**
+     * See test8.png in misc folder
+     */
     @Test
     public void canQuerySegmentsWithOnlyOnePointInWindow() {
-        // TODO : create png file for this test
         // Given
         Window w = new Window(0, 5, 0, 5);
 
@@ -144,7 +153,7 @@ public class WindowingTest {
                 new Segment(-5, 2, 3, 2),
                 new Segment(-10, -5, -5, -5),
                 new Segment(2, -5, 2, 3),
-                new Segment(-4, -20, -4, -10)
+                new Segment(-4, -3, -4, -1)
         ));
 
         // When
@@ -160,9 +169,11 @@ public class WindowingTest {
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 
+    /**
+     * See test9.png in misc folder
+     */
     @Test
     public void canQuerySegmentsAlongOrCrossingWindow() {
-        // TODO : create png file for this test
         // Given
         Window w = new Window(-2, 12, 0, 7);
 

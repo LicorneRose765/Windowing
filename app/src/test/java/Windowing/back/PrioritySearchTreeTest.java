@@ -16,6 +16,7 @@ public class PrioritySearchTreeTest {
     @Test
     void canCreatePSTFromHorizontalSegments() {
         // Given
+        // TODO : create png for this test
         // The right point of the segments is useless for the PST, we use only the left point.
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
                 new Segment(1, 5),
@@ -27,8 +28,10 @@ public class PrioritySearchTreeTest {
         // When
         PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL);
 
+
         // Then
         // Testing if the PST has the correct shape
+        assert pst != null;
         assertEquals(new Segment(1, 5), pst.getValue());
         // Left part
         PrioritySearchTree left = pst.getLeftSubTree();
@@ -45,9 +48,8 @@ public class PrioritySearchTreeTest {
 
     @Test
     void createPSTDoesntHaveSideEffect() {
-        // TODO do this test
+        // Test created after discovering an unexpected side effect of the build method.
         // Given
-        // The right point of the segments is useless for the PST, we use only the left point.
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
                 new Segment(1, 5),
                 new Segment(2, 3),
@@ -79,6 +81,7 @@ public class PrioritySearchTreeTest {
 
     @Test
     void canCreatePSTWithPointWithTheSameYCoordinate() {
+        // TODO : create png for this test
         // Given
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
                 new Segment(-2, 10),
@@ -95,6 +98,7 @@ public class PrioritySearchTreeTest {
 
         // Then
         // Testing if the PST has the correct shape
+        assert pst != null;
         assertEquals(new Segment(-2, 10), pst.getValue());
         // Left part
         PrioritySearchTree left = pst.getLeftSubTree();
@@ -113,6 +117,7 @@ public class PrioritySearchTreeTest {
 
     @Test
     void canCreatePSTFromVerticalSegments() {
+        // TODO : create png for this test
         // A vertical PST is just a pst where the x and y coordinates are swapped.
         // Given
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
@@ -127,6 +132,7 @@ public class PrioritySearchTreeTest {
 
         // Then
         // Testing if the PST has the correct shape
+        assert pst != null;
         assertEquals(new Segment(4, 2), pst.getValue());
 
         // Left part
