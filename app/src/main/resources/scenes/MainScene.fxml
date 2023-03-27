@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowing.front.controllers.MainSceneController">
     <AnchorPane prefHeight="50.0" prefWidth="1280.0">
-        <Button fx:id="readSegmentFileButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleReadSegmentFileButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered" onMouseExited="#handleButtonMouseExited" prefWidth="90" style="-fx-background-color: rgba(160, 170, 180, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;" text="Load">
+        <Button fx:id="readSegmentFileButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleReadSegmentFileButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered" onMouseExited="#handleButtonMouseExited" prefWidth="90" style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;" text="Load">
             <!-- <effect>
                 <InnerShadow blurType="TWO_PASS_BOX" choke="0.1" height="13.41" offsetX="-2.0" offsetY="-1.0" radius="8.8625" width="24.04" />
             </effect> -->
