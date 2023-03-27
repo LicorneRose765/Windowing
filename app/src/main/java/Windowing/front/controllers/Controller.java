@@ -16,40 +16,10 @@ public abstract class Controller {
      */
     public static String formatNewCSSLineMouseEntered(Button button) {
         String CSSLine = "";
-        if (button.getPrefWidth() == 350) {
+        String buttonText = button.getText();
+        if (buttonText.equals("Load") || buttonText.equals("Linux")) {
             // Big buttons
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-        } else if (button.getPrefWidth() == 120) {
-            // Language & Back buttons
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 296) {
-            // Change password button
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-        } else if (button.getPrefWidth() == 50) {
-            // Square buttons for PIN
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -1.5; -fx-border-radius: 4;";
-        } else if (button.getPrefWidth() == 200) {
-            if (button.getText().toLowerCase().contains("path")) {
-                CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-            } else {
-                // Confirm button for PIN
-                CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-            }
-        } else if (button.getPrefWidth() == 250) {
-            // Export buttons
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 170) {
-            // Right side buttons
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 75) {
-            // Add button for language
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 135) {
-            // Add/remove account for visualisation
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 100) {
-            // Search button
-            CSSLine = "-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
+            CSSLine = "-fx-background-color: rgb(160, 170, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20;";
         }
         return CSSLine;
     }
@@ -62,40 +32,10 @@ public abstract class Controller {
      */
     public static String formatNewCSSLineMouseExited(Button button) {
         String CSSLine = "";
-        if (button.getPrefWidth() == 350) {
+        String buttonText = button.getText();
+        if (buttonText.equals("Load") || buttonText.equals("Linux")) {
             // Big buttons
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-        } else if (button.getPrefWidth() == 120) {
-            // Language & Back buttons
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 296) {
-            // Change password button
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-        } else if (button.getPrefWidth() == 50) {
-            // Square buttons for PIN
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -1.5; -fx-border-radius: 4;";
-        } else if (button.getPrefWidth() == 200) {
-            if (button.getText().toLowerCase().contains("path")) {
-                CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-            } else {
-                // Confirm button for PIN
-                CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;";
-            }
-        } else if (button.getPrefWidth() == 250) {
-            // Export buttons
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 170) {
-            // Right side buttons
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 75) {
-            // Add button for language
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 135) {
-            // Add/remove account for visualisation
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
-        } else if (button.getPrefWidth() == 100) {
-            // Search button
-            CSSLine = "-fx-background-color: rgb(210, 205, 200); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1.5; -fx-border-radius: 5;";
+            CSSLine = "-fx-background-color: rgba(160, 170, 180, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20;";
         }
         return CSSLine;
     }

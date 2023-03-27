@@ -58,7 +58,7 @@ public class MainSceneController extends Controller {
 
         UnaryOperator<TextFormatter.Change> formatter = change -> {
             String newText = change.getControlNewText();
-            if (newText.matches("-?\\d+")) {
+            if (newText.matches("-?\\d*")) {
                 return change;
             } else {
                 return null;
@@ -113,16 +113,27 @@ public class MainSceneController extends Controller {
      * @return A <code>Window</code> object with the values of the text fields.
      */
     private Window extractWindow() {
+        String xMinText = xMinTextField.getText();
+        String xMaxText = xMaxTextField.getText();
+        String yMinText = yMinTextField.getText();
+        String yMaxText = yMaxTextField.getText();
+
+        // TODO : make this unbounded window
+        if (xMinText.equals("")) xMinText = "0";
+        if (xMaxText.equals("")) xMaxText = "0";
+        if (yMinText.equals("")) yMinText = "0";
+        if (yMaxText.equals("")) yMaxText = "0";
+
         return new Window(
-                Integer.parseInt(xMinTextField.getText()),
-                Integer.parseInt(xMaxTextField.getText()),
-                Integer.parseInt(yMinTextField.getText()),
-                Integer.parseInt(yMaxTextField.getText()));
+                Integer.parseInt(xMinText),
+                Integer.parseInt(xMaxText),
+                Integer.parseInt(yMinText),
+                Integer.parseInt(yMaxText));
     }
 
     /**
      * Removes any existing segments and draws the segments from the given file data after querying it with the given window.
-     * @param fileData The file data to query.
+     * @param windowing The windowing object containing the segments.
      * @param window The window to query with.
      */
     private void drawSegments(Windowing windowing, Window window) {
@@ -133,36 +144,9 @@ public class MainSceneController extends Controller {
         segmentsGroup.getChildren().clear();
         segmentsContainer.getChildren().clear();
 
-        /*
-        Line l = new Line(-200, -200, 200, -200);
-        l.setStroke(Color.RED);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(-200, -100, 200, -100);
-        l.setStroke(Color.GREEN);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(-200, 0, 200, 0);
-        l.setStroke(Color.BLUE);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(-200, 100, 200, 100);
-        l.setStroke(Color.GOLD);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(-200, 200, 200, 200);
-        l.setStroke(Color.ORANGE);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(-100, -200, -100, 200);
-        l.setStroke(Color.CYAN);
-        segmentsGroup.getChildren().add(l);
-        l = new Line(100, -200, 100, 200);
-        l.setStroke(Color.DARKGREEN);
-        segmentsGroup.getChildren().add(l);
-        */
-
-        // for (Point point : fileData.getPST().query(window)) {
-        //     segmentsGroup.getChildren().add(point.toLine());
-        // }
-
         for (Segment segment : windowing.query(window)) {
             segmentsGroup.getChildren().add(segment.toLine());
+            System.out.println("added segment.toLine() = " + segment.toLine());
         }
 
         updateScaling();

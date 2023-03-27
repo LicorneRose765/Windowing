@@ -42,7 +42,7 @@ public class Windowing {
     public ArrayList<Segment> query(Window window) {
         ArrayList<Segment> result = new ArrayList<>();
 
-        if (horizontalPST != null){
+        if (horizontalPST != null) {
             Window horizontalWindow = new Window(Double.NEGATIVE_INFINITY, window.getXMax(), window.getYMin(), window.getYMax());
             ArrayList<Segment> horizontalSegments = horizontalPST.query(horizontalWindow);
             // TODO : Do this directly in the query.
