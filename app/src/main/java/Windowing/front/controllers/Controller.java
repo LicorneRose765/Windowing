@@ -19,7 +19,7 @@ public abstract class Controller {
         String buttonText = button.getText();
         if (buttonText.equals("Load") || buttonText.equals("Linux")) {
             // Big buttons
-            CSSLine = "-fx-background-color: rgb(218, 163, 171); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20;";
+            CSSLine = "-fx-background-color: rgb(218, 163, 171); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;";
         }
         return CSSLine;
     }
@@ -35,7 +35,7 @@ public abstract class Controller {
         String buttonText = button.getText();
         if (buttonText.equals("Load") || buttonText.equals("Linux")) {
             // Big buttons
-            CSSLine = "-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20;";
+            CSSLine = "-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;";
         }
         return CSSLine;
     }

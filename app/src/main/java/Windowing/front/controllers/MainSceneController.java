@@ -101,12 +101,24 @@ public class MainSceneController extends Controller {
         }
         assert currentFileData != null;
 
+        xMinTextField.setPromptText("xMin (" + (int) currentFileData.getWindow().getXMin() + ")");
+        xMaxTextField.setPromptText("xMax (" + (int) currentFileData.getWindow().getXMax() + ")");
+        yMinTextField.setPromptText("yMin (" + (int) currentFileData.getWindow().getYMin() + ")");
+        yMaxTextField.setPromptText("yMax (" + (int) currentFileData.getWindow().getYMax() + ")");
         drawSegments(new Windowing(currentFileData.getSegments()), currentFileData.getWindow());
     }
 
     @FXML
     void handleLinuxButtonMouseClicked(MouseEvent mouseEvent) {
         drawSegments(new Windowing(currentFileData.getSegments()), extractWindow());
+        xMinTextField.setPromptText("xMin (" + xMinTextField.getText() + ")");
+        xMinTextField.setText("");
+        xMaxTextField.setPromptText("xMax (" + xMaxTextField.getText() + ")");
+        xMaxTextField.setText("");
+        yMinTextField.setPromptText("yMin (" + yMinTextField.getText() + ")");
+        yMinTextField.setText("");
+        yMaxTextField.setPromptText("yMax (" + yMaxTextField.getText() + ")");
+        yMaxTextField.setText("");
     }
 
     /**
