@@ -86,7 +86,6 @@ public class MainSceneController extends Controller {
                 } catch (FormatException e) {
                     // TODO : show feedback to the user
                     e.printStackTrace();
-                    System.out.println("File is not properly formatted.");
                 }
                 break;
             case 1:
@@ -158,7 +157,6 @@ public class MainSceneController extends Controller {
 
         for (Segment segment : windowing.query(window)) {
             segmentsGroup.getChildren().add(segment.toLine());
-            System.out.println("added segment.toLine() = " + segment.toLine());
         }
 
         updateScaling();

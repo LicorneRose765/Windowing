@@ -64,7 +64,6 @@ public class SegmentFileReader {
         }
 
         assert window != null;
-
         return new SegmentFileData(window, segments);
     }
 
@@ -106,6 +105,6 @@ public class SegmentFileReader {
      * @return An array of Point2D representing the dimensions of the window
      */
     private static Window extractWindow(double[] numbers) {
-        return new Window(numbers[0], numbers[2], numbers[1], numbers[3]);
+        return new Window(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 }

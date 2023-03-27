@@ -28,7 +28,6 @@ public class Window {
         this.xMax = xMax;
         this.yMin = yMin;
         this.yMax = yMax;
-        System.out.println("Window created : [" + xMin + ", "+ xMax + "] x [" + yMin + ", " + yMax + "]");
     }
 
     public double getXMin() {
@@ -101,10 +100,6 @@ public class Window {
 
 
     public boolean contains(Segment segment) {
-        // TODO : clean this up
-        System.out.println(segment + " Result : " + (segment.getX() >= xMin &&
-                segment.getX() <= xMax && segment.getY() >= yMin && segment.getY() <= yMax));
-
         return  segment.getX() >= xMin &&
                 segment.getX() <= xMax &&
                 segment.getY() >= yMin &&

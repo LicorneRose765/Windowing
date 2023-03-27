@@ -19,7 +19,7 @@ public class SegmentFileData {
     public SegmentFileData(Window window, ArrayList<Segment> segments) {
         this.window = window;
         this.segments = segments;
-        this.PST = PrioritySearchTree.build(segments, Direction.HORIZONTAL);
+        //this.PST = PrioritySearchTree.build(segments, Direction.HORIZONTAL);
         // TODO : separate here horizontal and vertical segments ?
     }
 

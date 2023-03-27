@@ -158,4 +158,39 @@ public class WindowingTest {
         System.out.println(result);
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+
+    @Test
+    public void canQueryTest() {
+        /*
+        0 100 0 100
+
+        0 0 100 0
+        0 0 0 100
+        100 0 100 100
+        0 100 100 100
+         */
+
+        // Given
+        Window w = new Window(0, 100, 0, 100);
+        ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
+                new Segment(0, 0, 100, 0),
+                new Segment(0, 0, 0, 100),
+                new Segment(100, 0, 100, 100),
+                new Segment(0, 100, 100, 100)
+        ));
+
+        // When
+        Windowing windowing = new Windowing(dataSet);
+        ArrayList<Segment> result = windowing.query(w);
+
+        // Then
+        ArrayList<Segment> expected = new ArrayList<>(Arrays.asList(
+                new Segment(0, 0, 100, 0),
+                new Segment(0, 0, 0, 100),
+                new Segment(100, 0, 100, 100),
+                new Segment(0, 100, 100, 100)
+        ));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+
+    }
 }
