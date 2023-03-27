@@ -4,6 +4,7 @@ import Windowing.back.segment.CompareVariable;
 import Windowing.back.segment.Segment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrioritySearchTree {
 
@@ -23,19 +24,21 @@ public class PrioritySearchTree {
      * @return A priority search tree
      */
     public static PrioritySearchTree build(ArrayList<Segment> data, Direction direction) {
-        if (data.size() == 0) {
+        // Need to copy the data to prevent the side effect of the function.
+        ArrayList<Segment> copiedData = new ArrayList<>(data);
+        if (copiedData.size() == 0) {
             return null;
         }
-        if (data.size() == 1) {
-            return new PrioritySearchTree(data.get(0), direction);
+        if (copiedData.size() == 1) {
+            return new PrioritySearchTree(copiedData.get(0), direction);
         }
         if (direction == Direction.VERTICAL) {
-            HeapSort.sort(data, CompareVariable.X);
+            HeapSort.sort(copiedData, CompareVariable.X);
         } else {
-            HeapSort.sort(data, CompareVariable.Y);
+            HeapSort.sort(copiedData, CompareVariable.Y);
         }
 
-        return buildHelper(data, direction);
+        return buildHelper(copiedData, direction);
     }
 
 
@@ -52,7 +55,7 @@ public class PrioritySearchTree {
         } else {
             min = sortedData.stream().min((p1, p2) -> p1.compareTo(p2, CompareVariable.X)).get();
         }
-        sortedData.remove(min); // Remove the minimum (y if vertical, x otherwise) of the list
+        sortedData.remove(min); // Remove the minimum x (y if vertical) of the list
 
         int medianIndex = (sortedData.size() / 2) - 1;
         if (medianIndex < 0) {

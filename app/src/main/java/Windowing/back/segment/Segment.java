@@ -14,17 +14,17 @@ public class Segment {
      * @param y  The y coordinate of the first point
      * @param x1 The x coordinate of the other point of the segment
      * @param y1 The y coordinate of the other point of the segment
-     * @throws IllegalArgumentException if the coordinates of the left point are higher than the coordinates of the other point of the segment. <br>
-     * Or, if the segment is not horizontal or vertical.
+     * @throws IllegalCoordinatesException if the coordinates of the left point are higher than the coordinates of the other point of the segment. <br>
+     * @throws IllegalSegmentTypeException if the segment is not horizontal or vertical.
      */
-    public Segment(double x, double y, double x1, double y1) {
+    public Segment(double x, double y, double x1, double y1) throws IllegalCoordinatesException, IllegalSegmentTypeException{
         if (x > x1 || y > y1) {
-            throw new IllegalArgumentException("The coordinates of the point must be lower than the coordinates of the other point of the segment. " +
+            throw new IllegalCoordinatesException("The coordinates of the point must be lower than the coordinates of the other point of the segment. " +
                     "x: " + x + " y: " + y + " x1: " + x1 + " y1: " + y1);
         }
 
         if (x != x1 && y != y1) {
-            throw new IllegalArgumentException("The segment must be horizontal or vertical. " +
+            throw new IllegalSegmentTypeException("The segment must be horizontal or vertical. " +
                     "x: "+ x + " y: " + y + " x1: " + x1 + " y1: " + y1) ;
         }
         this.x = x;

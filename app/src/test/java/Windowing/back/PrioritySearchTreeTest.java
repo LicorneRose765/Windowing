@@ -46,6 +46,40 @@ public class PrioritySearchTreeTest {
     }
 
     @Test
+    void createPSTDoesntHaveSideEffect() {
+        // TODO do this test
+        // Given
+        // The right point of the segments is useless for the PST, we use only the left point.
+        ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
+                new Segment(1, 5),
+                new Segment(2, 3),
+                new Segment(3, 7),
+                new Segment(4, 2),
+                new Segment(5, 8),
+                new Segment(1, 5),
+                new Segment(2, 3),
+                new Segment(3, 7),
+                new Segment(4, 2),
+                new Segment(5, 8),
+                new Segment(1, 5),
+                new Segment(2, 3),
+                new Segment(3, 7),
+                new Segment(4, 2),
+                new Segment(5, 8),
+                new Segment(1, 5),
+                new Segment(2, 3),
+                new Segment(3, 7),
+                new Segment(4, 2),
+                new Segment(5, 8)));
+        ArrayList<Segment> expected = new ArrayList<>(dataSet);
+
+        // When
+        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL);
+
+        assertEquals(expected, dataSet);
+    }
+
+    @Test
     void canCreatePSTWithPointWithTheSameYCoordinate() {
         // Given
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
