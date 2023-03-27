@@ -27,7 +27,7 @@ public class SegmentFileData {
         return window;
     }
 
-    public ArrayList<Segment> getPoints() {
+    public ArrayList<Segment> getSegments() {
         return segments;
     }
 

@@ -71,12 +71,12 @@ public class FileLoaderPopupController extends Controller {
     @FXML
     void handleOnConfirmButtonMouseClicked(MouseEvent mouseEvent) {
         if (examplesRadioButton.isSelected()) {
-            if (example1RadioButton.isSelected()) MainSceneController.chosenFileInt = 1;
-            if (example2RadioButton.isSelected()) MainSceneController.chosenFileInt = 2;
-            if (example3RadioButton.isSelected()) MainSceneController.chosenFileInt = 3;
+            if (example1RadioButton.isSelected()) MainSceneController.chosenFileValue = 1;
+            if (example2RadioButton.isSelected()) MainSceneController.chosenFileValue = 2;
+            if (example3RadioButton.isSelected()) MainSceneController.chosenFileValue = 3;
         } else {
             // The filesystem radio button MUST be selected then
-            MainSceneController.chosenFileInt = 0;
+            MainSceneController.chosenFileValue = 0;
             MainSceneController.chosenFile = chosenFile;
         }
         MainSceneController.popup.close();

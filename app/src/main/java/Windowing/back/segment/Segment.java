@@ -1,6 +1,7 @@
 package Windowing.back.segment;
 
 import Windowing.datastructure.Direction;
+import javafx.scene.shape.Line;
 
 public class Segment {
     private final double x, y, x1, y1;
@@ -137,5 +138,9 @@ public class Segment {
         if (!(obj instanceof Segment))
             return false;
         return this.x == ((Segment) obj).x && this.y == ((Segment) obj).y && this.x1 == ((Segment) obj).x1 && this.y1 == ((Segment) obj).y1;
+    }
+
+    public Line toLine() {
+        return new Line(x, y, x1, y1);
     }
 }

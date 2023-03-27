@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -17,15 +19,21 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.function.UnaryOperator;
 
 public class MainSceneController extends Controller {
+    @FXML
+    TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
+    @FXML
+    TextFormatter<String> xMinIntegerTextFormatter, xMaxIntegerTextFormatter, yMinIntegerTextFormatter, yMaxIntegerTextFormatter; // not sure about <String>
     @FXML
     Group segmentsGroup;
     @FXML
     StackPane lowerContainer, limiter, background, segmentsContainer;
     @FXML
-    Button readSegmentFileButton;
-    private static final double MAX_WIDTH = 1260, MAX_HEIGHT = 660;
+    Button readSegmentFileButton, linuxButton;
+
+    private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
 
     public static Stage popup; // TODO : this code sucks
     public static File chosenFile;
@@ -35,7 +43,10 @@ public class MainSceneController extends Controller {
      * 2 : the chosen file is example 2
      * 3 : the chosen file is example 3
      */
-    public static int chosenFileInt;
+    public static int chosenFileValue;
+
+    private SegmentFileData currentFileData;
+    private Windowing windowing;
 
     @FXML
     void initialize() {
@@ -44,17 +55,34 @@ public class MainSceneController extends Controller {
         background.prefHeightProperty().bind(limiter.prefHeightProperty());
         segmentsContainer.prefWidthProperty().bind(background.prefWidthProperty());
         segmentsContainer.prefHeightProperty().bind(background.prefHeightProperty());
+
+        UnaryOperator<TextFormatter.Change> formatter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("-?\\d+")) {
+                return change;
+            } else {
+                return null;
+            }
+        };
+        xMinIntegerTextFormatter = new TextFormatter<>(formatter);
+        xMaxIntegerTextFormatter = new TextFormatter<>(formatter);
+        yMinIntegerTextFormatter = new TextFormatter<>(formatter);
+        yMaxIntegerTextFormatter = new TextFormatter<>(formatter);
+
+        xMinTextField.setTextFormatter(xMinIntegerTextFormatter);
+        xMaxTextField.setTextFormatter(xMaxIntegerTextFormatter);
+        yMinTextField.setTextFormatter(yMinIntegerTextFormatter);
+        yMaxTextField.setTextFormatter(yMaxIntegerTextFormatter);
     }
 
     @FXML
     void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) throws IOException, URISyntaxException, FormatException {
-        SegmentFileData fileData = null;
         openFileLoaderPopup();
 
-        switch (chosenFileInt) {
+        switch (chosenFileValue) {
             case 0:
                 try {
-                    fileData = SegmentFileReader.readLines(chosenFile.toURI());
+                    currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
                 } catch (FormatException e) {
                     // TODO : show feedback to the user
                     e.printStackTrace();
@@ -62,24 +90,50 @@ public class MainSceneController extends Controller {
                 }
                 break;
             case 1:
-                fileData = SegmentFileReader.readLines("segments1.seg");
+                currentFileData = SegmentFileReader.readLines("segments1.seg");
                 break;
             case 2:
-                fileData = SegmentFileReader.readLines("segments2.seg");
+                currentFileData = SegmentFileReader.readLines("segments2.seg");
                 break;
             case 3:
-                fileData = SegmentFileReader.readLines("segments3.seg");
+                currentFileData = SegmentFileReader.readLines("segments3.seg");
                 break;
         }
-        assert fileData != null;
+        assert currentFileData != null;
 
-        drawSegments(fileData, fileData.getWindow());
+        drawSegments(new Windowing(currentFileData.getSegments()), currentFileData.getWindow());
     }
 
-    private void drawSegments(SegmentFileData fileData, Window window) {
+    @FXML
+    void handleLinuxButtonMouseClicked(MouseEvent mouseEvent) {
+        drawSegments(new Windowing(currentFileData.getSegments()), extractWindow());
+    }
+
+    /**
+     * @return A <code>Window</code> object with the values of the text fields.
+     */
+    private Window extractWindow() {
+        return new Window(
+                Integer.parseInt(xMinTextField.getText()),
+                Integer.parseInt(xMaxTextField.getText()),
+                Integer.parseInt(yMinTextField.getText()),
+                Integer.parseInt(yMaxTextField.getText()));
+    }
+
+    /**
+     * Removes any existing segments and draws the segments from the given file data after querying it with the given window.
+     * @param fileData The file data to query.
+     * @param window The window to query with.
+     */
+    private void drawSegments(Windowing windowing, Window window) {
+        // Initially, the button is disabled, so you can't apply the window before reading a file
+        // This method will be called when the user loads a file, which is when we should enable the linuxing button
+        linuxButton.setDisable(false);
+
         segmentsGroup.getChildren().clear();
         segmentsContainer.getChildren().clear();
 
+        /*
         Line l = new Line(-200, -200, 200, -200);
         l.setStroke(Color.RED);
         segmentsGroup.getChildren().add(l);
@@ -101,16 +155,24 @@ public class MainSceneController extends Controller {
         l = new Line(100, -200, 100, 200);
         l.setStroke(Color.DARKGREEN);
         segmentsGroup.getChildren().add(l);
+        */
 
         // for (Point point : fileData.getPST().query(window)) {
         //     segmentsGroup.getChildren().add(point.toLine());
         // }
+
+        for (Segment segment : windowing.query(window)) {
+            segmentsGroup.getChildren().add(segment.toLine());
+        }
 
         updateScaling();
 
         segmentsContainer.getChildren().add(segmentsGroup);
     }
 
+    /**
+     * Updates the scaling of the segments group to fit the display size constraints.
+     */
     private void updateScaling() {
         double scaleFactor = computeScaleFactor();
 
@@ -118,6 +180,10 @@ public class MainSceneController extends Controller {
         segmentsGroup.setScaleY(scaleFactor);
     }
 
+    /**
+     * Computes the scale factor to apply to the segments group to fit the display size constraints.
+     * @return The scale factor
+     */
     private double computeScaleFactor() {
         double xMin = 0, xMax = 0, yMin = 0, yMax = 0;
         for (Node node : segmentsGroup.getChildren()) {
@@ -129,7 +195,7 @@ public class MainSceneController extends Controller {
         }
         double absoluteWidth = xMax - xMin, absoluteHeight = yMax - yMin;
 
-        double scaleFactor = 1;
+        double scaleFactor;
         if (absoluteWidth / MAX_WIDTH > absoluteHeight / MAX_HEIGHT) {
             scaleFactor = MAX_WIDTH / absoluteWidth;
         } else {
@@ -138,6 +204,9 @@ public class MainSceneController extends Controller {
         return scaleFactor;
     }
 
+    /**
+     * Opens the file loader popup so that the user can choose a file to load segments from.
+     */
     private void openFileLoaderPopup() {
         popup = new Stage();
         Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup"); // TODO : maybe move this to main so we can load all fxml in the beginning
