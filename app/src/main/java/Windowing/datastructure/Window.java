@@ -48,6 +48,7 @@ public class Window {
 
     /**
      * Compare The xMin bound of the window with the point. (xMin | - infty)
+     *
      * @param p the point to compare with
      * @return -1 if xMin <= pX, 1 otherwise.
      */
@@ -61,6 +62,7 @@ public class Window {
 
     /**
      * Compare The xMax bound of the window with the point. (xMax | + infty)
+     *
      * @param p the point to compare with
      * @return -1 if xMax < pX, 1 otherwise.
      */
@@ -74,6 +76,7 @@ public class Window {
 
     /**
      * Compare The yMin bound of the window with the point. (yMin | - infty)
+     *
      * @param p the point to compare with
      * @return -1 if yMin <= pY, 1 otherwise.
      */
@@ -87,6 +90,7 @@ public class Window {
 
     /**
      * Compare The yMax bound of the window with the point. (yMax | + infty)
+     *
      * @param p the point to compare with
      * @return -1 if yMax < pY, 1 otherwise.
      */
@@ -98,12 +102,24 @@ public class Window {
         }
     }
 
-
+    /**
+     * Check if the segment is contained or is crossing the window.
+     *
+     * @param segment The segment to check.
+     * @return True if the segment is contained or is crossing the window, false otherwise.
+     */
     public boolean contains(Segment segment) {
-        return  segment.getX() >= xMin &&
-                segment.getX() <= xMax &&
-                segment.getY() >= yMin &&
-                segment.getY() <= yMax;
+        if (segment.isHorizontal()) {
+            return segment.getX() <= xMax
+                    && xMin <= segment.getX1()
+                    && segment.getY() <= yMax
+                    && yMin <= segment.getY();
+        } else {
+            return segment.getX() <= xMax
+                    && xMin <= segment.getX()
+                    && segment.getY() <= yMax
+                    && yMin <= segment.getY1();
+        }
     }
 
     public double getWidth() {

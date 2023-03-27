@@ -1,15 +1,16 @@
 package Windowing.back.segment;
 
-import Windowing.datastructure.Direction;
 import Windowing.datastructure.PrioritySearchTree;
 import Windowing.datastructure.Window;
 
 import java.util.ArrayList;
 
 /**
- * Represents the data read from a file as follows :
- *  - first line : dimensions of the initial window,
- *  - next lines : one segment per line.
+ * Represents the data read from a file as follows
+ * <ul>
+ *     <li>first line : dimensions of the initial window,</uli>
+ *     <li>next lines : one segment per line.</li>
+ * </ul>
  */
 public class SegmentFileData {
     private Window window;
@@ -34,14 +35,14 @@ public class SegmentFileData {
     public String toString() {
         StringBuilder bobTheBuilder = new StringBuilder();
         bobTheBuilder.append("Dimensions : ")
-                     .append(window.getXMax() - window.getXMin())
-                     .append(" x ")
-                     .append(window.getYMax() - window.getYMin())
-                     .append("\n");
+                .append(window.getXMax() - window.getXMin())
+                .append(" x ")
+                .append(window.getYMax() - window.getYMin())
+                .append("\n");
         for (int segmentIndex = 0; segmentIndex < segments.size(); segmentIndex++) {
             bobTheBuilder.append("Segment ").append(segmentIndex).append(" : ")
-                         .append(segments.get(segmentIndex).toString())
-                         .append("\n");
+                    .append(segments.get(segmentIndex).toString())
+                    .append("\n");
         }
         return bobTheBuilder.toString();
     }

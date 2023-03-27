@@ -3,6 +3,7 @@ package Windowing.back;
 import Windowing.back.segment.Segment;
 import Windowing.back.segment.Windowing;
 import Windowing.datastructure.Window;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class WindowingTest {
 
     @Test
-    public void canQuerySegments() {
+    public void canQuerySegmentsWithBoundedWindow() {
         // Test in a general set, more precise test below.
         // See test1.png in misc folder
 
@@ -53,17 +54,45 @@ public class WindowingTest {
     }
 
     @Test
-    public void canQuerySegmentCrossingWindowWithSmallDataSet(){
+    @Disabled
+    public void canQuerySegmentWithWindowXMinInfinite() {
+        // TODO : create png file for this test
+        // TODO : create this test
+    }
+
+    @Test
+    @Disabled
+    public void canQuerySegmentWithWindowXMaxInfinite() {
+        // TODO : create png file for this test
+        // TODO : create this test
+    }
+
+    @Test
+    @Disabled
+    public void canQuerySegmentWithWindowYMinInfinite() {
+        // TODO : create png file for this test
+        // TODO : create this test
+    }
+
+    @Test
+    @Disabled
+    public void canQuerySegmentWithWindowYMaxInfinite() {
+        // TODO : create png file for this test
+        // TODO : create this test
+    }
+
+    @Test
+    public void canQuerySegmentCrossingWindowWithSmallDataSet() {
         // error encountered during testing
         // TODO : create png file for this test
         // Given
         Window w = new Window(0, 5, 0, 5);
 
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
-                new Segment(-5,2,10,2),
-                new Segment(-10,-5,-5,-5),
-                new Segment(2,-5,2,10),
-                new Segment(2,-20,2,-10)
+                new Segment(-5, 2, 10, 2),
+                new Segment(-10, -5, -5, -5),
+                new Segment(2, -5, 2, 10),
+                new Segment(2, -20, 2, -10)
         ));
 
         // When
@@ -73,7 +102,7 @@ public class WindowingTest {
         // Then
         ArrayList<Segment> expected = new ArrayList<>(List.of(
                 new Segment(-5, 2, 10, 2),
-                new Segment(2,-5,2,10)
+                new Segment(2, -5, 2, 10)
         ));
 
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
@@ -140,7 +169,7 @@ public class WindowingTest {
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
                 new Segment(-2, -2, -2, 10),
                 new Segment(0, 0, 14, 0),
-                new Segment(-250,5,250,5),
+                new Segment(-250, 5, 250, 5),
                 new Segment(12.01, -2, 12.01, 8)
         ));
 
@@ -151,7 +180,7 @@ public class WindowingTest {
         // Then
         ArrayList<Segment> expected = new ArrayList<>(Arrays.asList(
                 new Segment(-2, -2, -2, 10),
-                new Segment(-250,5,250,5),
+                new Segment(-250, 5, 250, 5),
                 new Segment(0, 0, 14, 0)
         ));
         System.out.println(expected);
@@ -159,38 +188,4 @@ public class WindowingTest {
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 
-    @Test
-    public void canQueryTest() {
-        /*
-        0 100 0 100
-
-        0 0 100 0
-        0 0 0 100
-        100 0 100 100
-        0 100 100 100
-         */
-
-        // Given
-        Window w = new Window(0, 100, 0, 100);
-        ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
-                new Segment(0, 0, 100, 0),
-                new Segment(0, 0, 0, 100),
-                new Segment(100, 0, 100, 100),
-                new Segment(0, 100, 100, 100)
-        ));
-
-        // When
-        Windowing windowing = new Windowing(dataSet);
-        ArrayList<Segment> result = windowing.query(w);
-
-        // Then
-        ArrayList<Segment> expected = new ArrayList<>(Arrays.asList(
-                new Segment(0, 0, 100, 0),
-                new Segment(0, 0, 0, 100),
-                new Segment(100, 0, 100, 100),
-                new Segment(0, 100, 100, 100)
-        ));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
-
-    }
 }

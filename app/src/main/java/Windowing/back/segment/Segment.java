@@ -17,7 +17,7 @@ public class Segment {
      * @throws IllegalCoordinatesException if the coordinates of the left point are higher than the coordinates of the other point of the segment. <br>
      * @throws IllegalSegmentTypeException if the segment is not horizontal or vertical.
      */
-    public Segment(double x, double y, double x1, double y1) throws IllegalCoordinatesException, IllegalSegmentTypeException{
+    public Segment(double x, double y, double x1, double y1) throws IllegalCoordinatesException, IllegalSegmentTypeException {
         if (x > x1 || y > y1) {
             throw new IllegalCoordinatesException("The coordinates of the point must be lower than the coordinates of the other point of the segment. " +
                     "x: " + x + " y: " + y + " x1: " + x1 + " y1: " + y1);
@@ -25,7 +25,7 @@ public class Segment {
 
         if (x != x1 && y != y1) {
             throw new IllegalSegmentTypeException("The segment must be horizontal or vertical. " +
-                    "x: "+ x + " y: " + y + " x1: " + x1 + " y1: " + y1) ;
+                    "x: " + x + " y: " + y + " x1: " + x1 + " y1: " + y1);
         }
         this.x = x;
         this.y = y;
@@ -41,6 +41,7 @@ public class Segment {
     /**
      * Creates a segment with the coordinates of the first point. <br>
      * Only used for testing
+     *
      * @param x The x coordinate of the first point
      * @param y The y coordinate of the first point
      */
@@ -52,22 +53,48 @@ public class Segment {
         direction = Direction.HORIZONTAL;
     }
 
+    /**
+     * Getter for the coordinates of the first point of the segment.
+     *
+     * @return The x coordinate of the first point
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Getter for the coordinates of the first point of the segment.
+     *
+     * @return The y coordinate of the first point
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * Getter for the coordinates of the other point of the segment.
+     *
+     * @return The x coordinate of the other point
+     */
     public double getX1() {
         return x1;
     }
 
+    /**
+     * Getter for the coordinates of the other point of the segment.
+     *
+     * @return The y coordinate of the other point
+     */
     public double getY1() {
         return y1;
     }
 
+    /**
+     * Check if the segment is Horizontal
+     *
+     * @return True if the segment is horizontal, false otherwise
+     * @see Direction
+     */
     public boolean isHorizontal() {
         return direction == Direction.HORIZONTAL;
     }
@@ -80,7 +107,8 @@ public class Segment {
     /**
      * Compares two segments by their first point. <br>
      * We compare first the coordinates asked with the parameter var, if they are equal, we compare the other coordinate.
-     * @param p2 The segment to compare to
+     *
+     * @param p2  The segment to compare to
      * @param var The coordinate to compare first
      * @return 1 if this segment is greater than p2, -1 if this segment is smaller than p2. (Composite number space)
      */

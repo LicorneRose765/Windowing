@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class HeapSort {
     /**
      * Sorts the list of segments using HeapSort algorithm according to the variable given in parameter.
-     * @param A The list of segments.
+     *
+     * @param A   The list of segments.
      * @param var The variable to sort the list of segments.
      */
     public static void sort(ArrayList<Segment> A, CompareVariable var) {

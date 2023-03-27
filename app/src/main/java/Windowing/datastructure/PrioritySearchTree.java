@@ -4,8 +4,14 @@ import Windowing.back.segment.CompareVariable;
 import Windowing.back.segment.Segment;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * The <code>PrioritySearchTree</code> class implements all the methods needed to build or query a priority search tree. <br>
+ * A priority search tree is called vertical/horizontal if it stores vertical segments/horizontal segments.
+ *
+ * @see Direction
+ * @see Segment
+ */
 public class PrioritySearchTree {
 
     private PrioritySearchTree left, right;
@@ -16,8 +22,8 @@ public class PrioritySearchTree {
     /**
      * Builds a priority search tree from a list of points. <br>
      * We store the points from the vertical and horizontal segments in different PSTs.<br>
-     * For the vertical segments,we only need to store the bottom points. <br>
-     * For the horizontal segments, we only need to store the left points.
+     * For the vertical segments, we just need to store the bottom points. <br>
+     * For the horizontal segments, we just need to store the left points.
      *
      * @param data      The list of Points.
      * @param direction True if the PST stores point from a vertical segment, false otherwise.
@@ -86,11 +92,26 @@ public class PrioritySearchTree {
                 min, median, direction);
     }
 
+    /**
+     * Builds a leaf of the priority search tree.
+     *
+     * @param value     The value of the leaf.
+     * @param direction The direction of the Segment.
+     */
     public PrioritySearchTree(Segment value, Direction direction) {
         this.value = value;
         this.direction = direction;
     }
 
+    /**
+     * Main constructor of the PrioritySearchTree.
+     *
+     * @param left      The left subtree.
+     * @param right     The right subtree.
+     * @param value     The value of the node.
+     * @param median    The median of the node.
+     * @param direction The direction of the Segment.
+     */
     public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Segment value,
                               Segment median, Direction direction) {
         this.left = left;
@@ -100,18 +121,39 @@ public class PrioritySearchTree {
         this.direction = direction;
     }
 
+    /**
+     * Check if the node is a leaf.
+     *
+     * @return True if the node is a leaf, false otherwise.
+     */
     public boolean isLeaf() {
         return median == null;
     }
 
+    /**
+     * Check if the node has a left subtree.
+     *
+     * @return True if the node has a left subtree, false otherwise.
+     */
     public boolean hasLeft() {
         return left != null;
     }
 
+    /**
+     * Check if the node has a right subtree.
+     *
+     * @return True if the node has a right subtree, false otherwise.
+     */
     public boolean hasRight() {
         return right != null;
     }
 
+    /**
+     * Returns all the segments having at least a point in the window or crossing the window.
+     *
+     * @param window The window.
+     * @return A list of segments.
+     */
     public ArrayList<Segment> query(Window window) {
         if (direction == Direction.VERTICAL) {
             return queryVertical(window);
@@ -134,7 +176,7 @@ public class PrioritySearchTree {
             // Searching for vSplit
             if (window.yMinCompareTo(current.median) == 1) {
                 // yMin > y_mid. All the points at left aren't in the window, searching in right part.
-                current = current.getRight();
+                current = current.getRightSubTree();
             } else {
                 // yMin <= y_mid.
                 // We have to check were is yMax here.
@@ -143,7 +185,7 @@ public class PrioritySearchTree {
                     vSplit = current;
                 } else {
                     // yMax < y_mid : searching in left part
-                    current = current.getLeft();
+                    current = current.getLeftSubTree();
                 }
             }
         }
@@ -157,7 +199,7 @@ public class PrioritySearchTree {
         }
 
         // Searching for yMin
-        PrioritySearchTree leftSubtree = vSplit.getLeft();
+        PrioritySearchTree leftSubtree = vSplit.getLeftSubTree();
         while (leftSubtree != null) {
             if (window.contains(leftSubtree.value)) {
                 res.add(leftSubtree.value);
@@ -170,16 +212,16 @@ public class PrioritySearchTree {
                 // yMin <= y_min, searching yMin in the left subtree.
                 // All the points in the right subtree have their y coordinates in the window.
                 if (leftSubtree.hasRight()) {
-                    res.addAll(leftSubtree.getRight().reportInSubtree(window));
+                    res.addAll(leftSubtree.getRightSubTree().reportInSubtree(window));
                 }
-                leftSubtree = leftSubtree.getLeft();
+                leftSubtree = leftSubtree.getLeftSubTree();
             } else {
-                leftSubtree = leftSubtree.getRight();
+                leftSubtree = leftSubtree.getRightSubTree();
             }
         }
 
         // Searching for yMax
-        PrioritySearchTree rightSubtree = vSplit.getRight();
+        PrioritySearchTree rightSubtree = vSplit.getRightSubTree();
         while (rightSubtree != null) {
             if (window.contains(rightSubtree.value)) {
                 res.add(rightSubtree.value);
@@ -192,11 +234,11 @@ public class PrioritySearchTree {
                 // yMax >= y_mid, searching yMax in the right subtree.
                 // All the points in the left subtree have their y coordinates in the window.
                 if (rightSubtree.hasLeft()) {
-                    res.addAll(rightSubtree.getLeft().reportInSubtree(window));
+                    res.addAll(rightSubtree.getLeftSubTree().reportInSubtree(window));
                 }
-                rightSubtree = rightSubtree.getRight();
+                rightSubtree = rightSubtree.getRightSubTree();
             } else {
-                rightSubtree = rightSubtree.getLeft();
+                rightSubtree = rightSubtree.getLeftSubTree();
             }
         }
 
@@ -205,13 +247,11 @@ public class PrioritySearchTree {
     }
 
     private ArrayList<Segment> queryVertical(Window window) {
-        // TODO : Here we reports all the segments with their left point in the window.
-        // We should also report the segments that are crossing the window.
         ArrayList<Segment> res = new ArrayList<>();
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
-        while (vSplit == null && !current.isLeaf()){
+        while (vSplit == null && !current.isLeaf()) {
             if (window.contains(current.value)) {
                 // If the node is in the window.
                 res.add(current.value);
@@ -220,7 +260,7 @@ public class PrioritySearchTree {
             // Searching for vSplit
             if (window.xMinCompareTo(current.median) == 1) {
                 // xMin > x_mid. All the points at left aren't in the window, searching in right part.
-                current = current.getRight();
+                current = current.getRightSubTree();
             } else {
                 // xMin <= x_mid.
                 // We have to check were is xMax here.
@@ -229,7 +269,7 @@ public class PrioritySearchTree {
                     vSplit = current;
                 } else {
                     // xMax < x_mid : searching in left part
-                    current = current.getLeft();
+                    current = current.getLeftSubTree();
                 }
             }
         }
@@ -243,7 +283,7 @@ public class PrioritySearchTree {
         }
 
         // Searching for xMin
-        PrioritySearchTree leftSubtree = vSplit.getLeft();
+        PrioritySearchTree leftSubtree = vSplit.getLeftSubTree();
         while (leftSubtree != null) {
             if (window.contains(leftSubtree.value)) {
                 res.add(leftSubtree.value);
@@ -256,16 +296,16 @@ public class PrioritySearchTree {
                 // xMin <= x_min, searching xMin in the left subtree.
                 // All the points in the right subtree have their x coordinates in the window.
                 if (leftSubtree.hasRight()) {
-                    res.addAll(leftSubtree.getRight().reportInSubtree(window));
+                    res.addAll(leftSubtree.getRightSubTree().reportInSubtree(window));
                 }
-                leftSubtree = leftSubtree.getLeft();
+                leftSubtree = leftSubtree.getLeftSubTree();
             } else {
-                leftSubtree = leftSubtree.getRight();
+                leftSubtree = leftSubtree.getRightSubTree();
             }
         }
 
         // Searching for xMax
-        PrioritySearchTree rightSubtree = vSplit.getRight();
+        PrioritySearchTree rightSubtree = vSplit.getRightSubTree();
         while (rightSubtree != null) {
             if (window.contains(rightSubtree.value)) {
                 res.add(rightSubtree.value);
@@ -278,11 +318,11 @@ public class PrioritySearchTree {
                 // xMax >= x_mid, searching xMax in the right subtree.
                 // All the points in the left subtree have their x coordinates in the window.
                 if (rightSubtree.hasLeft()) {
-                    res.addAll(rightSubtree.getLeft().reportInSubtree(window));
+                    res.addAll(rightSubtree.getLeftSubTree().reportInSubtree(window));
                 }
-                rightSubtree = rightSubtree.getRight();
+                rightSubtree = rightSubtree.getRightSubTree();
             } else {
-                rightSubtree = rightSubtree.getLeft();
+                rightSubtree = rightSubtree.getLeftSubTree();
             }
         }
         return res;
@@ -303,47 +343,66 @@ public class PrioritySearchTree {
         }
     }
 
-    private ArrayList<Segment> reportInSubtreeHorizontal(Window window){
+    private ArrayList<Segment> reportInSubtreeHorizontal(Window window) {
         ArrayList<Segment> res = new ArrayList<>();
         if (window.xMaxCompareTo(this.value) == 1) {
             // xMax >= x
-            // TODO : modify here.
-            res.add(this.value);
+            if (window.getXMin() <= this.value.getX1()) {
+                // The segment is at least crossing the left bound of the window.
+                res.add(this.value);
+            }
             if (this.hasLeft()) {
-                res.addAll(this.getLeft().reportInSubtree(window));
+                res.addAll(this.getLeftSubTree().reportInSubtree(window));
             }
             if (this.hasRight()) {
-                res.addAll(this.getRight().reportInSubtree(window));
+                res.addAll(this.getRightSubTree().reportInSubtree(window));
             }
         }
         return res;
     }
 
-    private ArrayList<Segment> reportInSubtreeVertical(Window window){
+    private ArrayList<Segment> reportInSubtreeVertical(Window window) {
         ArrayList<Segment> res = new ArrayList<>();
         if (window.yMaxCompareTo(this.value) == 1) {
             // yMax >= y
-            // TODO : modify here.
-            res.add(this.value);
+            if (window.getYMin() <= this.value.getY1()) {
+                // The segment is at least crossing the lower bound of the window.
+                res.add(this.value);
+            }
             if (this.hasLeft()) {
-                res.addAll(this.getLeft().reportInSubtree(window));
+                res.addAll(this.getLeftSubTree().reportInSubtree(window));
             }
             if (this.hasRight()) {
-                res.addAll(this.getRight().reportInSubtree(window));
+                res.addAll(this.getRightSubTree().reportInSubtree(window));
             }
         }
         return res;
     }
 
 
-    public PrioritySearchTree getLeft() {
+    /**
+     * Returns the left subtree of the node.
+     *
+     * @return The left subtree of the node.
+     */
+    public PrioritySearchTree getLeftSubTree() {
         return this.left;
     }
 
-    public PrioritySearchTree getRight() {
+    /**
+     * Returns the right subtree of the node.
+     *
+     * @return The right subtree of the node.
+     */
+    public PrioritySearchTree getRightSubTree() {
         return this.right;
     }
 
+    /**
+     * Returns the current segment of the node.
+     *
+     * @return The value of the node.
+     */
     public Segment getValue() {
         return value;
     }
