@@ -106,7 +106,11 @@ public class MainSceneController extends Controller {
         switch (chosenFileValue) {
             case 0:
                 try {
+                    // TIME LOGGER
+                    long startl = System.currentTimeMillis();
                     currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
+                    long endl = System.currentTimeMillis();
+                    System.out.println("file read in" + " ["+ (endl - startl) +"]");
                 } catch (FormatException e) {
                     // TODO : show feedback to the user
                     e.printStackTrace();
@@ -129,7 +133,12 @@ public class MainSceneController extends Controller {
         yMinTextField.setPromptText("yMin (" + (int) currentFileData.getWindow().getYMin() + ")");
         yMaxTextField.setPromptText("yMax (" + (int) currentFileData.getWindow().getYMax() + ")");
         windowing = new Windowing(currentFileData.getSegments());
-        drawSegmentsAndWindow(windowing, currentFileData.getWindow());
+
+        // TIME LOGGER
+        long startl = System.currentTimeMillis();
+        drawSegmentsAndWindow(windowing, currentFileData.getWindow(), false);
+        long endl = System.currentTimeMillis();
+        System.out.println("drawn in" + " ["+ (endl - startl) +"]");
     }
 
     private Rectangle buildWindowRectangle(Window window) {
@@ -143,7 +152,7 @@ public class MainSceneController extends Controller {
 
     @FXML
     void handleLinuxButtonMouseClicked(MouseEvent mouseEvent) {
-        drawSegmentsAndWindow(windowing, extractWindow());
+        drawSegmentsAndWindow(windowing, extractWindow(), true);
         xMinTextField.setPromptText("xMin (" + xMinTextField.getText() + ")");
         xMinTextField.setText("");
         xMaxTextField.setPromptText("xMax (" + xMaxTextField.getText() + ")");
@@ -181,37 +190,42 @@ public class MainSceneController extends Controller {
      * @param windowing The windowing object containing the segments.
      * @param window The window to query with.
      */
-    private void drawSegmentsAndWindow(Windowing windowing, Window window) {
+    private void drawSegmentsAndWindow(Windowing windowing, Window window, boolean addWithStream) {
         // Initially, the button is disabled, so you can't apply the window before reading a file
         // This method will be called when the user loads a file, which is when we should enable the linuxing button
         linuxButton.setDisable(false);
+
+        // TIME LOGGER
         long startl = System.currentTimeMillis();
-        segmentsGroup.getChildren().clear();
+        segmentsGroup = new Group();
         long endl = System.currentTimeMillis();
         System.out.println("segments cleared in" + " ["+ (endl - startl) +"]");
 
+        // TIME LOGGER
         startl = System.currentTimeMillis();
         segmentsContainer.getChildren().clear();
         endl = System.currentTimeMillis();
         System.out.println("segments container cleared in" + " ["+ (endl - startl) +"]");
 
+        // TIME LOGGER
         startl = System.currentTimeMillis();
         ArrayList<Segment> segments = windowing.query(window);
         endl = System.currentTimeMillis();
-
         System.out.println("query finished in " + " ["+ (endl - startl) +"]");
 
+        // TIME LOGGER
         startl = System.currentTimeMillis();
-        segmentsGroup.getChildren().addAll(segments.stream().map(Segment::toLine).toList());
-        endl = System.currentTimeMillis();
-        System.out.println("segments added with stream in" + " ["+ (endl - startl) +"]");
-
-        startl = System.currentTimeMillis();
-        for (Segment segment : segments) {
-            segmentsGroup.getChildren().add(segment.toLine());
+        if (addWithStream) {
+            System.out.println("adding with stream");
+            segmentsGroup.getChildren().addAll(segments.stream().map(Segment::toLine).toList());
+        } else {
+            System.out.println("adding without stream");
+            for (Segment segment : segments) {
+                segmentsGroup.getChildren().add(segment.toLine());
+            }
         }
         endl = System.currentTimeMillis();
-        System.out.println("segments added in" + " ["+ (endl - startl) +"]");
+        System.out.println("segments added in" + " [" + (endl - startl) + "]");
 
         segmentsGroup.getChildren().add(buildWindowRectangle(window));
 
