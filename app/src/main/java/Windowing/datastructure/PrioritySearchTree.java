@@ -30,6 +30,7 @@ public class PrioritySearchTree {
      * @return A priority search tree
      */
     public static PrioritySearchTree build(ArrayList<Segment> data, Direction direction) {
+        System.out.println("Building " + direction + " PST");
         // Need to copy the data to prevent the side effect of the function.
         ArrayList<Segment> copiedData = new ArrayList<>(data);
         if (copiedData.size() == 0) {

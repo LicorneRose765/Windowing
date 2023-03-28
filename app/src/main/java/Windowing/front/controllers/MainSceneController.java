@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 public class MainSceneController extends Controller {
@@ -64,7 +65,7 @@ public class MainSceneController extends Controller {
      * This value represents how much the user is actually able to zoom in or out. A value of 4 means that the user can
      * zoom out 4 times less than the initial scale. Reminder : the user cannot zoom in more than the initial scale.
      */
-    private final double SCALE_LIMIT = 4;
+    private final double SCALE_LIMIT = 10;
     /**
      * The step used for zooming. A value of 1.05 means that the user will zoom in or out by 5% each time.
      * We multiply the current scaling of the segments by this value for zooming in, and divide for zooming out.
@@ -127,7 +128,8 @@ public class MainSceneController extends Controller {
         xMaxTextField.setPromptText("xMax (" + (int) currentFileData.getWindow().getXMax() + ")");
         yMinTextField.setPromptText("yMin (" + (int) currentFileData.getWindow().getYMin() + ")");
         yMaxTextField.setPromptText("yMax (" + (int) currentFileData.getWindow().getYMax() + ")");
-        drawSegmentsAndWindow(new Windowing(currentFileData.getSegments()), currentFileData.getWindow());
+        windowing = new Windowing(currentFileData.getSegments());
+        drawSegmentsAndWindow(windowing, currentFileData.getWindow());
     }
 
     private Rectangle buildWindowRectangle(Window window) {
@@ -141,7 +143,7 @@ public class MainSceneController extends Controller {
 
     @FXML
     void handleLinuxButtonMouseClicked(MouseEvent mouseEvent) {
-        drawSegmentsAndWindow(new Windowing(currentFileData.getSegments()), extractWindow());
+        drawSegmentsAndWindow(windowing, extractWindow());
         xMinTextField.setPromptText("xMin (" + xMinTextField.getText() + ")");
         xMinTextField.setText("");
         xMaxTextField.setPromptText("xMax (" + xMaxTextField.getText() + ")");
@@ -183,13 +185,33 @@ public class MainSceneController extends Controller {
         // Initially, the button is disabled, so you can't apply the window before reading a file
         // This method will be called when the user loads a file, which is when we should enable the linuxing button
         linuxButton.setDisable(false);
-
+        long startl = System.currentTimeMillis();
         segmentsGroup.getChildren().clear();
-        segmentsContainer.getChildren().clear();
+        long endl = System.currentTimeMillis();
+        System.out.println("segments cleared in" + " ["+ (endl - startl) +"]");
 
-        for (Segment segment : windowing.query(window)) {
+        startl = System.currentTimeMillis();
+        segmentsContainer.getChildren().clear();
+        endl = System.currentTimeMillis();
+        System.out.println("segments container cleared in" + " ["+ (endl - startl) +"]");
+
+        startl = System.currentTimeMillis();
+        ArrayList<Segment> segments = windowing.query(window);
+        endl = System.currentTimeMillis();
+
+        System.out.println("query finished in " + " ["+ (endl - startl) +"]");
+
+        startl = System.currentTimeMillis();
+        segmentsGroup.getChildren().addAll(segments.stream().map(Segment::toLine).toList());
+        endl = System.currentTimeMillis();
+        System.out.println("segments added with stream in" + " ["+ (endl - startl) +"]");
+
+        startl = System.currentTimeMillis();
+        for (Segment segment : segments) {
             segmentsGroup.getChildren().add(segment.toLine());
         }
+        endl = System.currentTimeMillis();
+        System.out.println("segments added in" + " ["+ (endl - startl) +"]");
 
         segmentsGroup.getChildren().add(buildWindowRectangle(window));
 
@@ -250,14 +272,14 @@ public class MainSceneController extends Controller {
             double resultingScale = segmentsGroup.getScaleX() * 1.05;
             // condition to be able to zoom in : we must not have a scale factor greater than the initial scale factor
             // (otherwise, the segments will be bigger than the window)
-            if (resultingScale > maxScale) return;
+            //if (resultingScale > maxScale) return;
             segmentsGroup.setScaleX(resultingScale);
             segmentsGroup.setScaleY(resultingScale);
         } else if (scrollEvent.getDeltaY() < 0) {
             double resultingScale = segmentsGroup.getScaleX() / 1.05;
             // condition to be able to zoom out : we must not have a scale factor smaller than the initial scale factor
             // divided by the max scale factor. This restriction is set in the SCALE_LIMIT value
-            if (resultingScale < maxScale / SCALE_LIMIT) return;
+            //if (resultingScale < maxScale / SCALE_LIMIT) return;
             segmentsGroup.setScaleX(resultingScale);
             segmentsGroup.setScaleY(resultingScale);
         }
