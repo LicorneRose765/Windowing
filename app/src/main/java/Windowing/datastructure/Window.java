@@ -22,7 +22,7 @@ public class Window {
      * @param yMin The minimum y coordinate of the window
      * @param yMax The maximum y coordinate of the window
      */
-    public Window(double xMin, double xMax, double yMin, double yMax) {
+    public Window(double xMin, double xMax, double yMin, double yMax) throws IllegalArgumentException {
         if (xMin > xMax || yMin > yMax) throw new IllegalArgumentException("Invalid window bounds");
         this.xMin = xMin;
         this.xMax = xMax;

@@ -2,14 +2,19 @@ package Windowing.front.controllers;
 
 import Windowing.back.segment.*;
 import Windowing.datastructure.Window;
+import Windowing.front.events.AbstractInvalidInputEvent;
+import Windowing.front.events.InvalidInputEvent;
 import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
@@ -26,6 +31,8 @@ import java.util.function.UnaryOperator;
 
 public class MainSceneController extends Controller {
     @FXML
+    Line xMinLine, xMaxLine, yMinLine, yMaxLine;
+    @FXML
     TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
     @FXML
     TextFormatter<String> xMinIntegerTextFormatter, xMaxIntegerTextFormatter, yMinIntegerTextFormatter, yMaxIntegerTextFormatter; // not sure about <String>
@@ -35,8 +42,6 @@ public class MainSceneController extends Controller {
     StackPane lowerContainer, limiter, background, segmentsContainer;
     @FXML
     Button readSegmentFileButton, linuxButton;
-
-    int i = 0;
 
     private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
 
@@ -82,7 +87,7 @@ public class MainSceneController extends Controller {
 
         UnaryOperator<TextFormatter.Change> formatter = change -> {
             String newText = change.getControlNewText();
-            if (newText.matches("-?\\d*")) {
+            if (newText.matches("-?(\\d*|inf)")) {
                 return change;
             } else {
                 return null;
@@ -97,6 +102,14 @@ public class MainSceneController extends Controller {
         xMaxTextField.setTextFormatter(xMaxIntegerTextFormatter);
         yMinTextField.setTextFormatter(yMinIntegerTextFormatter);
         yMaxTextField.setTextFormatter(yMaxIntegerTextFormatter);
+
+        xMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> xMinLine.setStroke(Color.rgb(200, 0, 0)));
+
+        xMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> xMaxLine.setStroke(Color.rgb(200, 0, 0)));
+
+        yMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> yMinLine.setStroke(Color.rgb(200, 0, 0)));
+
+        yMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> yMaxLine.setStroke(Color.rgb(200, 0, 0)));
     }
 
     @FXML
@@ -152,7 +165,15 @@ public class MainSceneController extends Controller {
 
     @FXML
     void handleLinuxButtonMouseClicked(MouseEvent mouseEvent) {
-        drawSegmentsAndWindow(windowing, extractWindow(), true);
+        // Reset in case they are already red because of previous bad input
+        xMinLine.setStroke(Color.rgb(0, 0, 0));
+        xMaxLine.setStroke(Color.rgb(0, 0, 0));
+        yMinLine.setStroke(Color.rgb(0, 0, 0));
+        yMaxLine.setStroke(Color.rgb(0, 0, 0));
+
+        Window extractedWindow = extractWindow();
+        if (extractedWindow == null) return; // happens if any of the component is null which happens in case of bad input (and an InvalidInputEvent is fired)
+        drawSegmentsAndWindow(windowing, extractedWindow, true);
         xMinTextField.setPromptText("xMin (" + xMinTextField.getText() + ")");
         xMinTextField.setText("");
         xMaxTextField.setPromptText("xMax (" + xMaxTextField.getText() + ")");
@@ -164,6 +185,24 @@ public class MainSceneController extends Controller {
     }
 
     /**
+     * Valid inputs must match the following regex : "-?(\d*|inf)". If the input is empty, fires an InvalidInputEvent
+     * to the given userFeedbackNode. This serves as user feedback and indicates which field should be modified.
+     * @param s The input to extract the Double value from
+     * @return The value of the input as a Double
+     */
+    private Double extractValue(String s, Node userFeedbackNode) {
+        if (s.equals("")) {
+            userFeedbackNode.fireEvent(new InvalidInputEvent());
+            return null;
+        }
+        if (s.substring(1).equals("inf")) {
+            if (s.startsWith("-")) return Double.NEGATIVE_INFINITY;
+            return Double.POSITIVE_INFINITY;
+        }
+        return Double.parseDouble(s);
+    }
+
+    /**
      * @return A <code>Window</code> object with the values of the text fields.
      */
     private Window extractWindow() {
@@ -172,17 +211,31 @@ public class MainSceneController extends Controller {
         String yMinText = yMinTextField.getText();
         String yMaxText = yMaxTextField.getText();
 
-        // TODO : make this unbounded window
-        if (xMinText.equals("")) xMinText = "0";
-        if (xMaxText.equals("")) xMaxText = "0";
-        if (yMinText.equals("")) yMinText = "0";
-        if (yMaxText.equals("")) yMaxText = "0";
+        // Calling extractValue() will fire events to the given feedback node in case of empty input
+        Double xMin = extractValue(xMinText, xMinLine);
+        Double xMax = extractValue(xMaxText, xMaxLine);
+        Double yMin = extractValue(yMinText, yMinLine);
+        Double yMax = extractValue(yMaxText, yMaxLine);
 
-        return new Window(
-                Integer.parseInt(xMinText),
-                Integer.parseInt(xMaxText),
-                Integer.parseInt(yMinText),
-                Integer.parseInt(yMaxText));
+        if (xMin == null) return null;
+        if (xMax == null) return null;
+        if (yMin == null) return null;
+        if (yMax == null) return null;
+
+        // Make sure that xMin < xMax
+        if (xMin >= xMax) {
+            // TODO : make an EventManager class with methods fireTo(event, target) and fireToAll(event, targets...)
+            xMinLine.fireEvent(new InvalidInputEvent());
+            xMaxLine.fireEvent(new InvalidInputEvent());
+        }
+        // Make sure that yMin < yMax
+        if (yMin >= yMax) {
+            yMinLine.fireEvent(new InvalidInputEvent());
+            yMaxLine.fireEvent(new InvalidInputEvent());
+        }
+        if (xMin >= xMax || yMin >= yMax) return null;
+
+        return new Window(xMin, xMax, yMin, yMax);
     }
 
     /**
@@ -298,5 +351,9 @@ public class MainSceneController extends Controller {
             segmentsGroup.setScaleY(resultingScale);
         }
         System.out.println("scale = " + segmentsGroup.getScaleX());
+    }
+
+    public void temp(MouseEvent mouseEvent) {
+        System.out.println("mouseEvent = " + mouseEvent);
     }
 }
