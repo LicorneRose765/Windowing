@@ -260,7 +260,11 @@ public class PrioritySearchTree {
             // Searching for vSplit
             if (window.xMinCompareTo(current.median) == 1) {
                 // xMin > x_mid. All the points at left aren't in the window, searching in right part.
-                current = current.getRightSubTree();
+                if (current.hasRight()) {
+                    current = current.getRightSubTree();
+                } else {
+                    break;
+                }
             } else {
                 // xMin <= x_mid.
                 // We have to check were is xMax here.
@@ -269,7 +273,11 @@ public class PrioritySearchTree {
                     vSplit = current;
                 } else {
                     // xMax < x_mid : searching in left part
-                    current = current.getLeftSubTree();
+                    if (current.hasLeft()) {
+                        current = current.getLeftSubTree();
+                    } else {
+                        break;
+                    }
                 }
             }
         }
