@@ -129,4 +129,14 @@ public class Window {
     public double getHeight() {
         return yMax - yMin;
     }
+
+    @Override
+    public String toString() {
+        return "Window{" +
+                "xMin=" + xMin +
+                ", xMax=" + xMax +
+                ", yMin=" + yMin +
+                ", yMax=" + yMax +
+                '}';
+    }
 }

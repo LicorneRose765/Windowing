@@ -53,7 +53,8 @@
                    prefHeight="650.0" prefWidth="1250.0">
             <StackPane fx:id="background"
                        style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;">
-                <StackPane fx:id="segmentsContainer" minHeight="-Infinity" minWidth="-Infinity">
+                <StackPane fx:id="segmentsContainer" minHeight="-Infinity" minWidth="-Infinity"
+                           onScroll="#handleSegmentsContainerOnScroll">
                     <!-- style="-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: 5; -fx-border-radius: 10;"> -->
                     <Group fx:id="segmentsGroup"/>
                 </StackPane>

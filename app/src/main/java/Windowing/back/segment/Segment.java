@@ -169,6 +169,6 @@ public class Segment {
     }
 
     public Line toLine() {
-        return new Line(x, y, x1, y1);
+        return new Line(x, -y, x1, -y1);
     }
 }
