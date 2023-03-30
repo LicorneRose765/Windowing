@@ -63,12 +63,12 @@ public class WindowingTest {
         // Given
         Window w = new Window(Double.NEGATIVE_INFINITY, 10, 0, 10);
         ArrayList<Segment> dataSet = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,4,8,4),
-                new Segment(-24,2,-24,8),
-                new Segment(-24,12,0,12),
-                new Segment(-20,-10,-20,-1),
-                new Segment(-30,8,20,8)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 4, 8, 4),
+                new Segment(-24, 2, -24, 8),
+                new Segment(-24, 12, 0, 12),
+                new Segment(-20, -10, -20, -1),
+                new Segment(-30, 8, 20, 8)
         ));
 
         // When
@@ -77,10 +77,10 @@ public class WindowingTest {
 
         // Then
         ArrayList<Segment> expected = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,4,8,4),
-                new Segment(-24,2,-24,8),
-                new Segment(-30,8,20,8)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 4, 8, 4),
+                new Segment(-24, 2, -24, 8),
+                new Segment(-30, 8, 20, 8)
         ));
 
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
@@ -96,14 +96,14 @@ public class WindowingTest {
         // Given
         Window w = new Window(0, Double.POSITIVE_INFINITY, 0, 10);
         ArrayList<Segment> dataSet = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,4,8,4),
-                new Segment(-24,2,-24,8),
-                new Segment(-24,12,0,12),
-                new Segment(-20,-10,-20,-1),
-                new Segment(-30,8,20,8),
-                new Segment(24,-2,24,0),
-                new Segment(18,2,22,2)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 4, 8, 4),
+                new Segment(-24, 2, -24, 8),
+                new Segment(-24, 12, 0, 12),
+                new Segment(-20, -10, -20, -1),
+                new Segment(-30, 8, 20, 8),
+                new Segment(24, -2, 24, 0),
+                new Segment(18, 2, 22, 2)
         ));
 
         // When
@@ -112,11 +112,11 @@ public class WindowingTest {
 
         // Then
         ArrayList<Segment> expected = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,4,8,4),
-                new Segment(-30,8,20,8),
-                new Segment(24,-2,24,0),
-                new Segment(18,2,22,2)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 4, 8, 4),
+                new Segment(-30, 8, 20, 8),
+                new Segment(24, -2, 24, 0),
+                new Segment(18, 2, 22, 2)
         ));
 
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
@@ -131,14 +131,14 @@ public class WindowingTest {
         // Given
         Window w = new Window(0, 10, Double.NEGATIVE_INFINITY, 0);
         ArrayList<Segment> dataSet = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,-10,8,-10),
-                new Segment(4,-20,4,2),
-                new Segment(-24,12,0,12),
-                new Segment(-20,-10,-20,-1),
-                new Segment(-30,-16,20,-16),
-                new Segment(2,-2,2,0),
-                new Segment(18,2,22,2)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, -10, 8, -10),
+                new Segment(4, -20, 4, 2),
+                new Segment(-24, 12, 0, 12),
+                new Segment(-20, -10, -20, -1),
+                new Segment(-30, -16, 20, -16),
+                new Segment(2, -2, 2, 0),
+                new Segment(18, 2, 22, 2)
         ));
 
         // When
@@ -147,11 +147,11 @@ public class WindowingTest {
 
         // Then
         ArrayList<Segment> expected = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,-10,8,-10),
-                new Segment(4,-20,4,2),
-                new Segment(-30,-16,20,-16),
-                new Segment(2,-2,2,0)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, -10, 8, -10),
+                new Segment(4, -20, 4, 2),
+                new Segment(-30, -16, 20, -16),
+                new Segment(2, -2, 2, 0)
         ));
 
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
@@ -166,14 +166,14 @@ public class WindowingTest {
         // Given
         Window w = new Window(0, 10, 0, Double.POSITIVE_INFINITY);
         ArrayList<Segment> dataSet = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,10,8,10),
-                new Segment(4,-20,4,2),
-                new Segment(-24,12,0,12),
-                new Segment(-20,1,-20,10),
-                new Segment(-30,16,20,16),
-                new Segment(2,-2,2,0),
-                new Segment(18,2,22,2)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 10, 8, 10),
+                new Segment(4, -20, 4, 2),
+                new Segment(-24, 12, 0, 12),
+                new Segment(-20, 1, -20, 10),
+                new Segment(-30, 16, 20, 16),
+                new Segment(2, -2, 2, 0),
+                new Segment(18, 2, 22, 2)
         ));
 
         // When
@@ -182,12 +182,12 @@ public class WindowingTest {
 
         // Then
         ArrayList<Segment> expected = new ArrayList<>(List.of(
-                new Segment(10,-2,10,12),
-                new Segment(-20,10,8,10),
-                new Segment(4,-20,4,2),
-                new Segment(-24,12,0,12),
-                new Segment(-30,16,20,16),
-                new Segment(2,-2,2,0)
+                new Segment(10, -2, 10, 12),
+                new Segment(-20, 10, 8, 10),
+                new Segment(4, -20, 4, 2),
+                new Segment(-24, 12, 0, 12),
+                new Segment(-30, 16, 20, 16),
+                new Segment(2, -2, 2, 0)
         ));
 
         assertTrue(expected.containsAll(result) && result.containsAll(expected));

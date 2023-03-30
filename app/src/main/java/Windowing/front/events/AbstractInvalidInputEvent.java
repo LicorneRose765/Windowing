@@ -1,12 +1,11 @@
 package Windowing.front.events;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventTarget;
 import javafx.event.EventType;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
 
+/**
+ * Defines an abstract skeleton for the {@link InvalidInputEvent} class.
+ */
 public abstract class AbstractInvalidInputEvent extends Event {
     public static final EventType<AbstractInvalidInputEvent> ANY =
             new EventType<>(Event.ANY, "ANY");

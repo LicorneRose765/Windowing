@@ -14,10 +14,40 @@ import java.util.ArrayList;
  */
 public class PrioritySearchTree {
 
-    private PrioritySearchTree left, right;
     private final Segment value;
-    private Segment median;
     private final Direction direction;
+    private PrioritySearchTree left, right;
+    private Segment median;
+
+    /**
+     * Builds a leaf of the priority search tree.
+     *
+     * @param value     The value of the leaf.
+     * @param direction The direction of the Segment.
+     */
+    public PrioritySearchTree(Segment value, Direction direction) {
+        this.value = value;
+        this.direction = direction;
+    }
+
+
+    /**
+     * Main constructor of the PrioritySearchTree.
+     *
+     * @param left      The left subtree.
+     * @param right     The right subtree.
+     * @param value     The value of the node.
+     * @param median    The median of the node.
+     * @param direction The direction of the Segment.
+     */
+    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Segment value,
+                              Segment median, Direction direction) {
+        this.left = left;
+        this.right = right;
+        this.value = value;
+        this.median = median;
+        this.direction = direction;
+    }
 
     /**
      * Builds a priority search tree from a list of points. <br>
@@ -47,7 +77,6 @@ public class PrioritySearchTree {
 
         return buildHelper(copiedData, direction);
     }
-
 
     private static PrioritySearchTree buildHelper(ArrayList<Segment> sortedData, Direction direction) {
         if (sortedData.size() == 0) {
@@ -91,35 +120,6 @@ public class PrioritySearchTree {
         return new PrioritySearchTree(buildHelper(leftData, direction),
                 buildHelper(rightData, direction),
                 min, median, direction);
-    }
-
-    /**
-     * Builds a leaf of the priority search tree.
-     *
-     * @param value     The value of the leaf.
-     * @param direction The direction of the Segment.
-     */
-    public PrioritySearchTree(Segment value, Direction direction) {
-        this.value = value;
-        this.direction = direction;
-    }
-
-    /**
-     * Main constructor of the PrioritySearchTree.
-     *
-     * @param left      The left subtree.
-     * @param right     The right subtree.
-     * @param value     The value of the node.
-     * @param median    The median of the node.
-     * @param direction The direction of the Segment.
-     */
-    public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Segment value,
-                              Segment median, Direction direction) {
-        this.left = left;
-        this.right = right;
-        this.value = value;
-        this.median = median;
-        this.direction = direction;
     }
 
     /**

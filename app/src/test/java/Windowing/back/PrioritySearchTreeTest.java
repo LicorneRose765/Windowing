@@ -129,7 +129,7 @@ public class PrioritySearchTreeTest {
      */
     @Test
     void canCreatePSTFromVerticalSegments() {
-            // A vertical PST is just a horizontal pst where x and y coordinates are swapped.
+        // A vertical PST is just a horizontal pst where x and y coordinates are swapped.
         // Given
         ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
                 new Segment(1, 5),  // 5

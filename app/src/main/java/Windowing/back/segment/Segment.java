@@ -22,7 +22,7 @@ public class Segment {
                     "x: " + x + " y: " + y + " x1: " + x1 + " y1: " + y1);
         }
         this.x = Math.min(x, x1);
-        this.y = Math.min(y,y1);
+        this.y = Math.min(y, y1);
         this.x1 = Math.max(x, x1);
         this.y1 = Math.max(y, y1);
         if (x == x1) {

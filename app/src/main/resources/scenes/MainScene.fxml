@@ -12,14 +12,18 @@
                 <InnerShadow blurType="TWO_PASS_BOX" choke="0.1" height="13.41" offsetX="-2.0" offsetY="-1.0" radius="8.8625" width="24.04" />
             </effect> -->
         </Button>
+        <Line endX="100.0" layoutX="625" layoutY="40.0" fx:id="xMinLine" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="625.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" fx:id="xMinRectangle" />
         <TextField layoutX="625.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" fx:id="xMinTextField" />
-        <Line endX="100.0" layoutX="625" layoutY="40.0" onMouseClicked="#temp" opacity="0.75" fx:id="xMinLine" />
+        <Line endX="100.0" layoutX="735" layoutY="40.0" fx:id="xMaxLine" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="735.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" fx:id="xMaxRectangle" />
         <TextField layoutX="735.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" fx:id="xMaxTextField" />
-        <Line endX="100.0" layoutX="735" layoutY="40.0" opacity="0.75" fx:id="xMaxLine" />
+        <Line fx:id="yMinLine" endX="100.0" layoutX="885" layoutY="40.0" />
+        <Rectangle fx:id="yMinRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="885.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" />
         <TextField fx:id="yMinTextField" layoutX="885.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" />
-        <Line fx:id="yMinLine" endX="100.0" layoutX="885" layoutY="40.0" opacity="0.75" />
+        <Line fx:id="yMaxLine" endX="100.0" layoutX="995" layoutY="40.0" />
+        <Rectangle fx:id="yMaxRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="995.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" />
         <TextField fx:id="yMaxTextField" layoutX="995.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" />
-        <Line fx:id="yMaxLine" endX="100.0" layoutX="995" layoutY="40.0" opacity="0.75" />
         <Button fx:id="linuxButton" disable="true" layoutX="1176.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleLinuxButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered" onMouseExited="#handleButtonMouseExited" prefWidth="90" style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;" text="Linux">
             <!-- <effect>
                 <InnerShadow blurType="TWO_PASS_BOX" choke="0.1" height="13.41" offsetX="-2.0" offsetY="-1.0"
@@ -37,7 +41,9 @@
             <StackPane fx:id="background" style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;">
                 <StackPane fx:id="segmentsContainer" minHeight="-Infinity" minWidth="-Infinity" onScroll="#handleSegmentsContainerOnScroll">
                     <!-- style="-fx-background-color: rgb(190, 185, 180); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: 5; -fx-border-radius: 10;"> -->
-                    <Group fx:id="segmentsGroup" />
+                    <Group fx:id="segmentsGroup">
+                        <Rectangle fx:id="windowRectangle" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" stroke="#c70000b2" strokeType="INSIDE" strokeWidth="0.66" />
+                    </Group>
                 </StackPane>
             </StackPane>
         </StackPane>

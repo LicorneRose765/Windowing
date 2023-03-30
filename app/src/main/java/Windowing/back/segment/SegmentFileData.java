@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * </ul>
  */
 public class SegmentFileData {
-    private Window window;
-    private ArrayList<Segment> segments;
+    private final Window window;
+    private final ArrayList<Segment> segments;
     private PrioritySearchTree PST;
 
     public SegmentFileData(Window window, ArrayList<Segment> segments) {

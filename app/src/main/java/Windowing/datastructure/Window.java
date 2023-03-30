@@ -139,4 +139,11 @@ public class Window {
                 ", yMax=" + yMax +
                 '}';
     }
+
+    /**
+     * @return Whether the window is finite or not. Finite means all coordinates composants are real numbers.
+     */
+    public boolean isFinite() {
+        return xMin != Double.NEGATIVE_INFINITY && xMax != Double.POSITIVE_INFINITY && yMin != Double.NEGATIVE_INFINITY && yMax != Double.POSITIVE_INFINITY;
+    }
 }
