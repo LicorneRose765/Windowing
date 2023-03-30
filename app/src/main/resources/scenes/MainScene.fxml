@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowing.front.controllers.MainSceneController">
     <AnchorPane prefHeight="50.0" prefWidth="1280.0">
@@ -14,16 +15,36 @@
         </Button>
         <Line endX="100.0" layoutX="625" layoutY="40.0" fx:id="xMinLine" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="625.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" fx:id="xMinRectangle" />
-        <TextField layoutX="625.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" fx:id="xMinTextField" />
+        <Label fx:id="xMinWarningLabel" layoutX="623.0" layoutY="12.0" prefHeight="25" prefWidth="100" text="!" textFill="rgb(200, 0, 0)" visible="false">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Label>
+        <TextField layoutX="625.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;" fx:id="xMinTextField" />
         <Line endX="100.0" layoutX="735" layoutY="40.0" fx:id="xMaxLine" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="735.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" fx:id="xMaxRectangle" />
-        <TextField layoutX="735.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" fx:id="xMaxTextField" />
+        <Label fx:id="xMaxWarningLabel" layoutX="733.0" layoutY="12.0" prefHeight="25" prefWidth="100" text="!" textFill="rgb(200, 0, 0)" visible="false">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Label>
+        <TextField layoutX="735.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="xMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;" fx:id="xMaxTextField" />
         <Line fx:id="yMinLine" endX="100.0" layoutX="885" layoutY="40.0" />
         <Rectangle fx:id="yMinRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="885.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" />
-        <TextField fx:id="yMinTextField" layoutX="885.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" />
+        <Label fx:id="yMinWarningLabel" layoutX="883.0" layoutY="12.0" prefHeight="25" prefWidth="100" text="!" textFill="rgb(200, 0, 0)" visible="false">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="yMinTextField" layoutX="885.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMin" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;" />
         <Line fx:id="yMaxLine" endX="100.0" layoutX="995" layoutY="40.0" />
         <Rectangle fx:id="yMaxRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ff00004d" height="25.0" layoutX="995.0" layoutY="12.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="100.0" />
-        <TextField fx:id="yMaxTextField" layoutX="995.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;  -fx-box-shadow: 0px 0px 10px rgba(66,66,66,.50);  -fx-text-shadow: 0px 0px 2px rgba(66,66,66,.65);" />
+        <Label fx:id="yMaxWarningLabel" layoutX="993.0" layoutY="12.0" prefHeight="25" prefWidth="100" text="!" textFill="rgb(200, 0, 0)" visible="false">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Label>
+        <TextField fx:id="yMaxTextField" layoutX="995.0" layoutY="11.0" prefHeight="25.0" prefWidth="100.0" promptText="yMax" style="-fx-padding: 4px; -fx-font-size: 16px;  -fx-border-width: 0px;  -fx-background-color: rgba(0, 0, 0, 0);  -fx-color: #000000;  -fx-border-style: solid;  -fx-border-radius: 0px;" />
         <Button fx:id="linuxButton" disable="true" layoutX="1176.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleLinuxButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered" onMouseExited="#handleButtonMouseExited" prefWidth="90" style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;" text="Linux">
             <!-- <effect>
                 <InnerShadow blurType="TWO_PASS_BOX" choke="0.1" height="13.41" offsetX="-2.0" offsetY="-1.0"

@@ -2,14 +2,17 @@ package Windowing.front.controllers;
 
 import Windowing.back.segment.*;
 import Windowing.datastructure.Window;
+import Windowing.front.events.AbstractInvalidInputEvent;
 import Windowing.front.events.EventsManager;
 import Windowing.front.events.InvalidInputEvent;
 import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
@@ -51,6 +54,8 @@ public class MainSceneController extends Controller {
      */
     private final double SCALE_STEP = 1.05;
     @FXML
+    Label xMinWarningLabel, xMaxWarningLabel, yMinWarningLabel, yMaxWarningLabel;
+    @FXML
     TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
     @FXML
     Line xMinLine, xMaxLine, yMinLine, yMaxLine;
@@ -74,6 +79,79 @@ public class MainSceneController extends Controller {
      * the entire area.
      */
     private double maxScale;
+
+    /**
+     * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> xMinLineInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            xMinLine.setStroke(Color.rgb(200, 0, 0));
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> xMaxLineInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            xMaxLine.setStroke(Color.rgb(200, 0, 0));
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> yMinLineInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            yMinLine.setStroke(Color.rgb(200, 0, 0));
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> yMaxLineInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            yMaxLine.setStroke(Color.rgb(200, 0, 0));
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> xMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            xMinWarningLabel.setVisible(true);
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> xMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            xMaxWarningLabel.setVisible(true);
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> yMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            yMinWarningLabel.setVisible(true);
+        }
+    };
+    /**
+     * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+     */
+    EventHandler<AbstractInvalidInputEvent> yMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(AbstractInvalidInputEvent event) {
+            yMaxWarningLabel.setVisible(true);
+        }
+    };
 
     @FXML
     void initialize() {
@@ -101,25 +179,17 @@ public class MainSceneController extends Controller {
         yMinTextField.setTextFormatter(yMinIntegerTextFormatter);
         yMaxTextField.setTextFormatter(yMaxIntegerTextFormatter);
 
-        xMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> {
-            // xMinLine.setStroke(Color.rgb(200,0,0));
-            xMinRectangle.setVisible(true);
-        });
+        xMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMinLineInvalidInputEventHandler);
+        xMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMaxLineInvalidInputEventHandler);
+        yMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMinLineInvalidInputEventHandler);
+        yMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMaxLineInvalidInputEventHandler);
 
-        xMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> {
-            // xMaxLine.setStroke(Color.rgb(200,0,0));
-            xMaxRectangle.setVisible(true);
-        });
+        xMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMinWarningLabelInvalidInputEventHandler);
+        xMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMaxWarningLabelInvalidInputEventHandler);
+        yMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMinWarningLabelInvalidInputEventHandler);
+        yMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMaxWarningLabelInvalidInputEventHandler);
 
-        yMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> {
-            // yMinLine.setStroke(Color.rgb(200,0,0));
-            yMinRectangle.setVisible(true);
-        });
-
-        yMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, event -> {
-            // yMaxLine.setStroke(Color.rgb(200,0,0));
-            yMaxRectangle.setVisible(true);
-        });
+        // TODO : remove this as well (it's for speed load)
         try {
             handleReadSegmentFileButtonMouseClicked(null);
         } catch (Exception ignored) {}
@@ -170,7 +240,7 @@ public class MainSceneController extends Controller {
         long startl = System.currentTimeMillis();
         drawSegmentsAndWindow(windowing, currentFileData.getWindow(), false);
         long endl = System.currentTimeMillis();
-        System.out.println("drawn in" + " [" + (endl - startl) + "]");
+        // System.out.println("drawn in" + " [" + (endl - startl) + "]");
     }
 
     private Rectangle buildWindowLines(Window window) {
@@ -188,6 +258,11 @@ public class MainSceneController extends Controller {
         xMaxLine.setStroke(Color.rgb(0, 0, 0));
         yMinLine.setStroke(Color.rgb(0, 0, 0));
         yMaxLine.setStroke(Color.rgb(0, 0, 0));
+
+        xMinWarningLabel.setVisible(false);
+        xMaxWarningLabel.setVisible(false);
+        yMinWarningLabel.setVisible(false);
+        yMaxWarningLabel.setVisible(false);
 
         xMinRectangle.setVisible(false);
         xMaxRectangle.setVisible(false);
@@ -210,15 +285,15 @@ public class MainSceneController extends Controller {
 
     /**
      * Valid inputs must match the following regex : <code>-?(\d*|inf)</code>. If the input is empty, fires an {@link InvalidInputEvent}
-     * to the given <code>userFeedbackNode</code>. This serves as user feedback and indicates which field should be modified.
+     * to the given <code>userFeedbackNodes</code>. This serves as user feedback and indicates which field should be modified.
      *
      * @param s The input to extract the Double value from
+     * @param userFeedbackNodes Nodes which will receive an {@link InvalidInputEvent} if the input is invalid.
      * @return The value of the input as a Double
      */
-    private Double extractValue(String s, Node userFeedbackNode) {
-        System.out.println("trying to parse s = " + s);
+    private Double extractValue(String s, Node... userFeedbackNodes) {
         if (s.equals("")) {
-            EventsManager.sendEventTo(new InvalidInputEvent(), userFeedbackNode);
+            for (Node node : userFeedbackNodes) EventsManager.sendEventTo(new InvalidInputEvent(), node);
             return null;
         }
         if (s.startsWith("-")) {
@@ -240,10 +315,10 @@ public class MainSceneController extends Controller {
         String yMaxText = yMaxTextField.getText();
 
         // Calling extractValue() will fire events to the given feedback node in case of empty input
-        Double xMin = extractValue(xMinText, xMinLine);
-        Double xMax = extractValue(xMaxText, xMaxLine);
-        Double yMin = extractValue(yMinText, yMinLine);
-        Double yMax = extractValue(yMaxText, yMaxLine);
+        Double xMin = extractValue(xMinText, xMinLine, xMinWarningLabel);
+        Double xMax = extractValue(xMaxText, xMaxLine, xMaxWarningLabel);
+        Double yMin = extractValue(yMinText, yMinLine, yMinWarningLabel);
+        Double yMax = extractValue(yMaxText, yMaxLine, yMaxWarningLabel);
 
         if (xMin == null) isInputWindowValid = false;
         if (xMax == null) isInputWindowValid = false;
@@ -253,14 +328,14 @@ public class MainSceneController extends Controller {
         // Make sure that xMin < xMax
         if (xMin != null && xMax != null) {
             if (xMin >= xMax) {
-                EventsManager.sendEventToAll(new InvalidInputEvent(), xMinLine, xMaxLine);
+                EventsManager.sendEventToAll(new InvalidInputEvent(), xMinLine, xMaxLine, xMinWarningLabel, xMaxWarningLabel);
                 isInputWindowValid = false;
             }
         }
         // Make sure that yMin < yMax
         if (yMin != null && yMax != null) {
             if (yMin >= yMax) {
-                EventsManager.sendEventToAll(new InvalidInputEvent(), yMinLine, yMaxLine);
+                EventsManager.sendEventToAll(new InvalidInputEvent(), yMinLine, yMaxLine, yMinWarningLabel, yMaxWarningLabel);
                 isInputWindowValid = false;
             }
         }
@@ -345,7 +420,6 @@ public class MainSceneController extends Controller {
             if (node instanceof Rectangle) continue;
 
             Line line = (Line) node;
-            System.out.println("line.getStartX() = " + line.getStartX());
             // Exclude window bounds in case because if they are -inf or inf, the scale factor will be 0
             if (line.getStartX() == Double.NEGATIVE_INFINITY) continue;
             if (line.getEndX() == Double.POSITIVE_INFINITY) continue;
@@ -365,7 +439,6 @@ public class MainSceneController extends Controller {
         } else {
             scaleFactor = MAX_HEIGHT / absoluteHeight;
         }
-        System.out.println("scaleFactor = " + scaleFactor);
         return scaleFactor;
     }
 
