@@ -167,25 +167,34 @@ public class PrioritySearchTree {
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
-        while (vSplit == null && !current.isLeaf()) {
+        while (vSplit == null) {
             if (window.contains(current.value)) {
                 // If the node is in the window.
                 res.add(current.value);
+            }
+            if (current.isLeaf()) {
+                break;
             }
 
             // Searching for vSplit
             if (window.yMinCompareTo(current.median) == 1) {
                 // yMin > y_mid. All the points at left aren't in the window, searching in right part.
-                current = current.getRightSubTree();
+                if (current.hasRight()) {
+                    current = current.getRightSubTree();
+                } else {
+                    break;
+                }
             } else {
                 // yMin <= y_mid.
                 // We have to check were is yMax here.
                 if (window.yMaxCompareTo(current.median) == 1) {
                     // yMax >= y_mid : found vSplit
                     vSplit = current;
-                } else {
+                } else if (current.hasLeft()) {
                     // yMax < y_mid : searching in left part
                     current = current.getLeftSubTree();
+                } else {
+                    break;
                 }
             }
         }

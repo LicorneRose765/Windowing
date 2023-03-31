@@ -11,12 +11,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -26,13 +22,60 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
+
+// TODO : on drag and drop pour déplacer
 
 /**
  * Controller used for the `MainScene` scene defined in the `MainScene.fxml` file.
  */
 public class MainSceneController extends Controller {
+
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                 FXML VARIABLES                                                 *
+     *                                                                                                                *
+     *================================================================================================================*/
+
+
+    @FXML
+    Label xMinWarningLabel, xMaxWarningLabel, yMinWarningLabel, yMaxWarningLabel;
+    @FXML
+    Label tooltipLabel;
+    @FXML
+    TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
+    @FXML
+    Line xMinLine, xMaxLine, yMinLine, yMaxLine;
+    @FXML
+    Rectangle xMinRectangle, xMaxRectangle, yMinRectangle, yMaxRectangle, windowRectangle, tooltipBackgroundRectangle;
+    @FXML
+    Group segmentsGroup;
+    @FXML
+    StackPane lowerContainer, limiter, background, segmentsContainer;
+    @FXML
+    Button readSegmentFileButton, linuxButton, tooltipButton;
+
+    UnaryOperator<TextFormatter.Change> formatter = MainSceneController::apply;
+    @FXML
+    TextFormatter xMinIntegerTextFormatter = new TextFormatter(formatter);
+    @FXML
+    TextFormatter xMaxIntegerTextFormatter = new TextFormatter(formatter);
+    @FXML
+    TextFormatter yMinIntegerTextFormatter = new TextFormatter(formatter);
+    @FXML
+    TextFormatter yMaxIntegerTextFormatter = new TextFormatter(formatter);
+
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                    VARIABLES                                                 *
+     *                                                                                                                *
+     *================================================================================================================*/
+
+
     private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
     public static Stage popup; // TODO : this code sucks
     public static File chosenFile;
@@ -43,6 +86,7 @@ public class MainSceneController extends Controller {
      * 3 : the chosen file is example 3
      */
     public static int chosenFileValue;
+    private SegmentFileData currentFileData;
     /**
      * This value represents how much the user is actually able to zoom in or out. A value of 4 means that the user can
      * zoom out 4 times less than the initial scale. Reminder : the user cannot zoom in more than the initial scale.
@@ -53,23 +97,7 @@ public class MainSceneController extends Controller {
      * We multiply the current scaling of the segments by this value for zooming in, and divide for zooming out.
      */
     private final double SCALE_STEP = 1.05;
-    @FXML
-    Label xMinWarningLabel, xMaxWarningLabel, yMinWarningLabel, yMaxWarningLabel;
-    @FXML
-    TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
-    @FXML
-    Line xMinLine, xMaxLine, yMinLine, yMaxLine;
-    @FXML
-    Rectangle xMinRectangle, xMaxRectangle, yMinRectangle, yMaxRectangle, windowRectangle;
-    @FXML
-    TextFormatter<String> xMinIntegerTextFormatter, xMaxIntegerTextFormatter, yMinIntegerTextFormatter, yMaxIntegerTextFormatter; // not sure about <String>
-    @FXML
-    Group segmentsGroup;
-    @FXML
-    StackPane lowerContainer, limiter, background, segmentsContainer;
-    @FXML
-    Button readSegmentFileButton, linuxButton;
-    private SegmentFileData currentFileData;
+
     private Windowing windowing;
     /**
      * Represents the initial scale of the loaded segments. Depending on their actual coordinates, they will need to be
@@ -80,78 +108,101 @@ public class MainSceneController extends Controller {
      */
     private double maxScale;
 
-    /**
-     * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> xMinLineInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            xMinLine.setStroke(Color.rgb(200, 0, 0));
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> xMaxLineInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            xMaxLine.setStroke(Color.rgb(200, 0, 0));
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> yMinLineInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            yMinLine.setStroke(Color.rgb(200, 0, 0));
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> yMaxLineInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            yMaxLine.setStroke(Color.rgb(200, 0, 0));
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> xMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            xMinWarningLabel.setVisible(true);
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> xMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            xMaxWarningLabel.setVisible(true);
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> yMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            yMinWarningLabel.setVisible(true);
-        }
-    };
-    /**
-     * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
-     */
-    EventHandler<AbstractInvalidInputEvent> yMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(AbstractInvalidInputEvent event) {
-            yMaxWarningLabel.setVisible(true);
-        }
-    };
+    private double mouseDragStartX, mouseDragStartY;
+    private double initialTranslateX, initialTranslateY;
+
+    EventHandlers eventHandlers = new EventHandlers();
+
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                     CLASSES                                                    *
+     *                                                                                                                *
+     *================================================================================================================*/
+
+
+    private class EventHandlers {
+        /**
+         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMinLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMinLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMaxLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMaxLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMinLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMinLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMaxLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMaxLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMinWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMaxWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMinWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMaxWarningLabel.setVisible(true);
+            }
+        };
+    }
+
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                   FXML METHODS                                                 *
+     *                                                                                                                *
+     *================================================================================================================*/
+
 
     @FXML
     void initialize() {
@@ -161,33 +212,35 @@ public class MainSceneController extends Controller {
         segmentsContainer.prefWidthProperty().bind(background.prefWidthProperty());
         segmentsContainer.prefHeightProperty().bind(background.prefHeightProperty());
 
-        UnaryOperator<TextFormatter.Change> formatter = change -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("-?((\\d*)|i|in|inf)")) {
-                return change;
-            } else {
-                return null;
-            }
-        };
-        xMinIntegerTextFormatter = new TextFormatter<>(formatter);
-        xMaxIntegerTextFormatter = new TextFormatter<>(formatter);
-        yMinIntegerTextFormatter = new TextFormatter<>(formatter);
-        yMaxIntegerTextFormatter = new TextFormatter<>(formatter);
-
         xMinTextField.setTextFormatter(xMinIntegerTextFormatter);
         xMaxTextField.setTextFormatter(xMaxIntegerTextFormatter);
         yMinTextField.setTextFormatter(yMinIntegerTextFormatter);
         yMaxTextField.setTextFormatter(yMaxIntegerTextFormatter);
 
-        xMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMinLineInvalidInputEventHandler);
-        xMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMaxLineInvalidInputEventHandler);
-        yMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMinLineInvalidInputEventHandler);
-        yMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMaxLineInvalidInputEventHandler);
+        xMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.xMinLineInvalidInputEventHandler);
+        xMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.xMaxLineInvalidInputEventHandler);
+        yMinLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMinLineInvalidInputEventHandler);
+        yMaxLine.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMaxLineInvalidInputEventHandler);
 
-        xMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMinWarningLabelInvalidInputEventHandler);
-        xMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, xMaxWarningLabelInvalidInputEventHandler);
-        yMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMinWarningLabelInvalidInputEventHandler);
-        yMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, yMaxWarningLabelInvalidInputEventHandler);
+        xMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.xMinWarningLabelInvalidInputEventHandler);
+        xMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.xMaxWarningLabelInvalidInputEventHandler);
+        yMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMinWarningLabelInvalidInputEventHandler);
+        yMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMaxWarningLabelInvalidInputEventHandler);
+
+        tooltipLabel.setText("""
+                Buttons :
+                      o   Load : load a segments file (must be properly formatted !)
+                      o   Linux : apply the given window (see below) to the currently loaded segments
+
+                Window input :
+                      o   xMin, xMax, yMin, yMax = coordinates of the window
+                      Accepted values :     o   positive or negative integers,
+                                            o   -inf or inf for unbounded windows
+                      Don't forget that conditions xMin < xMax and yMin < yMax must be met.
+
+                Controls :
+                      o   Drag with left click : move the segments
+                      o   Right click : center the segments""");
 
         // TODO : remove this as well (it's for speed load)
         try {
@@ -241,14 +294,9 @@ public class MainSceneController extends Controller {
         drawSegmentsAndWindow(windowing, currentFileData.getWindow(), false);
         long endl = System.currentTimeMillis();
         // System.out.println("drawn in" + " [" + (endl - startl) + "]");
-    }
 
-    private Rectangle buildWindowLines(Window window) {
-        windowRectangle.setX(window.getXMin() - 1.5);
-        windowRectangle.setY(-window.getYMax() - 1.5);
-        windowRectangle.setWidth(window.getXMax() - window.getXMin() + 3);
-        windowRectangle.setHeight(window.getYMax() - window.getYMin() + 3);
-        return windowRectangle;
+        initialTranslateX = segmentsGroup.getLayoutX();
+        initialTranslateY = segmentsGroup.getLayoutY();
     }
 
     @FXML
@@ -281,6 +329,101 @@ public class MainSceneController extends Controller {
         yMinTextField.setText("");
         yMaxTextField.setPromptText("yMax (" + yMaxTextField.getText() + ")");
         yMaxTextField.setText("");
+    }
+
+    @FXML
+    void handleSegmentsContainerOnScroll(ScrollEvent scrollEvent) {
+        if (scrollEvent.getDeltaY() > 0) {
+            double resultingScale = segmentsGroup.getScaleX() * SCALE_STEP;
+            // condition to be able to zoom in : we must not have a scale factor greater than the initial scale factor
+            // (otherwise, the segments will be bigger than the window)
+            // if (resultingScale > maxScale * 0.98) return; // * 0.98 so that the drawn window remains in the bounds
+            segmentsGroup.setScaleX(resultingScale);
+            segmentsGroup.setScaleY(resultingScale);
+        } else if (scrollEvent.getDeltaY() < 0) {
+            double resultingScale = segmentsGroup.getScaleX() / SCALE_STEP;
+            // condition to be able to zoom out : we must not have a scale factor smaller than the initial scale factor
+            // divided by the max scale factor. This restriction is set in the SCALE_LIMIT value
+            // if (resultingScale < maxScale / SCALE_LIMIT) return;
+            segmentsGroup.setScaleX(resultingScale);
+            segmentsGroup.setScaleY(resultingScale);
+        }
+    }
+
+
+    @FXML
+    void handleSegmentsContainerOnMousePressed(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            mouseDragStartX = mouseEvent.getSceneX();
+            mouseDragStartY = mouseEvent.getSceneY();
+            mouseEvent.consume();
+        }
+    }
+
+    @FXML
+    void handleSegmentsContainerOnMouseReleased(MouseEvent mouseEvent) {
+        // TODO : implement a minX/Y & maxX/Y when querying, return it somehow because we need it a lot (here for ex)
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            double mouseDragEndX = mouseEvent.getSceneX();
+            double mouseDragEndY = mouseEvent.getSceneY();
+            mouseEvent.consume();
+
+            double deltaX = mouseDragEndX - mouseDragStartX;
+            double deltaY = mouseDragEndY - mouseDragStartY;
+
+            segmentsGroup.setTranslateX(segmentsGroup.getTranslateX() + deltaX);
+            segmentsGroup.setTranslateY(segmentsGroup.getTranslateY() + deltaY);
+        } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+            segmentsGroup.setTranslateX(initialTranslateX);
+            segmentsGroup.setTranslateY(initialTranslateY);
+        }
+    }
+
+    @FXML
+    void handleTooltipButtonOnMouseEntered(MouseEvent mouseEvent) {
+        tooltipBackgroundRectangle.setWidth(tooltipLabel.getWidth());
+        tooltipBackgroundRectangle.setHeight(tooltipLabel.getHeight());
+        tooltipLabel.setVisible(true);
+        tooltipBackgroundRectangle.setVisible(true);
+
+    }
+
+    @FXML
+    void handleTooltipButtonOnMouseExited(MouseEvent mouseEvent) {
+        tooltipLabel.setVisible(false);
+        tooltipBackgroundRectangle.setVisible(false);
+    }
+
+    @FXML
+    void handleSegmentsContainerOnMouseMoved(MouseEvent mouseEvent) {
+        if (mouseEvent.isPrimaryButtonDown()) {
+        }
+    }
+
+    @FXML
+    private static TextFormatter.Change apply(TextFormatter.Change change) {
+        String newText = change.getControlNewText();
+        if (newText.matches("-?((\\d*)|i|in|inf)")) {
+            return change;
+        } else {
+            return null;
+        }
+    }
+
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                     METHODS                                                    *
+     *                                                                                                                *
+     *================================================================================================================*/
+
+
+    private void updateWindowRectangle(Window window) {
+        windowRectangle.setX(window.getXMin() - 1.5);
+        windowRectangle.setY(-window.getYMax() - 1.5);
+        windowRectangle.setWidth(window.getXMax() - window.getXMin() + 3);
+        windowRectangle.setHeight(window.getYMax() - window.getYMin() + 3);
+
     }
 
     /**
@@ -390,7 +533,10 @@ public class MainSceneController extends Controller {
         // TODO : si on a le temps, trouver un moyen de dessiner la window infinie
         //  idée : utiliser des segments, en afficher que certains, les mettre dans un autre group, utiliser le même
         //  scale factor déjà calculé, utiliser comme coordonnée limite 0 et containerWidth/Height
-        if (window.isFinite()) segmentsGroup.getChildren().add(buildWindowLines(window));
+        if (window.isFinite()) {
+            updateWindowRectangle(window);
+            segmentsGroup.getChildren().add(windowRectangle);
+        }
 
         updateScaling();
 
@@ -450,23 +596,5 @@ public class MainSceneController extends Controller {
         Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup"); // TODO : maybe move this to main so we can load all fxml in the beginning
         popup.setScene(Scenes.FileLoaderPopup);
         popup.showAndWait();
-    }
-
-    public void handleSegmentsContainerOnScroll(ScrollEvent scrollEvent) {
-        if (scrollEvent.getDeltaY() > 0) {
-            double resultingScale = segmentsGroup.getScaleX() * SCALE_STEP;
-            // condition to be able to zoom in : we must not have a scale factor greater than the initial scale factor
-            // (otherwise, the segments will be bigger than the window)
-            if (resultingScale > maxScale * 0.98) return; // * 0.98 so that the drawn window remains in the bounds
-            segmentsGroup.setScaleX(resultingScale);
-            segmentsGroup.setScaleY(resultingScale);
-        } else if (scrollEvent.getDeltaY() < 0) {
-            double resultingScale = segmentsGroup.getScaleX() / SCALE_STEP;
-            // condition to be able to zoom out : we must not have a scale factor smaller than the initial scale factor
-            // divided by the max scale factor. This restriction is set in the SCALE_LIMIT value
-            if (resultingScale < maxScale / SCALE_LIMIT) return;
-            segmentsGroup.setScaleX(resultingScale);
-            segmentsGroup.setScaleY(resultingScale);
-        }
     }
 }
