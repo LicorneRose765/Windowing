@@ -397,6 +397,13 @@ public class MainSceneController extends Controller {
         }
     }
 
+    @FXML
+    void handleTextFieldOnKeyReleased(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            handleLinuxButtonMouseClicked(null);
+        }
+    }
+
 
     /*================================================================================================================*
      *                                                                                                                *
@@ -416,8 +423,7 @@ public class MainSceneController extends Controller {
             windowLeftLine.setStartY(lowerLeftCorner.getY());
             windowLeftLine.setEndX(upperLeftCorner.getX());
             windowLeftLine.setEndY(upperLeftCorner.getY());
-        } else {
-            windowLeftLine = null;
+            segmentsGroup.getChildren().add(windowLeftLine);
         }
 
         if (window.getXMax() != Double.POSITIVE_INFINITY) {
@@ -425,8 +431,7 @@ public class MainSceneController extends Controller {
             windowRightLine.setStartY(upperRightCorner.getY());
             windowRightLine.setEndX(lowerRightCorner.getX());
             windowRightLine.setEndY(lowerRightCorner.getY());
-        } else {
-            windowRightLine = null;
+            segmentsGroup.getChildren().add(windowRightLine);
         }
 
         if (window.getYMin() != Double.NEGATIVE_INFINITY) {
@@ -434,34 +439,15 @@ public class MainSceneController extends Controller {
             windowDownLine.setStartY(lowerRightCorner.getY());
             windowDownLine.setEndX(lowerLeftCorner.getX());
             windowDownLine.setEndY(lowerLeftCorner.getY());
-        } else {
-            windowDownLine = null;
+            segmentsGroup.getChildren().add(windowDownLine);
         }
 
-        if (window.getYMax() != Double.NEGATIVE_INFINITY) {
+        if (window.getYMax() != Double.POSITIVE_INFINITY) {
             windowUpLine.setStartX(upperLeftCorner.getX());
             windowUpLine.setStartY(upperLeftCorner.getY());
             windowUpLine.setEndX(upperRightCorner.getX());
             windowUpLine.setEndY(upperRightCorner.getY());
-        } else {
-            windowUpLine = null;
-        }
-
-        if (windowLeftLine != null) {
-            segmentsGroup.getChildren().add(windowLeftLine);
-            System.out.println("a");
-        }
-        if (windowUpLine != null) {
             segmentsGroup.getChildren().add(windowUpLine);
-            System.out.println("b");
-        }
-        if (windowRightLine != null) {
-            segmentsGroup.getChildren().add(windowRightLine);
-            System.out.println("c");
-        }
-        if (windowDownLine != null) {
-            segmentsGroup.getChildren().add(windowDownLine);
-            System.out.println("d");
         }
 
         /*
