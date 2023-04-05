@@ -9,6 +9,7 @@ import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -26,7 +27,7 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
-// TODO : on drag and drop pour déplacer
+// TODO : grille
 
 /**
  * Controller used for the `MainScene` scene defined in the `MainScene.fxml` file.
@@ -48,7 +49,7 @@ public class MainSceneController extends Controller {
     @FXML
     TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
     @FXML
-    Line xMinLine, xMaxLine, yMinLine, yMaxLine;
+    Line xMinLine, xMaxLine, yMinLine, yMaxLine, windowLeftLine, windowUpLine, windowRightLine, windowDownLine;
     @FXML
     Rectangle xMinRectangle, xMaxRectangle, yMinRectangle, yMaxRectangle, windowRectangle, tooltipBackgroundRectangle;
     @FXML
@@ -60,13 +61,10 @@ public class MainSceneController extends Controller {
 
     UnaryOperator<TextFormatter.Change> formatter = MainSceneController::apply;
     @FXML
-    TextFormatter xMinIntegerTextFormatter = new TextFormatter(formatter);
-    @FXML
-    TextFormatter xMaxIntegerTextFormatter = new TextFormatter(formatter);
-    @FXML
-    TextFormatter yMinIntegerTextFormatter = new TextFormatter(formatter);
-    @FXML
-    TextFormatter yMaxIntegerTextFormatter = new TextFormatter(formatter);
+    TextFormatter<String> xMinIntegerTextFormatter = new TextFormatter<>(formatter),
+            xMaxIntegerTextFormatter = new TextFormatter<>(formatter),
+            yMinIntegerTextFormatter = new TextFormatter<>(formatter),
+            yMaxIntegerTextFormatter = new TextFormatter<>(formatter);
 
 
     /*================================================================================================================*
@@ -207,11 +205,6 @@ public class MainSceneController extends Controller {
     @FXML
     void initialize() {
         // omg dynamic javafx sucks
-        background.prefWidthProperty().bind(limiter.prefWidthProperty());
-        background.prefHeightProperty().bind(limiter.prefHeightProperty());
-        segmentsContainer.prefWidthProperty().bind(background.prefWidthProperty());
-        segmentsContainer.prefHeightProperty().bind(background.prefHeightProperty());
-
         xMinTextField.setTextFormatter(xMinIntegerTextFormatter);
         xMaxTextField.setTextFormatter(xMaxIntegerTextFormatter);
         yMinTextField.setTextFormatter(yMinIntegerTextFormatter);
@@ -395,12 +388,6 @@ public class MainSceneController extends Controller {
     }
 
     @FXML
-    void handleSegmentsContainerOnMouseMoved(MouseEvent mouseEvent) {
-        if (mouseEvent.isPrimaryButtonDown()) {
-        }
-    }
-
-    @FXML
     private static TextFormatter.Change apply(TextFormatter.Change change) {
         String newText = change.getControlNewText();
         if (newText.matches("-?((\\d*)|i|in|inf)")) {
@@ -419,11 +406,70 @@ public class MainSceneController extends Controller {
 
 
     private void updateWindowRectangle(Window window) {
+        Point2D lowerLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMin() + 1.5),
+                upperLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMax() - 1.5),
+                upperRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMax() - 1.5),
+                lowerRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMin() + 1.5);
+
+        if (window.getXMin() != Double.NEGATIVE_INFINITY) {
+            windowLeftLine.setStartX(lowerLeftCorner.getX());
+            windowLeftLine.setStartY(lowerLeftCorner.getY());
+            windowLeftLine.setEndX(upperLeftCorner.getX());
+            windowLeftLine.setEndY(upperLeftCorner.getY());
+        } else {
+            windowLeftLine = null;
+        }
+
+        if (window.getXMax() != Double.POSITIVE_INFINITY) {
+            windowRightLine.setStartX(upperRightCorner.getX());
+            windowRightLine.setStartY(upperRightCorner.getY());
+            windowRightLine.setEndX(lowerRightCorner.getX());
+            windowRightLine.setEndY(lowerRightCorner.getY());
+        } else {
+            windowRightLine = null;
+        }
+
+        if (window.getYMin() != Double.NEGATIVE_INFINITY) {
+            windowDownLine.setStartX(lowerRightCorner.getX());
+            windowDownLine.setStartY(lowerRightCorner.getY());
+            windowDownLine.setEndX(lowerLeftCorner.getX());
+            windowDownLine.setEndY(lowerLeftCorner.getY());
+        } else {
+            windowDownLine = null;
+        }
+
+        if (window.getYMax() != Double.NEGATIVE_INFINITY) {
+            windowUpLine.setStartX(upperLeftCorner.getX());
+            windowUpLine.setStartY(upperLeftCorner.getY());
+            windowUpLine.setEndX(upperRightCorner.getX());
+            windowUpLine.setEndY(upperRightCorner.getY());
+        } else {
+            windowUpLine = null;
+        }
+
+        if (windowLeftLine != null) {
+            segmentsGroup.getChildren().add(windowLeftLine);
+            System.out.println("a");
+        }
+        if (windowUpLine != null) {
+            segmentsGroup.getChildren().add(windowUpLine);
+            System.out.println("b");
+        }
+        if (windowRightLine != null) {
+            segmentsGroup.getChildren().add(windowRightLine);
+            System.out.println("c");
+        }
+        if (windowDownLine != null) {
+            segmentsGroup.getChildren().add(windowDownLine);
+            System.out.println("d");
+        }
+
+        /*
         windowRectangle.setX(window.getXMin() - 1.5);
         windowRectangle.setY(-window.getYMax() - 1.5);
         windowRectangle.setWidth(window.getXMax() - window.getXMin() + 3);
         windowRectangle.setHeight(window.getYMax() - window.getYMin() + 3);
-
+         */
     }
 
     /**
@@ -530,13 +576,11 @@ public class MainSceneController extends Controller {
         endl = System.currentTimeMillis();
         // System.out.println("segments added in" + " [" + (endl - startl) + "]");
 
-        // TODO : si on a le temps, trouver un moyen de dessiner la window infinie
-        //  idée : utiliser des segments, en afficher que certains, les mettre dans un autre group, utiliser le même
-        //  scale factor déjà calculé, utiliser comme coordonnée limite 0 et containerWidth/Height
-        if (window.isFinite()) {
-            updateWindowRectangle(window);
-            segmentsGroup.getChildren().add(windowRectangle);
-        }
+        // TODO : pour la window infinie : ajouter que les bords du rectangle nécessaires (infinie en x négatif = ne pas
+        //  ajouter le bord gauche)
+        updateWindowRectangle(window);
+
+        // segmentsGroup.getChildren().addAll(windowLeftLine, windowDownLine, windowRightLine, windowUpLine);
 
         updateScaling();
 

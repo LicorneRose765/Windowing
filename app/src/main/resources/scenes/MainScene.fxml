@@ -116,7 +116,6 @@
             <StackPane fx:id="background"
                        style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2.5; -fx-border-insets: -2.5; -fx-border-radius: 10;">
                 <StackPane fx:id="segmentsContainer" minHeight="-Infinity" minWidth="-Infinity"
-                           onMouseMoved="#handleSegmentsContainerOnMouseMoved"
                            onMousePressed="#handleSegmentsContainerOnMousePressed"
                            onMouseReleased="#handleSegmentsContainerOnMouseReleased"
                            onScroll="#handleSegmentsContainerOnScroll">
@@ -124,6 +123,10 @@
                     <Group fx:id="segmentsGroup">
                         <Rectangle fx:id="windowRectangle" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT"
                                    stroke="#c70000b2" strokeType="INSIDE" strokeWidth="0.66"/>
+                        <Line fx:id="windowLeftLine" stroke="#c70000b2" strokeWidth="0.66"/>
+                        <Line fx:id="windowUpLine" stroke="#c70000b2" strokeWidth="0.66"/>
+                        <Line fx:id="windowRightLine" stroke="#c70000b2" strokeWidth="0.66"/>
+                        <Line fx:id="windowDownLine" stroke="#c70000b2" strokeWidth="0.66"/>
                     </Group>
                 </StackPane>
             </StackPane>
