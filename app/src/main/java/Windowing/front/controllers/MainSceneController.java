@@ -35,7 +35,6 @@ import java.util.function.UnaryOperator;
  */
 public class MainSceneController extends Controller {
 
-
     /*================================================================================================================*
      *                                                                                                                *
      *                                                 FXML VARIABLES                                                 *
@@ -59,7 +58,6 @@ public class MainSceneController extends Controller {
     StackPane lowerContainer, limiter, background, segmentsContainer;
     @FXML
     Button readSegmentFileButton, linuxButton, tooltipButton;
-
     @FXML
     AnchorPane header;
 
@@ -577,6 +575,14 @@ public class MainSceneController extends Controller {
         updateScaling();
 
         segmentsContainer.getChildren().add(segmentsGroup);
+
+        System.out.println("segmentsGroup = " + segmentsGroup);
+        System.out.println("segmentsContainer = " + segmentsContainer.getWidth());
+        System.out.println("segmentsContainer = " + segmentsContainer.getMinWidth());
+        System.out.println("segmentsContainer = " + segmentsContainer.getMaxWidth());
+        System.out.println("segmentsContainer = " + segmentsContainer.getPrefWidth());
+        System.out.println("window = " + window);
+        System.out.println();
     }
 
     /**
