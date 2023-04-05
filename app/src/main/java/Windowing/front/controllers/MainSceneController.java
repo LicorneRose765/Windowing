@@ -14,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -58,6 +59,9 @@ public class MainSceneController extends Controller {
     StackPane lowerContainer, limiter, background, segmentsContainer;
     @FXML
     Button readSegmentFileButton, linuxButton, tooltipButton;
+
+    @FXML
+    AnchorPane header;
 
     UnaryOperator<TextFormatter.Change> formatter = MainSceneController::apply;
     @FXML
@@ -219,6 +223,8 @@ public class MainSceneController extends Controller {
         xMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.xMaxWarningLabelInvalidInputEventHandler);
         yMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMinWarningLabelInvalidInputEventHandler);
         yMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMaxWarningLabelInvalidInputEventHandler);
+
+        header.toFront();
 
         tooltipLabel.setText("""
                 Buttons :
