@@ -422,6 +422,8 @@ public class MainSceneController extends Controller {
                 upperLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMax() - 1.5),
                 upperRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMax() - 1.5),
                 lowerRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMin() + 1.5);
+        // TODO : when infinite, we replace window coordinates by 0 (so we get points at +/- 1.5, but we could
+        //  use something like window.getLowestXAmongAllSegments()
 
         if (window.getXMin() != Double.NEGATIVE_INFINITY) {
             windowLeftLine.setStartX(lowerLeftCorner.getX());
@@ -442,18 +444,26 @@ public class MainSceneController extends Controller {
         if (window.getYMin() != Double.NEGATIVE_INFINITY) {
             windowDownLine.setStartX(lowerRightCorner.getX());
             windowDownLine.setStartY(lowerRightCorner.getY());
-            windowDownLine.setEndX(lowerLeftCorner.getX());
+            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowDownLine.setEndX(-1.5);
+            else windowDownLine.setEndX(lowerLeftCorner.getX());
             windowDownLine.setEndY(lowerLeftCorner.getY());
             segmentsGroup.getChildren().add(windowDownLine);
         }
 
         if (window.getYMax() != Double.POSITIVE_INFINITY) {
-            windowUpLine.setStartX(upperLeftCorner.getX());
+            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowUpLine.setStartX(-1.5);
+            else windowUpLine.setStartX(upperLeftCorner.getX());
             windowUpLine.setStartY(upperLeftCorner.getY());
             windowUpLine.setEndX(upperRightCorner.getX());
             windowUpLine.setEndY(upperRightCorner.getY());
             segmentsGroup.getChildren().add(windowUpLine);
         }
+
+        System.out.println("windowLeftLine = " + windowLeftLine);
+        System.out.println("windowUpLine = " + windowUpLine);
+        System.out.println("windowRightLine = " + windowRightLine);
+        System.out.println("windowDownLine = " + windowDownLine);
+        System.out.println();
 
         /*
         windowRectangle.setX(window.getXMin() - 1.5);
@@ -576,14 +586,6 @@ public class MainSceneController extends Controller {
         updateScaling();
 
         segmentsContainer.getChildren().add(segmentsGroup);
-
-        System.out.println("segmentsGroup = " + segmentsGroup);
-        System.out.println("segmentsContainer = " + segmentsContainer.getWidth());
-        System.out.println("segmentsContainer = " + segmentsContainer.getMinWidth());
-        System.out.println("segmentsContainer = " + segmentsContainer.getMaxWidth());
-        System.out.println("segmentsContainer = " + segmentsContainer.getPrefWidth());
-        System.out.println("window = " + window);
-        System.out.println();
     }
 
     /**
