@@ -222,7 +222,8 @@ public class MainSceneController extends Controller {
         yMinWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMinWarningLabelInvalidInputEventHandler);
         yMaxWarningLabel.addEventHandler(InvalidInputEvent.INVALID_VALUE, eventHandlers.yMaxWarningLabelInvalidInputEventHandler);
 
-        header.toFront();
+
+        segmentsContainer.setClip(new Rectangle(1250, 650));
 
         tooltipLabel.setText("""
                 Buttons :
