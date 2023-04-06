@@ -239,18 +239,10 @@ public class MainSceneController extends Controller {
                 Controls :
                       o   Drag with left click : move the segments
                       o   Right click : center the segments""");
-
-        // TODO : remove this as well (it's for speed load)
-        try {
-            handleReadSegmentFileButtonMouseClicked(null);
-        } catch (Exception ignored) {}
     }
 
     @FXML
     void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) throws IOException, URISyntaxException, FormatException {
-        // TODO : uncomment this and remove the last line : currentFileData = SegmentFileReader.readLines("segments1.seg");
-        //  it's only there to speed load the segments1
-        /*
         openFileLoaderPopup();
 
         switch (chosenFileValue) {
@@ -276,8 +268,6 @@ public class MainSceneController extends Controller {
                 currentFileData = SegmentFileReader.readLines("segments3.seg");
                 break;
         }
-        */
-        currentFileData = SegmentFileReader.readLines("segments1.seg");
 
         assert currentFileData != null;
 
@@ -427,22 +417,27 @@ public class MainSceneController extends Controller {
 
         if (window.getXMin() != Double.NEGATIVE_INFINITY) {
             windowLeftLine.setStartX(lowerLeftCorner.getX());
-            windowLeftLine.setStartY(lowerLeftCorner.getY());
+            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowLeftLine.setStartY(1.5);
+            else windowLeftLine.setStartY(lowerLeftCorner.getY());
             windowLeftLine.setEndX(upperLeftCorner.getX());
-            windowLeftLine.setEndY(upperLeftCorner.getY());
+            if (window.getYMax() == Double.POSITIVE_INFINITY) windowLeftLine.setEndY(-1.5 - 100);
+            else windowLeftLine.setEndY(upperLeftCorner.getY());
             segmentsGroup.getChildren().add(windowLeftLine);
         }
 
         if (window.getXMax() != Double.POSITIVE_INFINITY) {
             windowRightLine.setStartX(upperRightCorner.getX());
-            windowRightLine.setStartY(upperRightCorner.getY());
+            if (window.getYMax() == Double.POSITIVE_INFINITY) windowRightLine.setStartY(-1.5 - 100);
+            else windowRightLine.setStartY(upperRightCorner.getY());
             windowRightLine.setEndX(lowerRightCorner.getX());
-            windowRightLine.setEndY(lowerRightCorner.getY());
+            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowRightLine.setEndY(1.5);
+            else windowRightLine.setEndY(lowerRightCorner.getY());
             segmentsGroup.getChildren().add(windowRightLine);
         }
 
         if (window.getYMin() != Double.NEGATIVE_INFINITY) {
-            windowDownLine.setStartX(lowerRightCorner.getX());
+            if (window.getXMax() == Double.POSITIVE_INFINITY) windowDownLine.setStartX(1.5 + 100);
+            else windowDownLine.setStartX(lowerRightCorner.getX());
             windowDownLine.setStartY(lowerRightCorner.getY());
             if (window.getXMin() == Double.NEGATIVE_INFINITY) windowDownLine.setEndX(-1.5);
             else windowDownLine.setEndX(lowerLeftCorner.getX());
@@ -454,7 +449,8 @@ public class MainSceneController extends Controller {
             if (window.getXMin() == Double.NEGATIVE_INFINITY) windowUpLine.setStartX(-1.5);
             else windowUpLine.setStartX(upperLeftCorner.getX());
             windowUpLine.setStartY(upperLeftCorner.getY());
-            windowUpLine.setEndX(upperRightCorner.getX());
+            if (window.getXMax() == Double.POSITIVE_INFINITY) windowUpLine.setEndX(1.5 + 100);
+            else windowUpLine.setEndX(upperRightCorner.getX());
             windowUpLine.setEndY(upperRightCorner.getY());
             segmentsGroup.getChildren().add(windowUpLine);
         }
@@ -474,7 +470,7 @@ public class MainSceneController extends Controller {
     }
 
     /**
-     * Valid inputs must match the following regex : <code>-?(\d*|inf)</code>. If the input is empty, fires an {@link InvalidInputEvent}
+     * Valid inputs must match the following regex : <code>-?(\d*|i|n|f)</code>. If the input is empty, fires an {@link InvalidInputEvent}
      * to the given <code>userFeedbackNodes</code>. This serves as user feedback and indicates which field should be modified.
      *
      * @param s The input to extract the Double value from
