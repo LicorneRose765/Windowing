@@ -13,6 +13,8 @@ import java.util.ArrayList;
 public class Windowing {
     PrioritySearchTree horizontalPST;
     PrioritySearchTree verticalPST;
+    double leastX = 0, greatestX = 0, leastY = 0, greatestY = 0;
+    public double deltaX = 0, deltaY = 0;
 
     /**
      * Builds a windowing structure from a list of segments.
@@ -24,11 +26,17 @@ public class Windowing {
         ArrayList<Segment> verticalSegments = new ArrayList<>();
         for (Segment segment : data) {
             if (segment.isHorizontal()) {
+                if (segment.getX() < leastX) leastX = segment.getX();
+                if (segment.getX1() > greatestX) greatestX = segment.getX1();
                 horizontalSegments.add(segment);
             } else {
+                if (segment.getY() < leastY) leastY = segment.getY();
+                if (segment.getY1() > greatestY) greatestY = segment.getY1();
                 verticalSegments.add(segment);
             }
         }
+        deltaX = greatestX - leastX;
+        deltaY = greatestY - leastY;
         horizontalPST = PrioritySearchTree.build(horizontalSegments, Direction.HORIZONTAL);
         verticalPST = PrioritySearchTree.build(verticalSegments, Direction.VERTICAL);
     }

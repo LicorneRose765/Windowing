@@ -407,7 +407,7 @@ public class MainSceneController extends Controller {
      *================================================================================================================*/
 
 
-    private void updateWindowRectangle(Window window) {
+    private void updateWindowRectangle(Window window, Windowing windowing) {
         Point2D lowerLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMin() + 1.5),
                 upperLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMax() - 1.5),
                 upperRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMax() - 1.5),
@@ -417,39 +417,39 @@ public class MainSceneController extends Controller {
 
         if (window.getXMin() != Double.NEGATIVE_INFINITY) {
             windowLeftLine.setStartX(lowerLeftCorner.getX());
-            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowLeftLine.setStartY(1.5);
+            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowLeftLine.setStartY(1.5 + windowing.deltaY / 2);
             else windowLeftLine.setStartY(lowerLeftCorner.getY());
             windowLeftLine.setEndX(upperLeftCorner.getX());
-            if (window.getYMax() == Double.POSITIVE_INFINITY) windowLeftLine.setEndY(-1.5 - 100);
+            if (window.getYMax() == Double.POSITIVE_INFINITY) windowLeftLine.setEndY(-1.5 - windowing.deltaY / 2);
             else windowLeftLine.setEndY(upperLeftCorner.getY());
             segmentsGroup.getChildren().add(windowLeftLine);
         }
 
         if (window.getXMax() != Double.POSITIVE_INFINITY) {
             windowRightLine.setStartX(upperRightCorner.getX());
-            if (window.getYMax() == Double.POSITIVE_INFINITY) windowRightLine.setStartY(-1.5 - 100);
+            if (window.getYMax() == Double.POSITIVE_INFINITY) windowRightLine.setStartY(-1.5 - windowing.deltaY / 2);
             else windowRightLine.setStartY(upperRightCorner.getY());
             windowRightLine.setEndX(lowerRightCorner.getX());
-            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowRightLine.setEndY(1.5);
+            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowRightLine.setEndY(1.5 + windowing.deltaY / 2);
             else windowRightLine.setEndY(lowerRightCorner.getY());
             segmentsGroup.getChildren().add(windowRightLine);
         }
 
         if (window.getYMin() != Double.NEGATIVE_INFINITY) {
-            if (window.getXMax() == Double.POSITIVE_INFINITY) windowDownLine.setStartX(1.5 + 100);
+            if (window.getXMax() == Double.POSITIVE_INFINITY) windowDownLine.setStartX(1.5 + windowing.deltaX / 2);
             else windowDownLine.setStartX(lowerRightCorner.getX());
             windowDownLine.setStartY(lowerRightCorner.getY());
-            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowDownLine.setEndX(-1.5);
+            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowDownLine.setEndX(-1.5 - windowing.deltaX / 2);
             else windowDownLine.setEndX(lowerLeftCorner.getX());
             windowDownLine.setEndY(lowerLeftCorner.getY());
             segmentsGroup.getChildren().add(windowDownLine);
         }
 
         if (window.getYMax() != Double.POSITIVE_INFINITY) {
-            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowUpLine.setStartX(-1.5);
+            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowUpLine.setStartX(-1.5 - windowing.deltaX / 2);
             else windowUpLine.setStartX(upperLeftCorner.getX());
             windowUpLine.setStartY(upperLeftCorner.getY());
-            if (window.getXMax() == Double.POSITIVE_INFINITY) windowUpLine.setEndX(1.5 + 100);
+            if (window.getXMax() == Double.POSITIVE_INFINITY) windowUpLine.setEndX(1.5 + windowing.deltaX / 2);
             else windowUpLine.setEndX(upperRightCorner.getX());
             windowUpLine.setEndY(upperRightCorner.getY());
             segmentsGroup.getChildren().add(windowUpLine);
@@ -575,7 +575,7 @@ public class MainSceneController extends Controller {
 
         // TODO : pour la window infinie : ajouter que les bords du rectangle nécessaires (infinie en x négatif = ne pas
         //  ajouter le bord gauche)
-        updateWindowRectangle(window);
+        updateWindowRectangle(window, windowing);
 
         // segmentsGroup.getChildren().addAll(windowLeftLine, windowDownLine, windowRightLine, windowUpLine);
 
