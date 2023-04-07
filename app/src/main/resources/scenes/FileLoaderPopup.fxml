@@ -2,37 +2,50 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/11.0.2" fx:controller="Windowing.front.controllers.FileLoaderPopupController">
-    <children>
-        <Button fx:id="closeButton" layoutX="536.0" layoutY="14.0" mnemonicParsing="false"
-                onMouseClicked="#handleOnCloseButtonMouseClicked" text="close"/>
-        <RadioButton fx:id="examplesRadioButton" layoutX="116.0" layoutY="106.0" mnemonicParsing="false"
-                     onMouseClicked="#handleExamplesOnMouseClicked" text="From examples">
-            <toggleGroup>
-                <ToggleGroup fx:id="loadGroup"/>
-            </toggleGroup>
-        </RadioButton>
-        <RadioButton fx:id="fileSystemRadioButton" layoutX="347.0" layoutY="106.0" mnemonicParsing="false"
-                     onMouseClicked="#handleFileSystemOnMouseClicked" text="From file system" toggleGroup="$loadGroup"/>
-        <RadioButton fx:id="example1RadioButton" disable="true" layoutX="132.0" layoutY="183.0" mnemonicParsing="false"
-                     onMouseClicked="#handleOnExample1ButtonMouseClicked" text="example 1">
-            <toggleGroup>
-                <ToggleGroup fx:id="examplesGroup"/>
-            </toggleGroup>
-        </RadioButton>
-        <RadioButton fx:id="example2RadioButton" disable="true" layoutX="132.0" layoutY="221.0" mnemonicParsing="false"
-                     onMouseClicked="#handleOnExample2ButtonMouseClicked" text="example 2"
-                     toggleGroup="$examplesGroup"/>
-        <RadioButton fx:id="example3RadioButton" disable="true" layoutX="132.0" layoutY="260.0" mnemonicParsing="false"
-                     onMouseClicked="#handleOnExample3ButtonMouseClicked" text="example 3"
-                     toggleGroup="$examplesGroup"/>
-        <Button fx:id="fileChooserButton" disable="true" layoutX="348.0" layoutY="187.0" mnemonicParsing="false"
-                onMouseClicked="#handleOnOpenFileChooserButtonMouseClicked" text="open file chooser"/>
-        <Label fx:id="fileChosenLabel" layoutX="372.0" layoutY="230.0" text="File chosen :" visible="false"/>
-        <Label fx:id="filenameLabel" alignment="TOP_CENTER" layoutX="337.0" layoutY="260.0" prefHeight="71.0"
-               prefWidth="158.0" textAlignment="CENTER" visible="false" wrapText="true"/>
-        <Button fx:id="confirmButton" disable="true" layoutX="270.0" layoutY="344.0" mnemonicParsing="false"
-                onMouseClicked="#handleOnConfirmButtonMouseClicked" text="confirm"/>
-    </children>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowing.front.controllers.FileLoaderPopupController">
+    <Button fx:id="closeButton" layoutX="536.0" layoutY="14.0" mnemonicParsing="false"
+            onMouseClicked="#handleOnCloseButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered"
+            onMouseExited="#handleButtonMouseExited"
+            style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;"
+            text="close"/>
+    <RadioButton fx:id="examplesRadioButton" layoutX="116.0" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                 onMouseClicked="#handleExamplesOnMouseClicked" prefHeight="28.0" prefWidth="125.0"
+                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-radius: 20; -fx-background-radius: 20;"
+                 text="From examples">
+        <toggleGroup>
+            <ToggleGroup fx:id="loadGroup"/>
+        </toggleGroup>
+    </RadioButton>
+    <RadioButton fx:id="fileSystemRadioButton" layoutX="347.0" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                 onMouseClicked="#handleFileSystemOnMouseClicked" prefHeight="28.0" prefWidth="125.0"
+                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-radius: 20; -fx-background-radius: 20;"
+                 text="From file system" toggleGroup="$loadGroup"/>
+    <RadioButton fx:id="example1RadioButton" disable="true" layoutX="132.0" layoutY="183.0" mnemonicParsing="false"
+                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-radius: 20; -fx-background-radius: 20;"
+                 onMouseClicked="#handleOnExample1ButtonMouseClicked" text="example 1">
+        <toggleGroup>
+            <ToggleGroup fx:id="examplesGroup"/>
+        </toggleGroup>
+    </RadioButton>
+    <RadioButton fx:id="example2RadioButton" disable="true" layoutX="132.0" layoutY="221.0" mnemonicParsing="false"
+                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-radius: 20; -fx-background-radius: 20;"
+                 onMouseClicked="#handleOnExample2ButtonMouseClicked" text="example 2" toggleGroup="$examplesGroup"/>
+    <RadioButton fx:id="example3RadioButton" disable="true" layoutX="132.0" layoutY="260.0" mnemonicParsing="false"
+                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-radius: 20; -fx-background-radius: 20;"
+                 onMouseClicked="#handleOnExample3ButtonMouseClicked" text="example 3" toggleGroup="$examplesGroup"/>
+    <Button fx:id="fileChooserButton" disable="true" layoutX="348.0" layoutY="187.0" mnemonicParsing="false"
+            onMouseEntered="#handleButtonMouseEntered" onMouseExited="#handleButtonMouseExited"
+            style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;"
+            onMouseClicked="#handleOnOpenFileChooserButtonMouseClicked" text="open file chooser"/>
+    <Label fx:id="fileChosenLabel" layoutX="372.0" layoutY="230.0" text="File chosen :" visible="false"/>
+    <Label fx:id="filenameLabel" alignment="TOP_CENTER" layoutX="337.0" layoutY="260.0" prefHeight="71.0"
+           prefWidth="158.0" textAlignment="CENTER" visible="false" wrapText="true"/>
+    <Button fx:id="confirmButton" disable="true" layoutX="270.0" layoutY="344.0" mnemonicParsing="false"
+            onMouseClicked="#handleOnConfirmButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered"
+            onMouseExited="#handleButtonMouseExited"
+            style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 1.5; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;"
+            text="confirm"/>
 </AnchorPane>
