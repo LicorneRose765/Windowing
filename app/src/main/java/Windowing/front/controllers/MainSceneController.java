@@ -407,59 +407,69 @@ public class MainSceneController extends Controller {
      *================================================================================================================*/
 
 
+    /**
+     * Computes the coordinates of the fours corners of the displayed window. Adapts these coordinates if the window is
+     * unbounded so that the displaying is intuitive and shows that well. Draws four lines representing the window,
+     * following the previously computed coordinates. If the window is unbounded on one side, do not show the line
+     * corresponding to that side to emphasize on the unbounded side.
+     * @param window The window to display
+     * @param windowing The windowing object containing the least and greatest X and Y coordinates among all segments
+     *                  retrieved from the query (corresponding to the given window)
+     */
     private void updateWindowRectangle(Window window, Windowing windowing) {
         Point2D lowerLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMin() + 1.5),
                 upperLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMax() - 1.5),
                 upperRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMax() - 1.5),
                 lowerRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMin() + 1.5);
-        // TODO : when infinite, we replace window coordinates by 0 (so we get points at +/- 1.5, but we could
-        //  use something like window.getLowestXAmongAllSegments()
 
-        if (window.getXMin() != Double.NEGATIVE_INFINITY) {
-            windowLeftLine.setStartX(lowerLeftCorner.getX());
-            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowLeftLine.setStartY(1.5 + windowing.deltaY / 2);
-            else windowLeftLine.setStartY(lowerLeftCorner.getY());
-            windowLeftLine.setEndX(upperLeftCorner.getX());
-            if (window.getYMax() == Double.POSITIVE_INFINITY) windowLeftLine.setEndY(-1.5 - windowing.deltaY / 2);
-            else windowLeftLine.setEndY(upperLeftCorner.getY());
-            segmentsGroup.getChildren().add(windowLeftLine);
+        if (window.getXMin() == Double.NEGATIVE_INFINITY) {
+            upperLeftCorner = new Point2D(windowing.leastX - 1.5, upperLeftCorner.getY());
+            lowerLeftCorner = new Point2D(windowing.leastX - 1.5, lowerLeftCorner.getY());
         }
 
-        if (window.getXMax() != Double.POSITIVE_INFINITY) {
-            windowRightLine.setStartX(upperRightCorner.getX());
-            if (window.getYMax() == Double.POSITIVE_INFINITY) windowRightLine.setStartY(-1.5 - windowing.deltaY / 2);
-            else windowRightLine.setStartY(upperRightCorner.getY());
-            windowRightLine.setEndX(lowerRightCorner.getX());
-            if (window.getYMin() == Double.NEGATIVE_INFINITY) windowRightLine.setEndY(1.5 + windowing.deltaY / 2);
-            else windowRightLine.setEndY(lowerRightCorner.getY());
-            segmentsGroup.getChildren().add(windowRightLine);
+        if (window.getXMax() == Double.POSITIVE_INFINITY) {
+            upperRightCorner = new Point2D(windowing.greatestX + 1.5, upperRightCorner.getY());
+            lowerRightCorner = new Point2D(windowing.greatestX + 1.5, lowerRightCorner.getY());
         }
 
-        if (window.getYMin() != Double.NEGATIVE_INFINITY) {
-            if (window.getXMax() == Double.POSITIVE_INFINITY) windowDownLine.setStartX(1.5 + windowing.deltaX / 2);
-            else windowDownLine.setStartX(lowerRightCorner.getX());
-            windowDownLine.setStartY(lowerRightCorner.getY());
-            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowDownLine.setEndX(-1.5 - windowing.deltaX / 2);
-            else windowDownLine.setEndX(lowerLeftCorner.getX());
-            windowDownLine.setEndY(lowerLeftCorner.getY());
-            segmentsGroup.getChildren().add(windowDownLine);
+        if (window.getYMin() == Double.NEGATIVE_INFINITY) {
+            lowerLeftCorner = new Point2D(lowerLeftCorner.getX(), - (windowing.leastY - 1.5));
+            lowerRightCorner = new Point2D(lowerRightCorner.getX(), - (windowing.leastY - 1.5));
         }
 
-        if (window.getYMax() != Double.POSITIVE_INFINITY) {
-            if (window.getXMin() == Double.NEGATIVE_INFINITY) windowUpLine.setStartX(-1.5 - windowing.deltaX / 2);
-            else windowUpLine.setStartX(upperLeftCorner.getX());
-            windowUpLine.setStartY(upperLeftCorner.getY());
-            if (window.getXMax() == Double.POSITIVE_INFINITY) windowUpLine.setEndX(1.5 + windowing.deltaX / 2);
-            else windowUpLine.setEndX(upperRightCorner.getX());
-            windowUpLine.setEndY(upperRightCorner.getY());
-            segmentsGroup.getChildren().add(windowUpLine);
+        if (window.getYMax() == Double.POSITIVE_INFINITY) {
+            upperLeftCorner = new Point2D(upperLeftCorner.getX(), - (windowing.greatestY + 1.5));
+            upperRightCorner = new Point2D(upperRightCorner.getX(), - (windowing.greatestY + 1.5));
         }
 
-        System.out.println("windowLeftLine = " + windowLeftLine);
-        System.out.println("windowUpLine = " + windowUpLine);
-        System.out.println("windowRightLine = " + windowRightLine);
-        System.out.println("windowDownLine = " + windowDownLine);
-        System.out.println();
+        windowLeftLine.setStartX(lowerLeftCorner.getX());
+        windowLeftLine.setEndX(upperLeftCorner.getX());
+        windowLeftLine.setStartY(lowerLeftCorner.getY());
+        windowLeftLine.setEndY(upperLeftCorner.getY());
+
+        windowUpLine.setStartX(upperLeftCorner.getX());
+        windowUpLine.setEndX(upperRightCorner.getX());
+        windowUpLine.setStartY(upperLeftCorner.getY());
+        windowUpLine.setEndY(upperRightCorner.getY());
+
+        windowRightLine.setStartX(upperRightCorner.getX());
+        windowRightLine.setEndX(lowerRightCorner.getX());
+        windowRightLine.setStartY(upperRightCorner.getY());
+        windowRightLine.setEndY(lowerRightCorner.getY());
+
+        windowDownLine.setStartX(lowerRightCorner.getX());
+        windowDownLine.setEndX(lowerLeftCorner.getX());
+        windowDownLine.setStartY(lowerRightCorner.getY());
+        windowDownLine.setEndY(lowerLeftCorner.getY());
+
+
+        if (window.getXMin() != Double.NEGATIVE_INFINITY) segmentsGroup.getChildren().add(windowLeftLine);
+
+        if (window.getXMax() != Double.POSITIVE_INFINITY) segmentsGroup.getChildren().add(windowRightLine);
+
+        if (window.getYMin() != Double.NEGATIVE_INFINITY) segmentsGroup.getChildren().add(windowDownLine);
+
+        if (window.getYMax() != Double.POSITIVE_INFINITY) segmentsGroup.getChildren().add(windowUpLine);
 
         /*
         windowRectangle.setX(window.getXMin() - 1.5);
