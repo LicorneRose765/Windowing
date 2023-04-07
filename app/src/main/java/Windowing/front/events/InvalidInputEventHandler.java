@@ -4,10 +4,10 @@ import javafx.event.EventHandler;
 
 /**
  * Defines an event handler for the {@link InvalidInputEvent}.
- *
+ * <p>
  * Usage example :
  * [NODE].addEventHandler(InvalidInputEvent.[EVENT_NAME], event -> {
- *     [some code to execute when receiving the event]
+ * [some code to execute when receiving the event]
  * });
  * where [NODE] is the targeted node and [EVENT_NAME] is the exact name of the event. [EVENT_NAME] must be a public,
  * static attribute of the {@link AbstractInvalidInputEvent} class.

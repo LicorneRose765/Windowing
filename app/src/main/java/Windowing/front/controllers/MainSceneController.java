@@ -12,7 +12,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -24,7 +27,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
@@ -42,40 +44,6 @@ public class MainSceneController extends Controller {
      *================================================================================================================*/
 
 
-    @FXML
-    Label xMinWarningLabel, xMaxWarningLabel, yMinWarningLabel, yMaxWarningLabel;
-    @FXML
-    Label tooltipLabel;
-    @FXML
-    TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
-    @FXML
-    Line xMinLine, xMaxLine, yMinLine, yMaxLine, windowLeftLine, windowUpLine, windowRightLine, windowDownLine;
-    @FXML
-    Rectangle xMinRectangle, xMaxRectangle, yMinRectangle, yMaxRectangle, windowRectangle, tooltipBackgroundRectangle;
-    @FXML
-    Group segmentsGroup;
-    @FXML
-    StackPane lowerContainer, limiter, background, segmentsContainer;
-    @FXML
-    Button readSegmentFileButton, linuxButton, tooltipButton;
-    @FXML
-    AnchorPane header;
-
-    UnaryOperator<TextFormatter.Change> formatter = MainSceneController::apply;
-    @FXML
-    TextFormatter<String> xMinIntegerTextFormatter = new TextFormatter<>(formatter),
-            xMaxIntegerTextFormatter = new TextFormatter<>(formatter),
-            yMinIntegerTextFormatter = new TextFormatter<>(formatter),
-            yMaxIntegerTextFormatter = new TextFormatter<>(formatter);
-
-
-    /*================================================================================================================*
-     *                                                                                                                *
-     *                                                    VARIABLES                                                 *
-     *                                                                                                                *
-     *================================================================================================================*/
-
-
     private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
     public static Stage popup;
     public static File chosenFile;
@@ -86,7 +54,6 @@ public class MainSceneController extends Controller {
      * 3 : the chosen file is example 3
      */
     public static int chosenFileValue;
-    private SegmentFileData currentFileData;
     /**
      * This value represents how much the user is actually able to zoom in or out. A value of 4 means that the user can
      * zoom out 4 times less than the initial scale. Reminder : the user cannot zoom in more than the initial scale.
@@ -97,7 +64,39 @@ public class MainSceneController extends Controller {
      * We multiply the current scaling of the segments by this value for zooming in, and divide for zooming out.
      */
     private final double SCALE_STEP = 1.05;
+    @FXML
+    Label xMinWarningLabel, xMaxWarningLabel, yMinWarningLabel, yMaxWarningLabel;
+    @FXML
+    Label tooltipLabel;
+    @FXML
+    TextField xMinTextField, xMaxTextField, yMinTextField, yMaxTextField;
+    @FXML
+    Line xMinLine, xMaxLine, yMinLine, yMaxLine, windowLeftLine, windowUpLine, windowRightLine, windowDownLine;
+    @FXML
+    Rectangle xMinRectangle, xMaxRectangle, yMinRectangle, yMaxRectangle, windowRectangle, tooltipBackgroundRectangle;
 
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                    VARIABLES                                                 *
+     *                                                                                                                *
+     *================================================================================================================*/
+    @FXML
+    Group segmentsGroup;
+    @FXML
+    StackPane lowerContainer, limiter, background, segmentsContainer;
+    @FXML
+    Button readSegmentFileButton, linuxButton, tooltipButton;
+    @FXML
+    AnchorPane header;
+    UnaryOperator<TextFormatter.Change> formatter = MainSceneController::apply;
+    @FXML
+    TextFormatter<String> xMinIntegerTextFormatter = new TextFormatter<>(formatter),
+            xMaxIntegerTextFormatter = new TextFormatter<>(formatter),
+            yMinIntegerTextFormatter = new TextFormatter<>(formatter),
+            yMaxIntegerTextFormatter = new TextFormatter<>(formatter);
+    EventHandlers eventHandlers = new EventHandlers();
+    private SegmentFileData currentFileData;
     private Windowing windowing;
     /**
      * Represents the initial scale of the loaded segments. Depending on their actual coordinates, they will need to be
@@ -107,11 +106,8 @@ public class MainSceneController extends Controller {
      * the entire area.
      */
     private double maxScale;
-
     private double mouseDragStartX, mouseDragStartY;
     private double initialTranslateX, initialTranslateY;
-
-    EventHandlers eventHandlers = new EventHandlers();
 
 
     /*================================================================================================================*
@@ -120,80 +116,14 @@ public class MainSceneController extends Controller {
      *                                                                                                                *
      *================================================================================================================*/
 
-
-    private class EventHandlers {
-        /**
-         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> xMinLineInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                xMinLine.setStroke(Color.rgb(200, 0, 0));
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> xMaxLineInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                xMaxLine.setStroke(Color.rgb(200, 0, 0));
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> yMinLineInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                yMinLine.setStroke(Color.rgb(200, 0, 0));
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> yMaxLineInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                yMaxLine.setStroke(Color.rgb(200, 0, 0));
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> xMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                xMinWarningLabel.setVisible(true);
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> xMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                xMaxWarningLabel.setVisible(true);
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> yMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                yMinWarningLabel.setVisible(true);
-            }
-        };
-        /**
-         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
-         */
-        EventHandler<AbstractInvalidInputEvent> yMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
-            @Override
-            public void handle(AbstractInvalidInputEvent event) {
-                yMaxWarningLabel.setVisible(true);
-            }
-        };
+    @FXML
+    private static TextFormatter.Change apply(TextFormatter.Change change) {
+        String newText = change.getControlNewText();
+        if (newText.matches("-?((\\d*)|i|in|inf)")) {
+            return change;
+        } else {
+            return null;
+        }
     }
 
 
@@ -202,7 +132,6 @@ public class MainSceneController extends Controller {
      *                                                   FXML METHODS                                                 *
      *                                                                                                                *
      *================================================================================================================*/
-
 
     @FXML
     void initialize() {
@@ -248,11 +177,7 @@ public class MainSceneController extends Controller {
         switch (chosenFileValue) {
             case 0:
                 try {
-                    // TIME LOGGER
-                    long startl = System.currentTimeMillis();
                     currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
-                    long endl = System.currentTimeMillis();
-                    System.out.println("file read in" + " [" + (endl - startl) + "]");
                 } catch (Exception e) {
                     ErrorSceneController.errorMessage = e.getMessage();
                     Scenes.ErrorScene = SceneLoader.load("ErrorScene");
@@ -304,11 +229,7 @@ public class MainSceneController extends Controller {
         yMaxTextField.setPromptText("yMax (" + (int) currentFileData.getWindow().getYMax() + ")");
         windowing = new Windowing(currentFileData.getSegments());
 
-        // TIME LOGGER
-        long startl = System.currentTimeMillis();
         drawSegmentsAndWindow(windowing, currentFileData.getWindow(), false);
-        long endl = System.currentTimeMillis();
-        // System.out.println("drawn in" + " [" + (endl - startl) + "]");
 
         initialTranslateX = segmentsGroup.getLayoutX();
         initialTranslateY = segmentsGroup.getLayoutY();
@@ -409,44 +330,27 @@ public class MainSceneController extends Controller {
     }
 
     @FXML
-    private static TextFormatter.Change apply(TextFormatter.Change change) {
-        String newText = change.getControlNewText();
-        if (newText.matches("-?((\\d*)|i|in|inf)")) {
-            return change;
-        } else {
-            return null;
-        }
-    }
-
-    @FXML
     void handleTextFieldOnKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             handleLinuxButtonMouseClicked(null);
         }
     }
 
-
-    /*================================================================================================================*
-     *                                                                                                                *
-     *                                                     METHODS                                                    *
-     *                                                                                                                *
-     *================================================================================================================*/
-
-
     /**
      * Computes the coordinates of the fours corners of the displayed window. Adapts these coordinates if the window is
      * unbounded so that the displaying is intuitive and shows that well. Draws four lines representing the window,
      * following the previously computed coordinates. If the window is unbounded on one side, do not show the line
      * corresponding to that side to emphasize on the unbounded side.
-     * @param window The window to display
+     *
+     * @param window    The window to display
      * @param windowing The windowing object containing the least and greatest X and Y coordinates among all segments
      *                  retrieved from the query (corresponding to the given window)
      */
     private void updateWindowRectangle(Window window, Windowing windowing) {
-        Point2D lowerLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMin() + 1.5),
-                upperLeftCorner = new Point2D(window.getXMin() - 1.5, - window.getYMax() - 1.5),
-                upperRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMax() - 1.5),
-                lowerRightCorner = new Point2D(window.getXMax() + 1.5, - window.getYMin() + 1.5);
+        Point2D lowerLeftCorner = new Point2D(window.getXMin() - 1.5, -window.getYMin() + 1.5),
+                upperLeftCorner = new Point2D(window.getXMin() - 1.5, -window.getYMax() - 1.5),
+                upperRightCorner = new Point2D(window.getXMax() + 1.5, -window.getYMax() - 1.5),
+                lowerRightCorner = new Point2D(window.getXMax() + 1.5, -window.getYMin() + 1.5);
 
         if (window.getXMin() == Double.NEGATIVE_INFINITY) {
             upperLeftCorner = new Point2D(windowing.leastX - 1.5, upperLeftCorner.getY());
@@ -459,13 +363,13 @@ public class MainSceneController extends Controller {
         }
 
         if (window.getYMin() == Double.NEGATIVE_INFINITY) {
-            lowerLeftCorner = new Point2D(lowerLeftCorner.getX(), - (windowing.leastY - 1.5));
-            lowerRightCorner = new Point2D(lowerRightCorner.getX(), - (windowing.leastY - 1.5));
+            lowerLeftCorner = new Point2D(lowerLeftCorner.getX(), -(windowing.leastY - 1.5));
+            lowerRightCorner = new Point2D(lowerRightCorner.getX(), -(windowing.leastY - 1.5));
         }
 
         if (window.getYMax() == Double.POSITIVE_INFINITY) {
-            upperLeftCorner = new Point2D(upperLeftCorner.getX(), - (windowing.greatestY + 1.5));
-            upperRightCorner = new Point2D(upperRightCorner.getX(), - (windowing.greatestY + 1.5));
+            upperLeftCorner = new Point2D(upperLeftCorner.getX(), -(windowing.greatestY + 1.5));
+            upperRightCorner = new Point2D(upperRightCorner.getX(), -(windowing.greatestY + 1.5));
         }
 
         windowLeftLine.setStartX(lowerLeftCorner.getX());
@@ -505,11 +409,18 @@ public class MainSceneController extends Controller {
          */
     }
 
+
+    /*================================================================================================================*
+     *                                                                                                                *
+     *                                                     METHODS                                                    *
+     *                                                                                                                *
+     *================================================================================================================*/
+
     /**
      * Valid inputs must match the following regex : <code>-?(\d*|i|n|f)</code>. If the input is empty, fires an {@link InvalidInputEvent}
      * to the given <code>userFeedbackNodes</code>. This serves as user feedback and indicates which field should be modified.
      *
-     * @param s The input to extract the Double value from
+     * @param s                 The input to extract the Double value from
      * @param userFeedbackNodes Nodes which will receive an {@link InvalidInputEvent} if the input is invalid.
      * @return The value of the input as a Double
      */
@@ -569,50 +480,30 @@ public class MainSceneController extends Controller {
     /**
      * Removes any existing segments and draws the segments from the given file data after querying it with the given <code>window</code>.
      *
-     * @param windowing The windowing object containing the segments.
-     * @param window    The window to query with.
+     * @param windowing     The windowing object containing the segments.
+     * @param window        The window to query with.
+     * @param addWithStream Whether to add the data via streams or not. Improves performance in some cases.
      */
     private void drawSegmentsAndWindow(Windowing windowing, Window window, boolean addWithStream) {
         // Initially, the button is disabled, so you can't apply the window before reading a file
         // This method will be called when the user loads a file, which is when we should enable the linuxing button
         linuxButton.setDisable(false);
 
-        // TIME LOGGER
-        long startl = System.currentTimeMillis();
         segmentsGroup = new Group();
-        long endl = System.currentTimeMillis();
-        // System.out.println("segments cleared in" + " [" + (endl - startl) + "]");
 
-        // TIME LOGGER
-        startl = System.currentTimeMillis();
         segmentsContainer.getChildren().clear();
-        endl = System.currentTimeMillis();
-        // System.out.println("segments container cleared in" + " [" + (endl - startl) + "]");
 
-        // TIME LOGGER
-        startl = System.currentTimeMillis();
         ArrayList<Segment> segments = windowing.query(window);
-        endl = System.currentTimeMillis();
-        // System.out.println("query finished in " + " [" + (endl - startl) + "]");
 
-        // TIME LOGGER
-        startl = System.currentTimeMillis();
         if (addWithStream) {
-            // System.out.println("adding with stream");
             segmentsGroup.getChildren().addAll(segments.stream().map(Segment::toLine).toList());
         } else {
-            // System.out.println("adding without stream");
             for (Segment segment : segments) {
                 segmentsGroup.getChildren().add(segment.toLine());
             }
         }
-        endl = System.currentTimeMillis();
-        // System.out.println("segments added in" + " [" + (endl - startl) + "]");
 
         updateWindowRectangle(window, windowing);
-
-        // segmentsGroup.getChildren().addAll(windowLeftLine, windowDownLine, windowRightLine, windowUpLine);
-
         updateScaling();
 
         segmentsContainer.getChildren().add(segmentsGroup);
@@ -670,5 +561,80 @@ public class MainSceneController extends Controller {
         popup = new Stage();
         popup.setScene(Scenes.FileLoaderPopup);
         popup.showAndWait();
+    }
+
+    private class EventHandlers {
+        /**
+         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMinLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMinLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMaxLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMaxLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMinLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMinLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMaxLineInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMaxLine.setStroke(Color.rgb(200, 0, 0));
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMinWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>xMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> xMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                xMaxWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMinLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMinWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMinWarningLabel.setVisible(true);
+            }
+        };
+        /**
+         * Anonymous class defining the handler used when the <code>yMaxLine</code> object receives an {@link InvalidInputEvent}.
+         */
+        EventHandler<AbstractInvalidInputEvent> yMaxWarningLabelInvalidInputEventHandler = new EventHandler<>() {
+            @Override
+            public void handle(AbstractInvalidInputEvent event) {
+                yMaxWarningLabel.setVisible(true);
+            }
+        };
     }
 }
