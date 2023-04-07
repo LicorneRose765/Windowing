@@ -25,6 +25,7 @@ public class TestMe extends Application {
         stage = stage_;
 
         Scenes.MainScene = SceneLoader.load("MainScene");
+        Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup");
 
         Flow.add(Scenes.MainScene);
 

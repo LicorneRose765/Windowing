@@ -77,7 +77,7 @@ public class MainSceneController extends Controller {
 
 
     private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
-    public static Stage popup; // TODO : this code sucks
+    public static Stage popup;
     public static File chosenFile;
     /**
      * 0 : the chosen file is the {@link #chosenFile} object of type {@link File}
@@ -253,19 +253,46 @@ public class MainSceneController extends Controller {
                     currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
                     long endl = System.currentTimeMillis();
                     System.out.println("file read in" + " [" + (endl - startl) + "]");
-                } catch (FormatException e) {
-                    // TODO : show feedback to the user
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    ErrorSceneController.errorMessage = e.getMessage();
+                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
+                    popup = new Stage();
+                    popup.setScene(Scenes.ErrorScene);
+                    popup.showAndWait();
                 }
                 break;
             case 1:
-                currentFileData = SegmentFileReader.readLines("segments1.seg");
+                try {
+                    currentFileData = SegmentFileReader.readLines("segments1.seg");
+                } catch (Exception e) {
+                    ErrorSceneController.errorMessage = e.getMessage();
+                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
+                    popup = new Stage();
+                    popup.setScene(Scenes.ErrorScene);
+                    popup.showAndWait();
+                }
                 break;
             case 2:
-                currentFileData = SegmentFileReader.readLines("segments2.seg");
+                try {
+                    currentFileData = SegmentFileReader.readLines("segments2.seg");
+                } catch (Exception e) {
+                    ErrorSceneController.errorMessage = e.getMessage();
+                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
+                    popup = new Stage();
+                    popup.setScene(Scenes.ErrorScene);
+                    popup.showAndWait();
+                }
                 break;
             case 3:
-                currentFileData = SegmentFileReader.readLines("segments3.seg");
+                try {
+                    currentFileData = SegmentFileReader.readLines("segments3.seg");
+                } catch (Exception e) {
+                    ErrorSceneController.errorMessage = e.getMessage();
+                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
+                    popup = new Stage();
+                    popup.setScene(Scenes.ErrorScene);
+                    popup.showAndWait();
+                }
                 break;
         }
 
@@ -350,7 +377,6 @@ public class MainSceneController extends Controller {
 
     @FXML
     void handleSegmentsContainerOnMouseReleased(MouseEvent mouseEvent) {
-        // TODO : implement a minX/Y & maxX/Y when querying, return it somehow because we need it a lot (here for ex)
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             double mouseDragEndX = mouseEvent.getSceneX();
             double mouseDragEndY = mouseEvent.getSceneY();
@@ -583,8 +609,6 @@ public class MainSceneController extends Controller {
         endl = System.currentTimeMillis();
         // System.out.println("segments added in" + " [" + (endl - startl) + "]");
 
-        // TODO : pour la window infinie : ajouter que les bords du rectangle nécessaires (infinie en x négatif = ne pas
-        //  ajouter le bord gauche)
         updateWindowRectangle(window, windowing);
 
         // segmentsGroup.getChildren().addAll(windowLeftLine, windowDownLine, windowRightLine, windowUpLine);
@@ -644,7 +668,6 @@ public class MainSceneController extends Controller {
      */
     private void openFileLoaderPopup() {
         popup = new Stage();
-        Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup"); // TODO : maybe move this to main so we can load all fxml in the beginning
         popup.setScene(Scenes.FileLoaderPopup);
         popup.showAndWait();
     }
