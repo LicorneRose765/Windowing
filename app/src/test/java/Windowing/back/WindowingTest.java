@@ -1,13 +1,16 @@
 package Windowing.back;
 
-import Windowing.back.segment.Segment;
-import Windowing.back.segment.Windowing;
+import Windowing.back.segment.*;
 import Windowing.datastructure.Window;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -306,6 +309,75 @@ public class WindowingTest {
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 
-    // TODO : test to evaluate the performance of the algorithm
+    @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
+    @Test
+    public void evaluatesBuildSpeedOnTestDataSets() throws IOException, URISyntaxException, FormatException {
+        // Given
+        // Segments 1 = 5000 segments
+        SegmentFileData segmentFileData = SegmentFileReader.readLines("segments1.seg");
+        ArrayList<Segment> dataSet = segmentFileData.getSegments();
 
+        long startTime = System.currentTimeMillis();
+        new Windowing(dataSet);
+        long endTime = System.currentTimeMillis();
+        long segments1BuildTime = endTime - startTime;
+
+        // Segments 2 = 10 000 segments
+        segmentFileData = SegmentFileReader.readLines("segments2.seg");
+        dataSet = segmentFileData.getSegments();
+
+        startTime = System.currentTimeMillis();
+        new Windowing(dataSet);
+        endTime = System.currentTimeMillis();
+        long segments2BuildTime = endTime - startTime;
+
+        // Segments 3 = 100 000 segments
+        segmentFileData = SegmentFileReader.readLines("segments3.seg");
+        dataSet = segmentFileData.getSegments();
+
+        startTime = System.currentTimeMillis();
+        new Windowing(dataSet);
+        endTime = System.currentTimeMillis();
+        long segments3BuildTime = endTime - startTime;
+
+        System.out.println("======== Test : Build time ========");
+        System.out.println("5000    segments build time : " + segments1BuildTime + " ms");
+        System.out.println("10 000  segments build time : " + segments2BuildTime + " ms");
+        System.out.println("100 000 segments build time : " + segments3BuildTime + " ms");
+        System.out.println("===================================\n");
+        assertTrue(true);
+
+    }
+
+    @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
+    @Test
+    public void evaluatesQuerySpeedOnSegments3DataSet() throws IOException, URISyntaxException, FormatException {
+        // Given
+        // Segments 3 = 100 000 segments
+        SegmentFileData segmentFileData = SegmentFileReader.readLines("segments3.seg");
+        ArrayList<Segment> dataSet = segmentFileData.getSegments();
+
+        Windowing windowing = new Windowing(dataSet);
+
+        // Infinite window
+        Window window = new Window(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        long startTime = System.currentTimeMillis();
+        windowing.query(window);
+        long endTime = System.currentTimeMillis();
+        long segments3QueryTime = endTime - startTime;
+
+        // Small window
+        window = new Window(0, 5, 0, 5);
+        startTime = System.nanoTime();
+        windowing.query(window);
+        endTime = System.nanoTime();
+        double segments3QueryTime2 = endTime - startTime;
+
+        System.out.println("======== Test : Query time ========");
+        System.out.println("Infinite window query time : " + segments3QueryTime + " ms");
+        System.out.println("Small    window query time : " + segments3QueryTime2 / 100000 + " ms");
+        System.out.println("===================================\n");
+        assertTrue(segments3QueryTime > segments3QueryTime2 / 100000);
+    }
 }

@@ -11,7 +11,11 @@ import java.util.ArrayList;
  * With this class, we can easily separate the windowing algorithms/data structure and the recovery of points in files.
  */
 public class Windowing {
-    public double leastX = 0, greatestX = 0, leastY = 0, greatestY = 0, deltaX, deltaY;
+    public double leastX = Double.POSITIVE_INFINITY,
+            greatestX = Double.NEGATIVE_INFINITY,
+            leastY = Double.POSITIVE_INFINITY,
+            greatestY = Double.NEGATIVE_INFINITY,
+            deltaX, deltaY;
     private final PrioritySearchTree horizontalPST;
     private final PrioritySearchTree verticalPST;
 
