@@ -90,7 +90,7 @@
                 onMouseClicked="#handleLinuxButtonMouseClicked" onMouseEntered="#handleButtonMouseEntered"
                 onMouseExited="#handleButtonMouseExited" prefWidth="90"
                 style="-fx-background-color: rgba(218, 163, 171, 0.7); -fx-border-color: rgb(10, 10, 20); -fx-border-width: 2; -fx-border-insets: -1; -fx-border-radius: 20; -fx-background-radius: 20;"
-                text="Linux">
+                text="Apply">
             <font>
                 <Font name="Monospaced Regular" size="13.0"/>
             </font>

@@ -171,57 +171,61 @@ public class MainSceneController extends Controller {
     }
 
     @FXML
-    void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) throws IOException, URISyntaxException, FormatException {
+    void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) {
         openFileLoaderPopup();
 
         switch (chosenFileValue) {
             case 0:
                 try {
                     currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
+                } catch (NullPointerException nullPointerException) {
+                    // user cancelled file selection
+                    return;
+                } catch (IOException ioException) {
+                    ErrorSceneController.errorMessage = "File not found or not readable";
+                    openErrorPopup();
+                } catch (FormatException formatException) {
+                    ErrorSceneController.errorMessage = "Error while parsing the file \n "
+                            + formatException.getMessage();
+                    openErrorPopup();
                 } catch (Exception e) {
-                    ErrorSceneController.errorMessage = e.getMessage();
-                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
-                    popup = new Stage();
-                    popup.setScene(Scenes.ErrorScene);
-                    popup.showAndWait();
+                    ErrorSceneController.errorMessage = "Error while loading the file";
+                    System.out.println("[ERROR] Couldn't load "+ chosenFile +" : " + e.getMessage());
+                    openErrorPopup();
                 }
                 break;
             case 1:
                 try {
                     currentFileData = SegmentFileReader.readLines("segments1.seg");
                 } catch (Exception e) {
-                    ErrorSceneController.errorMessage = e.getMessage();
-                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
-                    popup = new Stage();
-                    popup.setScene(Scenes.ErrorScene);
-                    popup.showAndWait();
+                    ErrorSceneController.errorMessage = "Error while loading segments1.seg";
+                    System.out.println("[ERROR] Couldn't load segments1.seg : " + e.getMessage());
+                    openErrorPopup();
                 }
                 break;
             case 2:
                 try {
                     currentFileData = SegmentFileReader.readLines("segments2.seg");
                 } catch (Exception e) {
-                    ErrorSceneController.errorMessage = e.getMessage();
-                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
-                    popup = new Stage();
-                    popup.setScene(Scenes.ErrorScene);
-                    popup.showAndWait();
+                    ErrorSceneController.errorMessage = "Error while loading segments2.seg";
+                    System.out.println("[ERROR] Couldn't load segments2.seg : " + e.getMessage());
+                    openErrorPopup();
                 }
                 break;
             case 3:
                 try {
                     currentFileData = SegmentFileReader.readLines("segments3.seg");
                 } catch (Exception e) {
-                    ErrorSceneController.errorMessage = e.getMessage();
-                    Scenes.ErrorScene = SceneLoader.load("ErrorScene");
-                    popup = new Stage();
-                    popup.setScene(Scenes.ErrorScene);
-                    popup.showAndWait();
+                    ErrorSceneController.errorMessage = "Error while loading segments3.seg";
+                    System.out.println("[ERROR] Couldn't load segments3.seg : " + e.getMessage());
+                    openErrorPopup();
                 }
                 break;
         }
 
-        assert currentFileData != null;
+        if (currentFileData == null) {
+            return;
+        }
 
         xMinTextField.setPromptText("xMin (" + (int) currentFileData.getWindow().getXMin() + ")");
         xMaxTextField.setPromptText("xMax (" + (int) currentFileData.getWindow().getXMax() + ")");
@@ -400,13 +404,6 @@ public class MainSceneController extends Controller {
         if (window.getYMin() != Double.NEGATIVE_INFINITY) segmentsGroup.getChildren().add(windowDownLine);
 
         if (window.getYMax() != Double.POSITIVE_INFINITY) segmentsGroup.getChildren().add(windowUpLine);
-
-        /*
-        windowRectangle.setX(window.getXMin() - 1.5);
-        windowRectangle.setY(-window.getYMax() - 1.5);
-        windowRectangle.setWidth(window.getXMax() - window.getXMin() + 3);
-        windowRectangle.setHeight(window.getYMax() - window.getYMin() + 3);
-         */
     }
 
 
@@ -560,6 +557,17 @@ public class MainSceneController extends Controller {
     private void openFileLoaderPopup() {
         popup = new Stage();
         popup.setScene(Scenes.FileLoaderPopup);
+        popup.setHeight(450);
+        popup.setWidth(600);
+        popup.showAndWait();
+    }
+
+    private void openErrorPopup() {
+        Scenes.ErrorScene = SceneLoader.load("ErrorScene");
+        popup = new Stage();
+        popup.setScene(Scenes.ErrorScene);
+        popup.setWidth(600);
+        popup.setHeight(450);
         popup.showAndWait();
     }
 

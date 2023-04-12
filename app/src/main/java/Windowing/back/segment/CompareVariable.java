@@ -5,5 +5,13 @@ package Windowing.back.segment;
  * Enum to determine which coordinates to use to compare two points.
  */
 public enum CompareVariable {
-    X, Y
+    /**
+     * X coordinates
+     */
+    X,
+
+    /**
+     * Y coordinates
+     */
+    Y
 }

@@ -1,8 +1,16 @@
 package Windowing.back.segment;
 
 import Windowing.datastructure.Direction;
+import Windowing.datastructure.PrioritySearchTree;
 import javafx.scene.shape.Line;
 
+/**
+ * Represents a segment to be used in the priority search tree. Each segment is either horizontal or vertical. <br>
+ * A segment is defined by two points (x, y) and (x1, y1). Only the left point in considered in the PST.
+ *
+ * @see Direction
+ * @see PrioritySearchTree
+ */
 public class Segment {
     private final double x, y, x1, y1;
     private final Direction direction;

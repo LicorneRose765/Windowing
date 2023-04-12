@@ -33,6 +33,9 @@ public class SegmentFileReader {
      * @param uri The URI of the file to read
      */
     public static SegmentFileData readLines(URI uri) throws IOException, FormatException {
+        if (!uri.toString().endsWith(".seg") && !uri.toString().endsWith(".txt")) {
+            throw new FormatException("The file must be a .seg or .txt file.");
+        }
         return readSegmentFileLines(uri);
     }
 

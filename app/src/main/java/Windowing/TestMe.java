@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class TestMe extends Application {
-    private static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -18,22 +17,16 @@ public class TestMe extends Application {
 
     @Override
     public void start(Stage stage_) {
-        // ArrayList<Double> data = new ArrayList<>(Arrays.asList(1D, 5D, 9D, 7D));
-        // PrioritySearchTree tree = PrioritySearchTree.createPrioritySearchTree(data);
-        // System.out.println("");
-
-        stage = stage_;
-
         Scenes.MainScene = SceneLoader.load("MainScene");
         Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup");
 
         Flow.add(Scenes.MainScene);
 
-        stage.setTitle("Linuxing app");
-        // stage.setResizable(false);
-        stage.setWidth(1280);
-        stage.setHeight(720);
-        stage.setScene(Scenes.MainScene);
-        stage.show();
+        stage_.setTitle("Windowing app");
+        stage_.setResizable(false);
+        stage_.setWidth(1280);
+        stage_.setHeight(750);
+        stage_.setScene(Scenes.MainScene);
+        stage_.show();
     }
 }

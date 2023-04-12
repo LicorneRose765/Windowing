@@ -8,19 +8,17 @@ import java.util.ArrayList;
 /**
  * Represents the data read from a file as follows
  * <ul>
- *     <li>first line : dimensions of the initial window,</uli>
+ *     <li>first line : dimensions of the initial window,</li>
  *     <li>next lines : one segment per line.</li>
  * </ul>
  */
 public class SegmentFileData {
     private final Window window;
     private final ArrayList<Segment> segments;
-    private PrioritySearchTree PST;
 
     public SegmentFileData(Window window, ArrayList<Segment> segments) {
         this.window = window;
         this.segments = segments;
-        // TODO : separate here horizontal and vertical segments ?
     }
 
     public Window getWindow() {
@@ -45,9 +43,5 @@ public class SegmentFileData {
                     .append("\n");
         }
         return bobTheBuilder.toString();
-    }
-
-    public PrioritySearchTree getPST() {
-        return PST;
     }
 }

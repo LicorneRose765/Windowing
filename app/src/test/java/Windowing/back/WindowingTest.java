@@ -303,9 +303,9 @@ public class WindowingTest {
                 new Segment(-250, 5, 250, 5),
                 new Segment(0, 0, 14, 0)
         ));
-        System.out.println(expected);
-        System.out.println(result);
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+
+    // TODO : test to evaluate the performance of the algorithm
 
 }

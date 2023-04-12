@@ -3,9 +3,9 @@ package Windowing.datastructure;
 import Windowing.back.segment.Segment;
 
 /**
- * Represents a window in the plane.
+ * Represents a window in the plane. <br>
  * All four attributes can be set to Double.POSITIVE_INFINITY or Double.NEGATIVE_INFINITY to represent
- * an unbounded window.
+ * an unbounded window. <br>
  * A query uses a window and can be mathematically represented as follows :
  * [xMin, xMax] x [yMin, yMax]
  */
@@ -30,18 +30,38 @@ public class Window {
         this.yMax = yMax;
     }
 
+    /**
+     * Getter for the bounds of the window.
+     *
+     * @return The minimum x coordinate of the window
+     */
     public double getXMin() {
         return xMin;
     }
 
+    /**
+     * Getter for the bounds of the window.
+     *
+     * @return The maximum x coordinate of the window
+     */
     public double getXMax() {
         return xMax;
     }
 
+    /**
+     * Getter for the bounds of the window.
+     *
+     * @return The minimum y coordinate of the window
+     */
     public double getYMin() {
         return yMin;
     }
 
+    /**
+     * Getter for the bounds of the window.
+     *
+     * @return The maximum y coordinate of the window
+     */
     public double getYMax() {
         return yMax;
     }
@@ -50,7 +70,7 @@ public class Window {
      * Compare The xMin bound of the window with the point. (xMin | - infty)
      *
      * @param p the point to compare with
-     * @return -1 if xMin <= pX, 1 otherwise.
+     * @return -1 if xMin {@literal <=} pX, 1 otherwise.
      */
     public int xMinCompareTo(Segment p) {
         if (xMin > p.getX()) {
@@ -64,7 +84,7 @@ public class Window {
      * Compare The xMax bound of the window with the point. (xMax | + infty)
      *
      * @param p the point to compare with
-     * @return -1 if xMax < pX, 1 otherwise.
+     * @return -1 if xMax {@literal <} pX, 1 otherwise.
      */
     public int xMaxCompareTo(Segment p) {
         if (xMax < p.getX()) {
@@ -78,7 +98,7 @@ public class Window {
      * Compare The yMin bound of the window with the point. (yMin | - infty)
      *
      * @param p the point to compare with
-     * @return -1 if yMin <= pY, 1 otherwise.
+     * @return -1 if yMin {@literal <=} pY, 1 otherwise.
      */
     public int yMinCompareTo(Segment p) {
         if (yMin > p.getY()) {
@@ -92,7 +112,7 @@ public class Window {
      * Compare The yMax bound of the window with the point. (yMax | + infty)
      *
      * @param p the point to compare with
-     * @return -1 if yMax < pY, 1 otherwise.
+     * @return -1 if yMax {@literal <} pY, 1 otherwise.
      */
     public int yMaxCompareTo(Segment p) {
         if (yMax < p.getY()) {
@@ -122,14 +142,6 @@ public class Window {
         }
     }
 
-    public double getWidth() {
-        return xMax - xMin;
-    }
-
-    public double getHeight() {
-        return yMax - yMin;
-    }
-
     @Override
     public String toString() {
         return "Window{" +
@@ -138,12 +150,5 @@ public class Window {
                 ", yMin=" + yMin +
                 ", yMax=" + yMax +
                 '}';
-    }
-
-    /**
-     * @return Whether the window is finite or not. Finite means all coordinates composants are real numbers.
-     */
-    public boolean isFinite() {
-        return xMin != Double.NEGATIVE_INFINITY && xMax != Double.POSITIVE_INFINITY && yMin != Double.NEGATIVE_INFINITY && yMax != Double.POSITIVE_INFINITY;
     }
 }
