@@ -3,7 +3,6 @@
  */
 package Windowing;
 
-import Windowing.front.navigation.Flow;
 import Windowing.front.scenes.SceneLoader;
 import Windowing.front.scenes.Scenes;
 import javafx.application.Application;
@@ -19,8 +18,6 @@ public class TestMe extends Application {
     public void start(Stage stage_) {
         Scenes.MainScene = SceneLoader.load("MainScene");
         Scenes.FileLoaderPopup = SceneLoader.load("FileLoaderPopup");
-
-        Flow.add(Scenes.MainScene);
 
         stage_.setTitle("Windowing app");
         stage_.setResizable(false);
