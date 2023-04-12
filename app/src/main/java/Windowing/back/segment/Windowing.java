@@ -11,6 +11,8 @@ import java.util.ArrayList;
  * With this class, we can easily separate the windowing algorithms/data structure and the recovery of points in files.
  */
 public class Windowing {
+
+    public ArrayList<Segment> segments;
     public double leastX = Double.POSITIVE_INFINITY,
             greatestX = Double.NEGATIVE_INFINITY,
             leastY = Double.POSITIVE_INFINITY,
@@ -40,8 +42,8 @@ public class Windowing {
         }
         deltaX = greatestX - leastX;
         deltaY = greatestY - leastY;
-        horizontalPST = PrioritySearchTree.build(horizontalSegments, Direction.HORIZONTAL);
-        verticalPST = PrioritySearchTree.build(verticalSegments, Direction.VERTICAL);
+        horizontalPST = PrioritySearchTree.build(horizontalSegments, Direction.HORIZONTAL, this);
+        verticalPST = PrioritySearchTree.build(verticalSegments, Direction.VERTICAL, this);
     }
 
     /**
@@ -51,8 +53,13 @@ public class Windowing {
      * @return The list of segments.
      */
     public ArrayList<Segment> query(Window window) {
-        ArrayList<Segment> result = new ArrayList<>(horizontalPST.query(window));
-        result.addAll(verticalPST.query(window));
-        return result;
+        segments = new ArrayList<>();
+        horizontalPST.query(window);
+        verticalPST.query(window);
+        return segments;
+    }
+
+    public void report(Segment segment) {
+        segments.add(segment);
     }
 }

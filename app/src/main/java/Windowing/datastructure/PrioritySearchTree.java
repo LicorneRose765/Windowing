@@ -2,6 +2,7 @@ package Windowing.datastructure;
 
 import Windowing.back.segment.CompareVariable;
 import Windowing.back.segment.Segment;
+import Windowing.back.segment.Windowing;
 
 import java.util.ArrayList;
 
@@ -18,16 +19,19 @@ public class PrioritySearchTree {
     private final Direction direction;
     private PrioritySearchTree left, right;
     private Segment median;
+    private final Windowing windowing;
 
     /**
      * Builds a leaf of the priority search tree.
      *
      * @param value     The value of the leaf.
      * @param direction The direction of the Segment.
+     * @param windowing The windowing who's calling the function. (used in the query methods)
      */
-    public PrioritySearchTree(Segment value, Direction direction) {
+    public PrioritySearchTree(Segment value, Direction direction, Windowing windowing) {
         this.value = value;
         this.direction = direction;
+        this.windowing = windowing;
     }
 
 
@@ -39,14 +43,16 @@ public class PrioritySearchTree {
      * @param value     The value of the node.
      * @param median    The median of the node.
      * @param direction The direction of the Segment.
+     * @param windowing The windowing who's calling the function. (used in the query methods)
      */
     public PrioritySearchTree(PrioritySearchTree left, PrioritySearchTree right, Segment value,
-                              Segment median, Direction direction) {
+                              Segment median, Direction direction, Windowing windowing) {
         this.left = left;
         this.right = right;
         this.value = value;
         this.median = median;
         this.direction = direction;
+        this.windowing = windowing;
     }
 
     /**
@@ -57,16 +63,17 @@ public class PrioritySearchTree {
      *
      * @param data      The list of Points.
      * @param direction True if the PST stores point from a vertical segment, false otherwise.
+     * @param windowing The windowing who's calling the function. (used in the query methods)
      * @return A priority search tree
      */
-    public static PrioritySearchTree build(ArrayList<Segment> data, Direction direction) {
+    public static PrioritySearchTree build(ArrayList<Segment> data, Direction direction, Windowing windowing) {
         // Need to copy the data to prevent the side effect of the function.
         ArrayList<Segment> copiedData = new ArrayList<>(data);
         if (copiedData.size() == 0) {
             return null;
         }
         if (copiedData.size() == 1) {
-            return new PrioritySearchTree(copiedData.get(0), direction);
+            return new PrioritySearchTree(copiedData.get(0), direction, windowing);
         }
         if (direction == Direction.VERTICAL) {
             HeapSort.sort(copiedData, CompareVariable.X);
@@ -74,15 +81,16 @@ public class PrioritySearchTree {
             HeapSort.sort(copiedData, CompareVariable.Y);
         }
 
-        return buildHelper(copiedData, direction);
+        return buildHelper(copiedData, direction, windowing);
     }
 
-    private static PrioritySearchTree buildHelper(ArrayList<Segment> sortedData, Direction direction) {
+    private static PrioritySearchTree buildHelper(ArrayList<Segment> sortedData,
+                                                  Direction direction, Windowing windowing) {
         if (sortedData.size() == 0) {
             return null;
         }
         if (sortedData.size() == 1) {
-            return new PrioritySearchTree(sortedData.get(0), direction);
+            return new PrioritySearchTree(sortedData.get(0), direction, windowing);
         }
         Segment min;
         if (direction == Direction.VERTICAL) {
@@ -116,9 +124,9 @@ public class PrioritySearchTree {
             }
         }
 
-        return new PrioritySearchTree(buildHelper(leftData, direction),
-                buildHelper(rightData, direction),
-                min, median, direction);
+        return new PrioritySearchTree(buildHelper(leftData, direction, windowing),
+                buildHelper(rightData, direction, windowing),
+                min, median, direction, windowing);
     }
 
     /**
@@ -149,28 +157,26 @@ public class PrioritySearchTree {
     }
 
     /**
-     * Returns all the segments having at least a point in the window or crossing the window.
+     * Gets all the segments having at least a point in the window or crossing the window and reports them to the windowing.
      *
      * @param window The window.
-     * @return A list of segments.
      */
-    public ArrayList<Segment> query(Window window) {
+    public void query(Window window) {
         if (direction == Direction.VERTICAL) {
-            return queryVertical(window);
+            queryVertical(window);
         } else {
-            return queryHorizontal(window);
+            queryHorizontal(window);
         }
     }
 
-    private ArrayList<Segment> queryHorizontal(Window window) {
-        ArrayList<Segment> res = new ArrayList<>();
+    private void queryHorizontal(Window window) {
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
         while (vSplit == null) {
             if (window.contains(current.value)) {
                 // If the node is in the window.
-                res.add(current.value);
+                windowing.report(current.value);
             }
             if (current.isLeaf()) {
                 break;
@@ -202,16 +208,16 @@ public class PrioritySearchTree {
         if (vSplit == null) {
             // We are in a leaf, and we didn't find vSplit.
             if (window.contains(current.value)) {
-                res.add(current.value);
+                windowing.report(current.value);
             }
-            return res;
+            return;
         }
 
         // Searching for yMin
         PrioritySearchTree leftSubtree = vSplit.getLeftSubTree();
         while (leftSubtree != null) {
             if (window.contains(leftSubtree.value)) {
-                res.add(leftSubtree.value);
+                windowing.report(leftSubtree.value);
             }
             if (leftSubtree.isLeaf()) {
                 break;
@@ -221,7 +227,7 @@ public class PrioritySearchTree {
                 // yMin <= y_min, searching yMin in the left subtree.
                 // All the points in the right subtree have their y coordinates in the window.
                 if (leftSubtree.hasRight()) {
-                    res.addAll(leftSubtree.getRightSubTree().reportInSubtree(window));
+                    leftSubtree.getRightSubTree().reportInSubtree(window);
                 }
                 leftSubtree = leftSubtree.getLeftSubTree();
             } else {
@@ -233,7 +239,7 @@ public class PrioritySearchTree {
         PrioritySearchTree rightSubtree = vSplit.getRightSubTree();
         while (rightSubtree != null) {
             if (window.contains(rightSubtree.value)) {
-                res.add(rightSubtree.value);
+                windowing.report(rightSubtree.value);
             }
             if (rightSubtree.isLeaf()) {
                 break;
@@ -243,7 +249,7 @@ public class PrioritySearchTree {
                 // yMax >= y_mid, searching yMax in the right subtree.
                 // All the points in the left subtree have their y coordinates in the window.
                 if (rightSubtree.hasLeft()) {
-                    res.addAll(rightSubtree.getLeftSubTree().reportInSubtree(window));
+                    rightSubtree.getLeftSubTree().reportInSubtree(window);
                 }
                 rightSubtree = rightSubtree.getRightSubTree();
             } else {
@@ -252,18 +258,16 @@ public class PrioritySearchTree {
         }
 
 
-        return res;
     }
 
-    private ArrayList<Segment> queryVertical(Window window) {
-        ArrayList<Segment> res = new ArrayList<>();
+    private void queryVertical(Window window) {
         PrioritySearchTree vSplit = null;
         PrioritySearchTree current = this;
 
         while (vSplit == null && !current.isLeaf()) {
             if (window.contains(current.value)) {
                 // If the node is in the window.
-                res.add(current.value);
+                windowing.report(current.value);
             }
 
             // Searching for vSplit
@@ -294,16 +298,16 @@ public class PrioritySearchTree {
         if (vSplit == null) {
             // We are in a leaf, and we didn't find vSplit.
             if (window.contains(current.value)) {
-                res.add(current.value);
+                windowing.report(current.value);
             }
-            return res;
+            return;
         }
 
         // Searching for xMin
         PrioritySearchTree leftSubtree = vSplit.getLeftSubTree();
         while (leftSubtree != null) {
             if (window.contains(leftSubtree.value)) {
-                res.add(leftSubtree.value);
+                windowing.report(leftSubtree.value);
             }
             if (leftSubtree.isLeaf()) {
                 break;
@@ -313,7 +317,7 @@ public class PrioritySearchTree {
                 // xMin <= x_min, searching xMin in the left subtree.
                 // All the points in the right subtree have their x coordinates in the window.
                 if (leftSubtree.hasRight()) {
-                    res.addAll(leftSubtree.getRightSubTree().reportInSubtree(window));
+                    leftSubtree.getRightSubTree().reportInSubtree(window);
                 }
                 leftSubtree = leftSubtree.getLeftSubTree();
             } else {
@@ -325,7 +329,7 @@ public class PrioritySearchTree {
         PrioritySearchTree rightSubtree = vSplit.getRightSubTree();
         while (rightSubtree != null) {
             if (window.contains(rightSubtree.value)) {
-                res.add(rightSubtree.value);
+                windowing.report(rightSubtree.value);
             }
             if (rightSubtree.isLeaf()) {
                 break;
@@ -335,14 +339,13 @@ public class PrioritySearchTree {
                 // xMax >= x_mid, searching xMax in the right subtree.
                 // All the points in the left subtree have their x coordinates in the window.
                 if (rightSubtree.hasLeft()) {
-                    res.addAll(rightSubtree.getLeftSubTree().reportInSubtree(window));
+                    rightSubtree.getLeftSubTree().reportInSubtree(window);
                 }
                 rightSubtree = rightSubtree.getRightSubTree();
             } else {
                 rightSubtree = rightSubtree.getLeftSubTree();
             }
         }
-        return res;
     }
 
     /**
@@ -350,50 +353,45 @@ public class PrioritySearchTree {
      * We don't have to check on their y-coordinates/x-coordinates because we have already done in the function query.
      *
      * @param window The window to check
-     * @return A list of points in the subtree that are in the x-range of the window.
      */
-    public ArrayList<Segment> reportInSubtree(Window window) {
+    public void reportInSubtree(Window window) {
         if (direction == Direction.HORIZONTAL) {
-            return reportInSubtreeHorizontal(window);
+            reportInSubtreeHorizontal(window);
         } else {
-            return reportInSubtreeVertical(window);
+            reportInSubtreeVertical(window);
         }
     }
 
-    private ArrayList<Segment> reportInSubtreeHorizontal(Window window) {
-        ArrayList<Segment> res = new ArrayList<>();
+    private void reportInSubtreeHorizontal(Window window) {
         if (window.xMaxCompareTo(this.value) == 1) {
             // xMax >= x
             if (window.getXMin() <= this.value.getX1()) {
                 // The segment is at least crossing the left bound of the window.
-                res.add(this.value);
+                windowing.report(this.value);
             }
             if (this.hasLeft()) {
-                res.addAll(this.getLeftSubTree().reportInSubtree(window));
+                this.getLeftSubTree().reportInSubtree(window);
             }
             if (this.hasRight()) {
-                res.addAll(this.getRightSubTree().reportInSubtree(window));
+                this.getRightSubTree().reportInSubtree(window);
             }
         }
-        return res;
     }
 
-    private ArrayList<Segment> reportInSubtreeVertical(Window window) {
-        ArrayList<Segment> res = new ArrayList<>();
+    private void reportInSubtreeVertical(Window window) {
         if (window.yMaxCompareTo(this.value) == 1) {
             // yMax >= y
             if (window.getYMin() <= this.value.getY1()) {
                 // The segment is at least crossing the lower bound of the window.
-                res.add(this.value);
+                windowing.report(this.value);
             }
             if (this.hasLeft()) {
-                res.addAll(this.getLeftSubTree().reportInSubtree(window));
+                this.getLeftSubTree().reportInSubtree(window);
             }
             if (this.hasRight()) {
-                res.addAll(this.getRightSubTree().reportInSubtree(window));
+                this.getRightSubTree().reportInSubtree(window);
             }
         }
-        return res;
     }
 
 

@@ -29,7 +29,7 @@ public class PrioritySearchTreeTest {
         ));
 
         // When
-        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL);
+        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL, null);
 
 
         // Then
@@ -77,7 +77,7 @@ public class PrioritySearchTreeTest {
         ArrayList<Segment> expected = new ArrayList<>(dataSet);
 
         // When
-        PrioritySearchTree.build(dataSet, Direction.HORIZONTAL);
+        PrioritySearchTree.build(dataSet, Direction.HORIZONTAL, null);
 
         // Then
         assertEquals(expected, dataSet);
@@ -103,7 +103,7 @@ public class PrioritySearchTreeTest {
         // The median cannot be simply 10, y_mid will be the midpoint which will be in this case (2,10)
 
         // When
-        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL);
+        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.HORIZONTAL, null);
 
         // Then
         // Testing if the PST has the correct shape
@@ -140,7 +140,7 @@ public class PrioritySearchTreeTest {
         ));
 
         // When
-        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.VERTICAL);
+        PrioritySearchTree pst = PrioritySearchTree.build(dataSet, Direction.VERTICAL, null);
 
         // Then
         // Testing if the PST has the correct shape
