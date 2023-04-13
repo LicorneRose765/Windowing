@@ -79,6 +79,7 @@ public class FileLoaderPopupController extends Controller {
             MainSceneController.chosenFileValue = 0;
             MainSceneController.chosenFile = chosenFile;
         }
+        MainSceneController.modifiedChosenFile = true;
         MainSceneController.popup.close();
     }
 

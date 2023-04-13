@@ -47,6 +47,8 @@ public class MainSceneController extends Controller {
     private static final double MAX_WIDTH = 1250, MAX_HEIGHT = 650;
     public static Stage popup;
     public static File chosenFile;
+
+    public static boolean modifiedChosenFile = false;
     /**
      * 0 : the chosen file is the {@link #chosenFile} object of type {@link File}
      * 1 : the chosen file is example 1
@@ -157,7 +159,7 @@ public class MainSceneController extends Controller {
         tooltipLabel.setText("""
                 Buttons :
                       o   Load : load a segments file (must be properly formatted !)
-                      o   Linux : apply the given window (see below) to the currently loaded segments
+                      o   Apply : apply the given window (see below) to the currently loaded segments
 
                 Window input :
                       o   xMin, xMax, yMin, yMax = coordinates of the window
@@ -173,14 +175,16 @@ public class MainSceneController extends Controller {
     @FXML
     void handleReadSegmentFileButtonMouseClicked(MouseEvent mouseEvent) {
         openFileLoaderPopup();
+        if (!modifiedChosenFile) {
+            // If the user cancelled the file selection, we don't want to do anything
+            return;
+        }
+
 
         switch (chosenFileValue) {
             case 0:
                 try {
                     currentFileData = SegmentFileReader.readLines(chosenFile.toURI());
-                } catch (NullPointerException nullPointerException) {
-                    // user cancelled file selection
-                    return;
                 } catch (IOException ioException) {
                     ErrorSceneController.errorMessage = "File not found or not readable";
                     openErrorPopup();
@@ -483,7 +487,7 @@ public class MainSceneController extends Controller {
      */
     private void drawSegmentsAndWindow(Windowing windowing, Window window, boolean addWithStream) {
         // Initially, the button is disabled, so you can't apply the window before reading a file
-        // This method will be called when the user loads a file, which is when we should enable the linuxing button
+        // This method will be called when the user loads a file, which is when we should enable the linux button (apply button)
         linuxButton.setDisable(false);
 
         segmentsGroup = new Group();
@@ -555,6 +559,7 @@ public class MainSceneController extends Controller {
      * Opens the file loader popup so that the user can choose a file to load segments from.
      */
     private void openFileLoaderPopup() {
+        modifiedChosenFile = false;
         popup = new Stage();
         popup.setScene(Scenes.FileLoaderPopup);
         popup.setHeight(450);
