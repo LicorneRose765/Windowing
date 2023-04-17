@@ -58,11 +58,8 @@ public class SegmentFileReader {
             double[] lineNumbers = parseLine(lines.get(lineIndex), lineIndex);
 
             if (lineNumbers != null) {
-                if (lineIndex == 0) {
-                    window = extractWindow(lineNumbers);
-                } else {
-                    segments.add(extractPoint(lineNumbers));
-                }
+                if (lineIndex == 0) window = extractWindow(lineNumbers);
+                else segments.add(extractPoint(lineNumbers));
             }
         }
 
