@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
@@ -109,6 +108,8 @@ public class MainSceneController extends Controller {
     private double mouseDragStartX, mouseDragStartY;
     private double initialTranslateX, initialTranslateY;
 
+    private static String validInputRegex = "-?((\\d*)|i|in|inf)", validInputResultRegex = "-?((\\d*)|inf)";
+
 
     /*================================================================================================================*
      *                                                                                                                *
@@ -119,7 +120,7 @@ public class MainSceneController extends Controller {
     @FXML
     private static TextFormatter.Change apply(TextFormatter.Change change) {
         String newText = change.getControlNewText();
-        if (newText.matches("-?((\\d*)|i|in|inf)")) {
+        if (newText.matches(validInputRegex)) {
             return change;
         } else {
             return null;
@@ -424,7 +425,7 @@ public class MainSceneController extends Controller {
      * @return The value of the input as a Double
      */
     private Double extractValue(String s, Node... userFeedbackNodes) {
-        if (s.equals("")) {
+        if (s.equals("") || !(s.matches(validInputResultRegex))) {
             for (Node node : userFeedbackNodes) EventsManager.sendEventTo(new InvalidInputEvent(), node);
             return null;
         }
