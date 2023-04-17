@@ -12,6 +12,9 @@ import java.util.ArrayList;
  */
 public class Windowing {
 
+    /**
+     * The list of segments that are in the window or crosses it. (empty if no query has been executed)
+     */
     public ArrayList<Segment> segments;
     public double leastX = Double.POSITIVE_INFINITY,
             greatestX = Double.NEGATIVE_INFINITY,
@@ -59,6 +62,10 @@ public class Windowing {
         return segments;
     }
 
+    /**
+     * Reports a segment to the list of segments.
+     * @param segment The segment to report.
+     */
     public void report(Segment segment) {
         segments.add(segment);
     }
