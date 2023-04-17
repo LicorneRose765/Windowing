@@ -50,7 +50,7 @@ public class SegmentFileReader {
      * @throws IOException     See {@link java.nio.file.Files#readAllLines}
      */
     private static SegmentFileData readSegmentFileLines(URI uri) throws FormatException, IOException {
-        List<String> lines = Files.readAllLines(Paths.get(uri)); // TODO : use resources bc this path won't work         //  why did I write this to.do ?
+        List<String> lines = Files.readAllLines(Paths.get(uri));
         Window window = null;
         ArrayList<Segment> segments = new ArrayList<>();
 

@@ -30,8 +30,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
-// TODO : grille
-
 /**
  * Controller used for the `MainScene` scene defined in the `MainScene.fxml` file.
  */
