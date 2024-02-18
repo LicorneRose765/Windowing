@@ -57,8 +57,14 @@ public class Windowing {
      */
     public ArrayList<Segment> query(Window window) {
         segments = new ArrayList<>();
-        horizontalPST.query(window);
-        verticalPST.query(window);
+        if(horizontalPST != null) {
+            horizontalPST.query(window);
+        }
+
+        if(verticalPST != null) {
+            verticalPST.query(window);
+        }
+
         return segments;
     }
 

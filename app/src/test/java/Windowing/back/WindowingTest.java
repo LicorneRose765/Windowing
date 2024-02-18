@@ -380,4 +380,24 @@ public class WindowingTest {
         System.out.println("===================================\n");
         assertTrue(segments3QueryTime > segments3QueryTime2 / 100000);
     }
+
+    @Test
+    public void canQueryOnlyVerticalSegments() {
+        // Given
+        ArrayList<Segment> dataSet = new ArrayList<>(Arrays.asList(
+                new Segment(2, -5, 2, 3),
+                new Segment(-4, -3, -4, -1)
+        ));
+        Windowing windowing = new Windowing(dataSet);
+        Window w = new Window(0, 5, 0, 5);
+
+        // When
+        ArrayList<Segment> result = windowing.query(w);
+
+        // Then
+        ArrayList<Segment> expected = new ArrayList<>(List.of(
+                new Segment(2, -5, 2, 3)
+        ));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
 }
